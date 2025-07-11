@@ -1,7 +1,7 @@
 package conf
 
 import (
-	"kuaishouweb/common"
+	"github.com/kongshui/danmu/common"
 	"log"
 	"os"
 

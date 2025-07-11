@@ -1,9 +1,10 @@
 package dao
 
 import (
-	sRedis "kuaishouweb/dao/redis/redis"
-	cRedis "kuaishouweb/dao/redis/rediscluster"
 	"time"
+
+	sRedis "github.com/kongshui/danmu/dao/redis/redis"
+	cRedis "github.com/kongshui/danmu/dao/redis/rediscluster"
 
 	"github.com/go-redis/redis"
 )

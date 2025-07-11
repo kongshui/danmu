@@ -1,9 +1,10 @@
 package conf
 
 import (
-	"kuaishouweb/common"
 	"log"
 	"os"
+
+	"github.com/kongshui/danmu/common"
 
 	"github.com/pelletier/go-toml/v2"
 )
