@@ -1,0 +1,24 @@
+syntax = "proto3";
+package pmsg;
+option go_package="./pmsg"; 
+
+message KsMsgAck {
+    string RoomId = 1;  // roomId
+    KsMsgAckData data = 2; //数据处理
+}
+
+message KsMsgAckData {
+    string UniqueMessageId = 1; //消息幂等id
+    string PushType = 2;    //推送消息类型，只上报giftSend，其他不上报
+    int64 Timestamp = 3;    //毫秒级时间戳，cp客户端 处理完消息时间戳
+}
+
+message DymsgAckMessage {
+    string room_id = 1; // room_id
+    message ack_data {
+        string msg_id = 1; // 消息id
+        string msg_type = 2; // 推送消息类型
+        int64 client_time = 3; // 毫秒级时间戳，cp客户端 处理完消息时间戳
+    }
+    repeated ack_data data = 2; // 数据处理
+}

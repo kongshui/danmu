@@ -1,0 +1,10 @@
+syntax = "proto3";
+package pmsg;
+
+option go_package="./pmsg";
+
+message IsFirstConsumeMessage {
+    string OpenId = 1;      // 玩家ID
+    bool IsConsume = 2;     //是否第一次消费
+    int64 TimeStamp = 3;    //收到礼物时间戳，毫秒级
+}

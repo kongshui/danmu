@@ -1,0 +1,10 @@
+syntax = "proto3";
+package pmsg;
+option go_package="./pmsg";
+
+
+message AddIntegralReq  {
+    string OpenId = 1; // 主播id
+    int64 NodeId = 2; // 节点id
+    string GroupId = 3; // 分组id
+}

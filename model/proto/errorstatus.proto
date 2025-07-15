@@ -1,0 +1,21 @@
+syntax = "proto3";
+package pmsg;
+option go_package="./pmsg";
+
+// 错误状态
+enum ErrorStatus  {
+    UnknownError = 0; // 未知错误
+    MatchError = 1; // 匹配错误
+    MatchRoomIdError = 2; // 房间ID错误
+    MatchOpenIdError = 3; // 用户ID错误
+    MatchBattleRoomIdError = 4; // 战斗房间ID错误 
+    SetMatchStatusError = 5; // 设置匹配状态错误
+    ProtoMarshalError = 6; // 协议序列化错误
+    GetUuidError = 7; // 获取UUID错误
+    GetRedisError = 8; // 获取Redis错误
+    SetRedisError = 9; // 设置Redis错误
+    GetMatchStatusError = 10; // 获取匹配状态错误
+    SendMessageError = 11; // 发送消息错误
+    ProtoUnmarshalError = 12; // 协议反序列化错误
+    MatchBattleV1SetStartTimeError = 13; // 设置超时错误
+}

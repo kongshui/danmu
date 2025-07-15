@@ -1,0 +1,12 @@
+syntax = "proto3";
+package pmsg;
+
+option go_package="./pmsg";
+
+message GroupUser {
+    string OpenId = 1;      //用户openId
+    string GroupId = 2;     //组Id
+    int64 Score = 3;        //玩家分数
+    int64 Rank = 4;         //玩家排名
+    int32 RoundResult = 5;  //对局结果(1=胜利、2=失败、3=平局)
+}

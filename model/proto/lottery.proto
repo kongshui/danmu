@@ -1,0 +1,11 @@
+syntax = "proto3";
+package pmsg;
+option go_package="./pmsg";
+
+message LotteryMsg  {
+    string OpenId = 1; // 用户OpenId
+    string NickName = 2; // 用户昵称
+    string HeadImgUrl = 3; // 用户头像
+    string LotteryMap = 4; // 抽奖结果 json string
+    int64 Count = 5; // 礼物数量
+}

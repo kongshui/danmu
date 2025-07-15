@@ -1,0 +1,11 @@
+syntax = "proto3";
+package pmsg;
+
+option go_package="./pmsg";
+
+//protoc.exe   --go_out=./ .\messagetype\*.proto
+
+message TokenMessage{
+    string token = 1;       //客户端token
+    int64 timestamp = 2;    //客户端获取token时间戳
+}

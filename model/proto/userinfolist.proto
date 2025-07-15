@@ -1,0 +1,11 @@
+syntax = "proto3";
+package pmsg;
+
+option go_package="./pmsg";
+
+import "proto/userinfo.proto";
+
+message UserInfoListMessage {
+    repeated UserInfo UserInfoList = 1; //用户列表
+    int64 Timestamp = 2;    //时间戳
+}

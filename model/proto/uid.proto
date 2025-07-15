@@ -1,0 +1,7 @@
+syntax = "proto3";
+package pmsg;
+option go_package="./pmsg";
+
+message UidSend {
+    string UidStr = 1; // 分配的uid
+}

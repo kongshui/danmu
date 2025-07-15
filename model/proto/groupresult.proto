@@ -1,0 +1,9 @@
+syntax = "proto3";
+package pmsg;
+
+option go_package="./pmsg";
+
+message GroupResult {
+    string GroupId = 1; //分组id
+    int32 Result = 2;   //对局结果（1=胜利、2=失败、3=平局）
+}

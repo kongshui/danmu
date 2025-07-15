@@ -1,0 +1,13 @@
+syntax = "proto3";
+package pmsg;
+
+option go_package="./pmsg";
+
+
+message PlatFormDataSend {
+    string OpenId = 1; // 快手的userId或者抖音的openId
+    string RoomId = 2; // 房间号
+    bytes Data = 3; // 发送数据
+    string PushType = 4; // 推送类型
+    int64 TimeStamp = 5; // 时间戳
+}

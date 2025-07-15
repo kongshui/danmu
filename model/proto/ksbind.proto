@@ -1,0 +1,8 @@
+syntax = "proto3";
+package pmsg;
+option go_package="./pmsg";
+
+message KSBindReq  {
+    string RoomId = 1; // 房间Id
+    string OpenId = 2; // 主播Id
+} 

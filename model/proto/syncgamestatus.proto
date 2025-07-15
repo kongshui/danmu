@@ -1,0 +1,17 @@
+syntax = "proto3";
+package pmsg;
+
+option go_package="./pmsg";
+
+import "proto/groupresult.proto";
+
+message SyncGameStatusMessage {
+    string AnchorOpenId = 1;    //主播id
+    string AppId = 2;           //小游戏id
+    string RoomId = 3;          //房间id
+    int64 RoundId = 4;          //对局id
+    int64 StartTime = 5;        //开始时间
+    int64 EndTime = 6;          //结束时间
+    int32 Status = 7;           //状态,当前房间的游戏对局状态（1=已开始、2=已结束）
+    repeated GroupResult GroupResultList = 8;   //对局结果
+}

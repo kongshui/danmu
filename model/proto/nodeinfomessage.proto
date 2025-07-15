@@ -1,0 +1,12 @@
+syntax = "proto3";
+package pmsg;
+
+option go_package="./pmsg";
+//protoc.exe   --go_out=./ .\messagetype\*.proto
+
+message NodeInfoMessage {
+    string Uuid = 1;    //网关节点uuid
+    int32 NodeType = 2;  //节点类型 1:网关 2:节点 3:客户端
+    string Name = 3;
+    string GroupId = 4;
+}

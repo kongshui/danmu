@@ -1,0 +1,14 @@
+syntax = "proto3";
+package pmsg;
+option go_package="./pmsg";
+
+//protoc.exe   --go_out=./ .\messagetype\*.proto
+
+message MessageBody {
+    uint32 MessageId = 1;           // 消息ID
+    string MessageType = 2;         // 消息类型
+    bytes MessageData = 3; // 消息数据
+    int64 Timestamp = 4;   // 时间戳
+    string Uuid = 5;        // 用户ID
+    string Extra = 6;       // 其他内容，比如路径或者其他
+}

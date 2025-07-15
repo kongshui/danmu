@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package battlecalv1;
+option go_package = "./battlecalv1pb";
+
+// protoc.exe   --go_out=./ --go-grpc_out=. .\battlecalv1\battlecalv1.proto
+// 服务注册
+service MatchBattleCalV1 {
+    rpc AddGift(AddGiftToGroupReq) returns (AddGiftToGroupResp);
+    // rpc JoinGroup(JoinGroupReq) returns (JoinGroupResp);
+}
+
+//发送礼物数据
+message AddGiftToGroupReq {
+    string group_id = 1;    // group名称
+    string gift_id = 2; // 礼物Id
+    int64 gift_num = 3; // 礼物数量
+    repeated string anchor_open_id_list = 4;   //主播id List
+    string open_id = 5; // 送礼用户Id
+    string anchor_open_id = 6; // 主播Id
+    bool is_comment = 7; //是否真是礼物，ture为假，false为真
+    bool is_join =8; // 是否加入组
+}
+
+// 接收礼物数据
+message AddGiftToGroupResp {
+    int64 Status = 1; // 状态,0 是正常，其余为异常
+    string ErrorMsg =2; // 错误日志
+}
+
+// // 发送加入组
+// message JoinGroupReq {
+//     string group_id = 1;    // group名称
+//     string open_id = 2; // 加入用户Id
+//     string anchor_open_id = 3; // 主播Id
+//     repeated string anchor_open_id_list = 4;   //主播id List
+// }
+
+// // 加入组返回
+// message JoinGroupResp {
+//     int64 Status = 1; // 状态,0 是正常，其余为异常
+//     string ErrorMsg =2; // 错误日志
+// }
+

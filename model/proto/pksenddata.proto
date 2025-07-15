@@ -1,0 +1,29 @@
+syntax = "proto3";
+package pmsg;
+option go_package = "./pmsg";
+
+message PkSendDataMessage {
+    string group_id = 1;    // group名称
+    repeated PkData data = 2;   // 发送数据
+}
+
+message PkData {
+    int64 people_num = 1; // 人数
+    int64 integral_pool =2; // 积分
+    int64 node_integral = 3; //进度条积分
+    int64 coin_count =4; // 连胜币数量
+    double angle = 5; // 角度
+    repeated PkPeopleData top_three = 6; // 前三名信息
+    string direction = 7; // 方向
+    string lottery_open_id = 8; // 抽奖openId
+    int64 strength_left_all =9; // 左边总腕力
+    int64 strength_right_all =10; // 右边总腕力
+    int64 strength_left_base =11; // 左边基础腕力
+    int64 strength_right_base =12; // 右边基础腕力
+}
+
+message PkPeopleData {
+    string open_id = 1; // 用户openId
+    int64 integral = 2; // 用户积分积分
+    int64 coin = 3; // 连胜币
+}

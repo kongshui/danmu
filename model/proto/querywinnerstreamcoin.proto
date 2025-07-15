@@ -1,0 +1,10 @@
+syntax = "proto3";
+package pmsg;
+
+option go_package="./pmsg";
+
+message QueryWinnerStreamCoinMessage {
+    repeated string UserList = 1;    //查询用户列表
+    string Side = 2; // 哪边查询
+    int64 TimeStamp = 3;
+}
