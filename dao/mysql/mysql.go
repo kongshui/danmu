@@ -16,6 +16,7 @@ import (
 type MysqlClient struct {
 	Client *sql.DB
 	Lock   *sync.RWMutex
+	isUse  bool
 }
 
 // new mysql client
@@ -30,7 +31,10 @@ func init() {
 }
 
 // mysql初始化
-func (m *MysqlClient) MysqlInit(userName, password, addr, db string) {
+func (m *MysqlClient) MysqlInit(userName, password, addr, db string, isUse bool) {
+	if !m.isUse {
+		return
+	}
 	if addr == "" {
 		log.Println("从环境中获取MYSQL地址失败...")
 		os.Exit(6)
@@ -41,17 +45,21 @@ func (m *MysqlClient) MysqlInit(userName, password, addr, db string) {
 		log.Fatal(err)
 	}
 	m.Client = client
+	m.isUse = isUse
 	go m.mysqlCheckPing(userName, password, addr, db)
 }
 
 // mysql连接检查
 func (m *MysqlClient) mysqlCheckPing(userName, password, addr, db string) {
+	if !m.isUse {
+		return
+	}
 	t := time.NewTicker(10 * time.Second)
 	for {
 		<-t.C
 		if err := m.Client.Ping(); err != nil {
 			log.Println("mysql连接失败,重新初始化")
-			m.MysqlInit(userName, password, addr, db)
+			m.MysqlInit(userName, password, addr, db, m.isUse)
 			continue
 		}
 		// log.Println("mysql ping success")
@@ -60,6 +68,9 @@ func (m *MysqlClient) mysqlCheckPing(userName, password, addr, db string) {
 
 // mysql插入礼物数据roomid, anchorOpenId, open_id, nick_name, msg_id string, giftNum, giftValue int, isTest bool, gift_time int64
 func (m *MysqlClient) InsertGiftData(roomid, anchorOpenId, name, roundId string, data map[string]any) error {
+	if !m.isUse {
+		return nil
+	}
 	_, err := m.Client.Exec("INSERT INTO log_gift (room_id, anchor_open_id,anchor_name,open_id, nick_name, msg_id, gift_num,gift_value,test,gift_time,gift_id,round_id) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 		roomid, anchorOpenId, name, data["userInfo"].(map[string]any)["userId"].(string), data["userInfo"].(map[string]any)["userName"].(string), data["uniqueNo"], data["giftCount"], data["giftTotalPrice"], false, time.Now().UnixMilli(), data["giftId"], roundId)
 	if err != nil {
@@ -70,6 +81,9 @@ func (m *MysqlClient) InsertGiftData(roomid, anchorOpenId, name, roundId string,
 
 // mysql 查询维护状态
 func (m *MysqlClient) GetMaintainStatus() (WeihuStruct, error) {
+	if !m.isUse {
+		return WeihuStruct{}, nil
+	}
 	var status WeihuStruct
 	err := m.Client.QueryRow("SELECT is_maintain,start_time,end_time,maintain_msg FROM maintain").Scan(&status.IsMaintain, &status.StartTime, &status.EndTime, &status.MaintainMsg)
 	if err != nil {
@@ -81,6 +95,9 @@ func (m *MysqlClient) GetMaintainStatus() (WeihuStruct, error) {
 
 // mysql 当前排行版清零
 func (m *MysqlClient) ClearRank() error {
+	if !m.isUse {
+		return nil
+	}
 	_, err := m.Client.Exec("UPDATE player_info SET world_point = 0")
 	if err != nil {
 		log.Println("mysql 当前排行版清零失败", err)
@@ -91,6 +108,9 @@ func (m *MysqlClient) ClearRank() error {
 
 // mysql 当前连胜币清零
 func (m *MysqlClient) ClearCoin() error {
+	if !m.isUse {
+		return nil
+	}
 	_, err := m.Client.Exec("UPDATE player_info SET win_coin = 0")
 	if err != nil {
 		log.Println("mysql 当前连胜币清零失败", err)
@@ -101,6 +121,9 @@ func (m *MysqlClient) ClearCoin() error {
 
 // mysql update 排行榜
 func (m *MysqlClient) UpdateRank(openid string, score int64) error {
+	if !m.isUse {
+		return nil
+	}
 	if int64(score) < 1 {
 		return nil
 	}
@@ -118,6 +141,9 @@ func (m *MysqlClient) UpdateRank(openid string, score int64) error {
 
 // mysql 设置玩家连胜币
 func (m *MysqlClient) SetCoin(openid string, score int64) error {
+	if !m.isUse {
+		return nil
+	}
 	_, err := m.Client.Exec("UPDATE player_info SET win_coin = ? WHERE open_id = ?", score, openid)
 	if err != nil {
 		log.Println("mysql 设置玩家连胜币失败", err)
@@ -128,6 +154,9 @@ func (m *MysqlClient) SetCoin(openid string, score int64) error {
 
 // mysql 更新玩家连胜币
 func (m *MysqlClient) UpdateCoin(openid string, score int64) error {
+	if !m.isUse {
+		return nil
+	}
 	if int64(score) == 0 {
 		return nil
 	}
@@ -161,6 +190,9 @@ func (m *MysqlClient) UpdateCoin(openid string, score int64) error {
 
 // mysql 更新玩家连胜
 func (m *MysqlClient) UpdateWin(openid string, score int64) error {
+	if !m.isUse {
+		return nil
+	}
 	if int64(score) == 0 {
 		return nil
 	}
@@ -178,6 +210,9 @@ func (m *MysqlClient) UpdateWin(openid string, score int64) error {
 
 // mysql 设置玩家连胜
 func (m *MysqlClient) SetWin(openid string, score int64) error {
+	if !m.isUse {
+		return nil
+	}
 	_, err := m.Client.Exec("UPDATE player_info SET win_count = ? WHERE open_id = ?", score, openid)
 	if err != nil {
 		log.Println("mysql 设置玩家连胜失败", err)
@@ -188,6 +223,9 @@ func (m *MysqlClient) SetWin(openid string, score int64) error {
 
 // 查询玩家是否存在
 func (m *MysqlClient) IsPlayerExist(openid string) (bool, error) {
+	if !m.isUse {
+		return false, nil
+	}
 	var count int
 	err := m.Client.QueryRow("SELECT COUNT(1) FROM player_info WHERE open_id = ?", openid).Scan(&count)
 	if err != nil {
@@ -202,6 +240,9 @@ func (m *MysqlClient) IsPlayerExist(openid string) (bool, error) {
 
 // 插入玩家基本信息
 func (m *MysqlClient) InsertPlayerBaseInfo(openId, avatarUrl, nickName string) error {
+	if !m.isUse {
+		return nil
+	}
 	if ok, _ := m.IsPlayerExist(openId); ok {
 		return nil
 	}
@@ -217,6 +258,9 @@ func (m *MysqlClient) InsertPlayerBaseInfo(openId, avatarUrl, nickName string) e
 
 // 更新玩家基本信息
 func (m *MysqlClient) UpdatePlayerBaseInfo(openId, avatarUrl, nickName string) error {
+	if !m.isUse {
+		return nil
+	}
 	_, err := m.Client.Exec("update player_info set avatar_url = ?,nick_name = ? where open_id = ?", avatarUrl, nickName, openId)
 	if err != nil {
 		log.Println("mysql 更新玩家信息失败", err)
@@ -235,6 +279,9 @@ type WeihuStruct struct {
 
 // 添加玩家获胜统计,about： true 左边，false，右边
 func (m *MysqlClient) UpdateOpenWinCount(openid string, about bool) error {
+	if !m.isUse {
+		return nil
+	}
 	// ok, err := m.isInWinCount(openid)
 	// if err != nil {
 	// 	return err
@@ -255,6 +302,9 @@ func (m *MysqlClient) UpdateOpenWinCount(openid string, about bool) error {
 
 // 查询玩家是否在获胜统计中
 func (m *MysqlClient) IsInWinCount(openid string) (bool, error) {
+	if !m.isUse {
+		return false, nil
+	}
 	var count int
 	err := m.Client.QueryRow("SELECT COUNT(1) FROM winner_count WHERE open_id = ?", openid).Scan(&count)
 	if err != nil {
@@ -269,6 +319,9 @@ func (m *MysqlClient) IsInWinCount(openid string) (bool, error) {
 
 // 更新左右胜场数， about: true 左边，false，右边
 func (m *MysqlClient) UpdateGroupWinCount(about bool) error {
+	if !m.isUse {
+		return nil
+	}
 	var (
 		context string
 	)
