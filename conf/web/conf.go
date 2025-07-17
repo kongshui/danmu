@@ -48,7 +48,7 @@ type (
 		Username string `toml:"username"`
 		Password string `toml:"password"`
 		Db       string `toml:"db"`
-		isUse    bool   `toml:"isuse"`
+		IsUse    bool   `toml:"isuse"`
 	}
 	//Log
 	Logging struct {
