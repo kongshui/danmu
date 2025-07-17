@@ -48,6 +48,7 @@ type (
 		Username string `toml:"username"`
 		Password string `toml:"password"`
 		Db       string `toml:"db"`
+		isUse    bool   `toml:"isuse"`
 	}
 	//Log
 	Logging struct {
@@ -86,7 +87,7 @@ func newConf() *Config {
 		Etcd:    Etcd{[]string{"127.0.0.1:2379"}, "root", "123456"},
 		Nats:    Nats{[]string{"nats://localhost:4222"}},
 		Redis:   Redis{"127.0.0.1:6379", 0, "", false},
-		Mysql:   Mysql{"127.0.0.1:3306", "root", "123456", "store_log"},
+		Mysql:   Mysql{"127.0.0.1:3306", "root", "123456", "store_log", true},
 		App:     App{"ks", "ks676384373188706596", "XJpIcKcmjKo0RI3JFll-Ag", "", "", "", "", "", "", false},
 	}
 }
