@@ -1,9 +1,10 @@
 package conf
 
 import (
-	"github.com/kongshui/danmu/common"
 	"log"
 	"os"
+
+	"github.com/kongshui/danmu/common"
 
 	"github.com/pelletier/go-toml/v2"
 )
@@ -47,6 +48,7 @@ type (
 	}
 	//Conf
 	Config struct {
+		Project string  `toml:"project"`
 		Server  Server  `toml:"server"`
 		Logging Logging `toml:"logging"`
 		Etcd    Etcd    `toml:"etcd"`

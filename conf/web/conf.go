@@ -64,6 +64,7 @@ type (
 	}
 	//Conf
 	Config struct {
+		Project string  `toml:"project"`
 		Server  Server  `toml:"server"`
 		Logging Logging `toml:"logging"`
 		Etcd    Etcd    `toml:"etcd"`
