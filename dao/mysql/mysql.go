@@ -32,7 +32,7 @@ func init() {
 
 // mysql初始化
 func (m *MysqlClient) MysqlInit(userName, password, addr, db string, isUse bool) {
-	if !m.isUse {
+	if !isUse {
 		return
 	}
 	if addr == "" {
