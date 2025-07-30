@@ -1,0 +1,16 @@
+syntax = "proto3";
+package pmsg;
+
+option go_package="./pmsg";
+
+message UserJoinGroupMessage {
+     string OpenId = 1;     //用户openid
+     string GroupId = 2;    //分组id
+     int64 RoundId = 3;     //对局id
+     string AvatarUrl = 4; //用户头像
+     string NickName = 5;  //用户昵称
+     int64 WorldScore = 6; //世界排行榜分数
+     int64 WorldRank = 7;  //世界排行榜排名
+     int64 WinningStreamCoin = 8; //连胜币
+     bool IsConsume = 9;    //是否是第一次消费
+}

@@ -1,0 +1,16 @@
+syntax = "proto3";
+package pmsg;
+
+option go_package="./pmsg";
+
+message SingleRoomAddGroupMessage{
+    repeated SingleRoomAddGroupInfo UserList = 1;   //玩家列表
+    string RoomId = 2;      //房间id
+    string AnchorOpenId = 3; //主播openId
+}
+message SingleRoomAddGroupInfo{
+    string GroupId = 1;     //分组id
+    string OpenId = 2;      //玩家openId
+    string AvatarUrl = 3;   //玩家头像
+    string NickName = 4;    //玩家昵称
+}

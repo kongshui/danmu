@@ -1,0 +1,27 @@
+syntax = "proto3";
+package pmsg;
+
+option go_package="./pmsg";
+
+message AddWinnerStreamCoinMessage {
+    bool  IsEnd = 1;    // 是否结束
+    repeated AddWinnerStreamCoin UserList = 2;
+}
+
+message AddWinnerStreamCoin {
+    string  OpenId = 1;     // 用户open_id
+    int64  AddNum = 2;      // 添加多少连胜币
+    string  RoomId = 3;      // 房间id
+    string AnchorOpenId = 4; // 主播open_id
+}
+
+message ResponseAddWinnerStreamCoinMessage {
+    repeated ResponseAddWinnerStreamCoin UserList = 1;
+    string Side = 2; // 哪边查询
+    int64 TimeStamp = 3;    // 毫秒级时间戳
+}
+
+message ResponseAddWinnerStreamCoin {
+    string  OpenId = 1;     // 用户open_id
+    int64 WinningStreamCoin = 2; // 现存连胜币
+}

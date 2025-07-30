@@ -1,0 +1,25 @@
+syntax = "proto3";
+package pmsg;
+
+option go_package="./pmsg";
+
+//使用连胜币请求
+message RequestwinnerstreamcoinMessage{
+    string  OpenId = 1;         //用户ID
+    int64  UseNum = 2;         //使用连胜币数量
+    int64  RoundId = 3;        //对局ID
+    int64  GiftId = 4;         //礼物ID
+    int64  TimeStamp = 5;       //时间戳
+    string RoomId = 6;         //房间ID
+}
+
+//使用连胜币返回
+message ResponsewinnerstreamcoinMessage{
+    string  OpenId = 1;                     //用户ID
+    int64  WinningStreamCoin = 2;         //现在连胜币数量
+    int64  RoundId = 3;        //对局ID
+    int64  GiftId = 4;         //礼物ID
+    int64  TimeStamp = 5;       //时间戳
+    bool CanUse = 6;                //是否能够使用
+    string RoomId = 7;         //房间ID
+}

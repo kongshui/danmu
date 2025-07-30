@@ -1,0 +1,11 @@
+syntax = "proto3";
+package pmsg;
+
+option go_package="./pmsg";
+
+message AnchorInfoMessage {
+    string RoomId = 1;  //主播房间号
+    string AnchorOpenId = 2;  //主播openId
+    string NickName = 3;  //主播昵称
+    string AvatarUrl = 4;  //主播头像
+}

@@ -1,0 +1,12 @@
+syntax = "proto3";
+package pmsg;
+option go_package="./pmsg";
+
+import"proto/constid.proto";
+
+
+message SseMessage {
+    repeated string uid_list = 1;   // uid列表
+    bytes data = 2; // 数据
+    MessageId message_id = 3; // 消息类型
+}

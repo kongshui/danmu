@@ -1,0 +1,15 @@
+syntax = "proto3";
+package pmsg;
+
+option go_package="./pmsg";
+
+import "proto/groupresult.proto";
+import "proto/groupuser.proto";
+
+message RoundUploadMessage {
+    string RoomId = 1;          //主播房间id
+    string AnchorOpenId = 2;    //主播id
+    int64 RoundId = 3;          //对局id
+    repeated GroupResult GroupResultList = 4;   //对局结果列表
+    repeated GroupUser GroupUserList = 5;       //玩家列表
+}

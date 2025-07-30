@@ -1,0 +1,13 @@
+syntax = "proto3";
+package pmsg;
+
+option go_package="./pmsg";
+
+//protoc.exe   --go_out=./ .\messagetype\*.proto
+
+message AddGroupMessage{
+    int32 GroupId = 1;      //组Id
+    string GroupName = 2;   //组名
+    string UserId = 3;      //加入的用户Id
+    string UdpAddr = 4;     //加入组的玩家的udpAddr地址，暂时不用
+}

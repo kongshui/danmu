@@ -1,0 +1,297 @@
+syntax = "proto3";
+package pmsg;
+
+option go_package="./pmsg";
+
+import "proto/groupresult.proto";
+import "proto/groupuser.proto";
+import "proto/addwinnerstreamcoin.proto";
+
+
+// 时间超过两分钟未匹配成功，则重新开始匹配
+// 发送匹配信息
+message MatchBattleV1ApplyMessage {
+    string OpenId = 1; // 用户ID
+    string RoomId = 2; // 房间ID
+    bool IsAnonymous = 3; // 是否匿名
+    string MatchNum =4; // 匹配码
+    int64 TimeStamp = 5; // 创建时间
+}
+
+// 成功匹配返回信息
+message MatchBattleV1ApplyAckMessage {
+    repeated string OpenIdList = 1; // 用户ID
+    string MatchBattleRoomId = 2; // 战斗房间ID
+    message userInfo {
+        string OpenId = 1; // 用户ID
+        string NickName = 2; // 用户名称
+        string AvatarUrl = 3; // 用户头像
+        bool IsAnonymous = 4; // 是否匿名
+    } 
+    repeated userInfo usersInfo = 3;
+    bool IsMatch = 4; // 是否匹配成功
+    int64 TimeStamp = 5; // 创建时间
+}
+
+// 成功匹配发送场景就绪信息
+message MatchBattleV1ReadyMessage {
+    string OpenId = 1; // 用户ID
+    string RoomId = 2; // 房间ID
+    string MatchBattleRoomId = 3; // 战斗房间ID
+    repeated string OpenIdList = 4; // 用户ID
+    int64 TimeStamp = 5; // 创建时间
+}
+
+// 客户端收到场景就绪信息后，如果自己就绪，发送完全就绪信息，收到的是对方的就绪信息
+message MatchBattleV1ReadyAckMessage {
+    string OpenId = 1; // 用户ID
+    string RoomId = 2; // 房间ID
+    string MatchBattleRoomId = 3; // 战斗房间ID
+    repeated string OpenIdList = 4; // 用户ID
+    int64 TimeStamp = 5; // 创建时间  
+}
+
+// 服务端收到匹配就绪信息ack后，发送开始时间
+message MatchBattleV1TimeCheckMessage {
+    string MatchBattleRoomId = 1; // 战斗房间ID
+    int64 CheckTimeStamp = 2; // 检验时间
+    int64 TimeStamp = 3; // 创建时间 
+}
+
+// 客户端收到开始时间后，发送开始返回信息，确认开始时间正确,服务端将消息转发至对方客户端
+message MatchBattleV1TimeCheckAckMessage {
+    string OpenId = 1; // 用户ID
+    string RoomId = 2; // 房间ID
+    int64 CheckTimeStamp = 3; // 检验时间
+    int64 DifferenceTime = 4; //差值时间，以时间最大的为基准，慢的时间在发送TimeStamp时要进行调整
+    string MatchBattleRoomId = 5; // 战斗房间ID
+    repeated string OpenIdList = 6; // 用户ID
+    int64 TimeStamp = 7; // 创建时间
+}
+
+// 客户端收到对方的开始确认时间后，发送确认时间信息至服务器
+message MatchBattleV1StartConfirmMessage {
+    string OpenId = 1; // 用户ID
+    string RoomId = 2; // 房间ID
+    string MatchBattleRoomId = 3; // 战斗房间ID
+    repeated string OpenIdList = 4; // 用户ID
+    int64 TimeStamp = 5; // 创建时间 
+}
+
+// 服务器收到确认信息返回
+message MatchBattleV1StartConfirmAckMessage {
+    string OpenId = 1; // 用户ID
+    string RoomId = 2; // 房间ID
+    string MatchBattleRoomId = 3; // 战斗房间ID
+    repeated string OpenIdList = 4; // 用户ID
+    int64 TimeStamp = 5; // 创建时间
+}
+
+// 服务器收到确认信息后，发送roundid信息
+message MatchBattleV1SendRoundIdMessage {
+    string MatchBattleRoomId = 1; // 战斗房间ID
+    int64 RoundId = 2; // 回合ID,使用微秒级时间戳
+    int64 TimeStamp = 3; // 创建时间
+}
+
+// 客户端收到roundid信息后，返送返回消息
+message MatchBattleV1SendRoundIdAckMessage {
+    string OpenId = 1; // 用户ID
+    int64 RoundId = 2; // 回合ID,使用微秒级时间戳
+    int64 TimeStamp = 3; // 创建时间  
+}
+
+// 发送对方信息
+//message MatchBattleV1SendUserInfoMessage {
+//    string OpenId = 1; // 用户ID
+//    int64 RoundId = 2; // 回合ID,使用微秒级时间戳
+//    string NickName = 3; // 昵称
+//    string AvatarUrl = 4; // 头像
+//    string MatchBattleRoomId = 5; // 战斗房间ID
+//    int64 TimeStamp = 6; // 创建时间
+//}
+
+// 如果开始后没有收到roundId信息，客户端重新请求Rond信息
+message MatchBattleV1AskRoundIdMessage {
+    string MatchBattleRoomId = 1; // 战斗房间ID
+    string OpenId = 2; // 用户ID
+    int64 TimeStamp = 3; // 创建时间
+}
+
+message MatchBattleV1AskRoundIdAckMessage {
+    string MatchBattleRoomId = 1; // 战斗房间ID
+    int64 RoundId = 2; // 回合ID,使用微秒级时间戳
+    int64 TimeStamp = 3; // 创建时间
+}
+
+// 客户端发送start消息给服务器端，切换场景前一秒或者切换场景后立刻发
+message MatchBattleV1StartMessage {
+    string OpenId = 1; // 用户ID
+    string RoomId = 2; // 房间ID
+    string MatchBattleRoomId = 3; // 战斗房间ID
+    repeated string OpenIdList = 4; // 用户ID
+    int64 RoundId = 5; //roundId
+    int64 TimeStamp = 6; // 创建时间  
+}
+// 双发发送各自数据给对方，用于同步数据,服务端进行转发，openId和roomId是对方的 
+// 如果是掉线，未掉线客户端收到信息后，发送现在状态给对方，掉线方收到后，发送确认信息，确认已经收到，同时自己再10s或者5s内不发同步消息
+message MatchBattleV1SyncMessage {
+    string OpenId = 1; // 用户ID
+    string RoomId = 2; // 房间ID
+    string MatchBattleRoomId = 3; // 战斗房间ID
+    repeated string OpenIdList = 4; // 用户ID
+    bytes Data = 5; // 数据
+    int64 RoundId = 6; //roundId
+    int64 SyncId = 7;    // 没发送一次递增1，未收到回包后处理
+    int64 SyncIdAck = 8;    //收到的最近一次的同步消息
+    int64 TimeStamp = 9; // 创建时间  
+}
+
+// 客户端收到信息后，发送确认信息，确认已经收到
+// 如果是掉线方，收到后自己在10s或者5s内不发同步消息
+message MatchBattleV1SyncAckMessage {
+    string OpenId = 1; // 用户ID
+    string RoomId = 2; // 房间ID
+    string MatchBattleRoomId = 3; // 战斗房间ID
+    int64 RoundId = 4; //roundId
+    int64 SyncId = 5;    // 收到的syncId回包
+    int64 TimeStamp = 6; // 创建时间
+}
+
+// 游戏结束后，发送结束信息，服务端转发给对方
+message MatchBattleV1EndMessage {
+    string OpenId = 1; // 用户ID
+    string RoomId = 2; // 房间ID
+    string MatchBattleRoomId = 3; // 战斗房间ID
+    repeated string OpenIdList = 4; // 用户ID
+    int64 RoundId = 5; //roundId
+    int64 TimeStamp = 6; // 创建时间  
+}
+
+// 取消匹配
+message MatchBattleV1CancelMessage {
+    string OpenId = 1; // 用户ID
+    string RoomId = 2; // 房间ID
+    string MatchNum =3; // 匹配码
+    int64 TimeStamp = 4; // 创建时间 
+}
+// 客户端收到取消匹配信息后，发送取消匹配确认信息
+message MatchBattleV1CancelAckMessage {
+    string OpenId = 1; // 用户ID
+    string RoomId = 2; // 房间ID
+    string Error = 3; //错误信息
+    bool IsSuccess = 4; // 是否取消成功
+    int64 TimeStamp = 5; // 创建时间 
+}
+//断线重连规则........................
+// 查询客户端是否是断线重连，如果是，服务端向客户端发送以下，断线是掉线即为关闭客户端
+message MatchBattleV1ReconnectMessage {
+    string OpenId = 1; // 用户ID
+    string RoomId = 2; // 房间ID
+    string MatchBattleRoomId = 3; // 战斗房间ID
+    int64 TimeStamp = 4; // 创建时间 
+}
+
+// 客户端收到信息后，确认是否是断线重连，还是重新开始，重新开始点击匹配按钮.点击重新链接发送以下按钮
+message MatchBattleV1ReconnectAckMessage {
+    repeated string OpenIdList = 1; // 用户ID
+    string MatchBattleRoomId = 2; // 匹配房间ID
+    int64 TimeStamp = 3; // 创建时间
+}
+
+//服务端收到后，向未掉线方服务器发送同步信息，下面信息是掉线放信息，然后开始发送MatchBattleV1ApplySyncMessage信息
+message MatchBattleV1ReconnectSyncMessage {
+    string OpenId = 1; // 用户ID
+    string RoomId = 2; // 房间ID
+    int64 TimeStamp = 3; // 创建时间
+}
+
+//匹配报错
+message MatchBattleErrorMessage {
+    string OpenId = 1; // 用户ID
+    string RoomId = 2; // 房间ID
+    string MatchBattleRoomId = 3; // 战斗房间ID
+    int64 TimeStamp = 4; // 创建时间
+    int32 ErrorCode = 5; // 错误码
+    string ErrorMsg = 6; // 错误信息  
+}
+
+// 上传最终结果，只有获胜方上传
+message MatchBattleV1Upload {
+    string MatchBattleRoomId = 1; // 战斗房间ID
+    repeated GroupResult GroupResultList = 2; //分组输赢结果，避免GroupUserList中输赢组区分错误
+    repeated GroupUser GroupUserList = 3;    //用户角色信息，用于查看角色的
+    repeated string OpenIdList = 4; // 用户ID
+    int64 TimeStamp = 5; // 创建时间
+}
+
+// 匹配组上传节点积分
+message MatchBattleAddIntegralMessage {
+    string OpenId = 1; // 主播OpenId
+    string MatchBattleRoomId = 2; // 战斗房间ID
+    string Side = 3; // 哪边传过来的。左边还是右边
+    int64 NodeId = 4; // 节点id
+    int64 TimeStamp = 5; // 创建时间
+}
+
+// 匹配使用连胜币
+message MatchBattleUseWinnerStreamCoinMessage {
+    string OpenId = 1; // 使用连胜币OpenId
+    string MatchBattleRoomId = 2; // 战斗房间ID
+    repeated string OpenIdList = 3; // 用户ID
+    string Comment = 4;   // 礼物Id
+    string UseSide = 5; // 哪边使用
+    string RoomId = 6; // 主播房间号
+    int64 TimeStamp = 7; // 创建时间
+}
+
+// 匹配使用连胜币返回
+message MatchBattleUseWinnerStreamCoinAckMessage {
+    string OpenId = 1; // 使用连胜币OpenId
+    string MatchBattleRoomId = 2; // 战斗房间ID
+    repeated string OpenIdList = 3; // 用户ID
+    string GiftId = 4;   // 评论内容
+    string UseSide = 5; // 哪边使用
+    int64 WinningStreamCoin = 6; // 还剩下多少连胜币 
+    bool IsUse = 7; //是否使用成功
+    string RoomId = 8; // 主播房间号
+    int64 TimeStamp = 9; // 创建时间
+}
+
+// 添加连胜币
+message MatchBattleAddStreamCoinMessage {
+    string MatchBattleRoomId = 1; // 战斗房间ID
+    repeated AddWinnerStreamCoin UserList = 2; // 添加连胜币集合
+    string Type = 3; // 瓜分连胜币还是胜利失败添加连胜币,divideup瓜分，normal普通获取
+    int64 TimeStamp = 9; // 创建时间
+}
+
+// startGamed,正式开始游戏前确认
+message MatchBattleStartGamedConfirmMessage {
+    string MatchBattleRoomId = 1; // 战斗房间ID
+    repeated string OpenIdList = 2; // 用户ID
+    int64 TimeStamp = 3; // 创建时间
+}
+// startGamed,正式开始游戏前确认ack
+message MatchBattleStartGamedConfirAckMessage {
+    string OpenId = 1; // 主播OpenId
+    string MatchBattleRoomId = 2; // 战斗房间ID
+    repeated string OpenIdList = 3; // 用户ID
+    int64 TimeStamp = 4; // 创建时间
+}
+
+// startgameAck
+message MatchBattleV1StartAckMessage {
+    string MatchBattleRoomId = 1; // 战斗房间ID
+    repeated string OpenIdList = 2; // 用户ID
+    int64 RoundId = 3; //roundId
+    int64 TimeStamp = 4; // 创建时间 
+}
+
+// 退出pk组
+message MatchBattleQuitWithErrorMessage {
+    string OpenId = 1; // 主播OpenId
+    string MatchBattleRoomId = 2; // 战斗房间ID
+    string ErrorMsg = 3; // 错误信息
+    int64 TimeStamp = 4; // 创建时间 
+}

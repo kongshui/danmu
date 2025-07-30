@@ -1,0 +1,53 @@
+syntax = "proto3";
+package pmsg;
+
+option go_package="./pmsg";
+
+// 加入匹配分组成功
+message MatchGroupStatusMessage {
+    int64 GradeLevel = 1;    // 玩家段位
+    string UserId = 2;  // 玩家ID
+    string Uuid = 3;    // 链接uuid
+    string GroupId = 4; // 分组ID
+    int64 Status = 5; // 状态 0:空闲 1:入组 2:离组,3:掉线,4:重连,5:申请入组失败，6：申请入组成功,7：取消入组，8：取消入组失败，9：取消入组成功，10：不在分组中,11：在分组中,12：分组不存在
+    int64 TimeStamp = 6;    // 时间戳
+    string Error = 7;   // 错误信息
+}
+
+enum MatchGroupStatus {
+    NONE = 0;    // 空闲，即为基础信息
+    ENTER_GROUP = 1;    // 玩家入组
+    LEAVE_GROUP = 2;    // 玩家离组
+    OFFLINE = 3;    // 玩家掉线
+    RECONNECT = 4;    // 玩家重连
+    ENTER_GROUP_FAIL = 5;    // 玩家申请入组失败
+    ENTER_GROUP_SUCCESS = 6;    // 玩家申请入组成功
+    CANCEL_GROUP = 7;    // 玩家取消入组
+    CANCEL_GROUP_FAIL = 8;    // 玩家取消入组失败
+    CANCEL_GROUP_SUCCESS = 9;    // 玩家取消入组成功
+    NOT_IN_GROUP = 10;    // 玩家不在分组中
+    IN_GROUP = 11;    // 玩家在分组中
+    GROUP_NOT_EXIST = 12;    // 分组不存在
+}
+
+//groupInfoMessage
+message GroupInfoMessage {
+    string GroupId = 1; //分组ID
+    string RoomId = 2; //房间ID
+    int64 Status = 3; //状态
+    repeated GroupUserInfo UserList = 4;
+    int64 TimeStamp = 5;    // 时间戳
+}
+
+message GroupUserInfo {
+    string OpenId = 1; //用户ID
+    string UdpAddr = 3; //udp地址
+}
+
+// queryGroupInfoMessage
+message QueryGroupInfoMessage {
+    string GroupId = 1; //分组ID
+    string RoomId = 2; //房间ID
+    int64 TimeStamp = 3; // 时间戳
+}
+

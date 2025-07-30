@@ -1,0 +1,45 @@
+project = "shanhaijing"
+
+[server]
+addr = "192.168.31.76"    #ip地址
+port = "8001"   #开放的端口号
+debug = true    #是否是调试模式
+grpc = false
+
+[etcd]
+addr = ["127.0.0.1:2379","192.168.1.2:2380"] #etcd地址，ip+端口号，如果是集群，则是列表形式
+username = "root" #etcd用户名
+password = "123456" #etcd密码
+
+[redis]
+addr = "127.0.0.1:6379"
+db = 0
+password = ""
+mode = false
+
+[mysql]
+addr = "127.0.0.1:3306"
+username = "root"
+password = "123456"
+db = "store_log"
+isuse = true
+
+[logging]
+level = "debug" #日志等级,暂时为info和debug两个
+log_path = ""  #日志名称,默认情况下是运行目录下的logs
+max_size = 2104298746 #日志最大容量，单位byte
+max_backups = 10 #最多多少个备份，
+max_age = 24 #最大多少时间轮转一次日志,单位小时
+
+[app]
+platform = "dy" #平台,快手：ks,抖音：dy
+app_id = "xxxxxx" #appId
+app_secret = "xxxxxxxx"   #appSecret
+comment_secret = "000106632f6db81fee49726f0e7313d698fa4947" # 评论密钥，抖音使用
+gift_secret = "000106632f6db81fee49726f0e7313d698fa4947"    # 礼物密钥，抖音使用
+like_secret = "000106632f6db81fee49726f0e7313d698fa4947"    # 点赞密钥，抖音使用
+query_group_secret = "000106632f6db81fee49726f0e7313d698fa4947" # 查询组密钥
+choose_group_secret = "000106632f6db81fee49726f0e7313d698fa4947" # 选择组密钥
+race_secret = "000106632f6db81fee49726f0e7313d698fa4947"    # 比赛密钥
+is_online = false # 是否上线
+is_mock = true  # 是否是虚拟

@@ -1,0 +1,15 @@
+syntax = "proto3";
+package pmsg;
+
+option go_package="./pmsg";
+
+
+message ReloginMessage {
+    string Token = 1;       // token
+    int64 Timestamp = 2;    // 时间戳
+    string GroupId = 3;     // 分组id
+    string UserId = 4;      // 用户id
+    string OpenId = 5;      // 用户open_id
+    string RoomId = 6;      // 房间id
+    int64 GradeLevel = 7;        // 段位
+}
