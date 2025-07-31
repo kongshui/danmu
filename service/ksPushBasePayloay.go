@@ -78,7 +78,7 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 			// 送礼,正式上线前将test_去掉，用上一层的
 			// if strings.HasPrefix(data.Data.UniqueMessageId, "stress_") || data.Event == "LIVE_INTERACTION_DATA_TEST" {
 			gift := KsGiftSendStruct{}
-			if err := json.Unmarshal(jsonByte, &gift); err != nil {
+			if err := json.NewDecoder(strings.NewReader(string(jsonByte))).Decode(&gift); err != nil {
 				ziLog.Error(fmt.Sprintf("ksPushBasePayloay giftSend  json.Marshal err:  %v，失败数据为： %v", err, v), debug)
 				continue
 			}
@@ -156,7 +156,7 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 			msgId = pmsg.MessageId_liveGift
 		case "liveComment":
 			commentData := KsLiveCommentStruct{}
-			if err := json.Unmarshal(jsonByte, &commentData); err != nil {
+			if err := json.NewDecoder(strings.NewReader(string(jsonByte))).Decode(&commentData); err != nil {
 				ziLog.Error(fmt.Sprintf("ksPushBasePayloay json.Unmarshal err:  %v,失败数据为： %v", err, v), debug)
 				continue
 			}
@@ -211,7 +211,7 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 				score = 0
 			} else {
 				liveLikeData := KsLiveLikeStruct{}
-				if err := json.Unmarshal(jsonByte, &liveLikeData); err != nil {
+				if err := json.NewDecoder(strings.NewReader(string(jsonByte))).Decode(&liveLikeData); err != nil {
 					ziLog.Error(fmt.Sprintf("ksPushBasePayloay json.Unmarshal err:  %v,失败数据为： %v", err, v), debug)
 					continue
 				}
@@ -326,7 +326,7 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 			continue
 		}
 		gift := KsGiftSendStruct{}
-		if err := json.Unmarshal(jsonByte, &gift); err != nil {
+		if err := json.NewDecoder(strings.NewReader(string(jsonByte))).Decode(&gift); err != nil {
 			ziLog.Error(fmt.Sprintf("ksPushGiftSendPayloay json.Unmarshal err:  %v,失败数据为： %v", err, v), debug)
 			continue
 		}

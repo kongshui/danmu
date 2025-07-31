@@ -44,7 +44,10 @@ func pushDyBasePayloayDirect(roomId, anchorOpenId, msgType string, data []byte) 
 	switch msgType {
 	case "live_comment":
 		getData := []ContentPayloadStruct{}
-		if err := json.Unmarshal(data, &getData); err != nil {
+		// if err := json.Unmarshal(data, &getData); err != nil {
+		// 	ziLog.Error(fmt.Sprintf("PushDyBasePayloayDirect json.Unmarshal err: %v, data: %v", err, data), debug)
+		// }
+		if err := json.NewDecoder(strings.NewReader(string(data))).Decode(&getData); err != nil {
 			ziLog.Error(fmt.Sprintf("PushDyBasePayloayDirect json.Unmarshal err: %v, data: %v", err, data), debug)
 		}
 		for _, v := range getData {
@@ -65,7 +68,7 @@ func pushDyBasePayloayDirect(roomId, anchorOpenId, msgType string, data []byte) 
 		}
 	case "live_gift":
 		getData := []GiftPayloadStruct{}
-		if err := json.Unmarshal(data, &getData); err != nil {
+		if err := json.NewDecoder(strings.NewReader(string(data))).Decode(&getData); err != nil {
 			ziLog.Error(fmt.Sprintf("PushDyBasePayloayDirect json.Unmarshal err: %v, data: %v", err, string(data)), debug)
 		}
 		ziLog.Gift(fmt.Sprintf("PushDyBasePayloayDirect getData: %v", string(data)), debug)
@@ -100,7 +103,7 @@ func pushDyBasePayloayDirect(roomId, anchorOpenId, msgType string, data []byte) 
 		}
 	case "live_like":
 		getData := []LiveLikePayloadStruct{}
-		if err := json.Unmarshal(data, &getData); err != nil {
+		if err := json.NewDecoder(strings.NewReader(string(data))).Decode(&getData); err != nil {
 			ziLog.Error(fmt.Sprintf("PushDyBasePayloayDirect json.Unmarshal err: %v, data: %v", err, data), debug)
 		}
 		for _, v := range getData {
