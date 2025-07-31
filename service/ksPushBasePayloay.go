@@ -62,8 +62,9 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 
 	for _, v := range data.Data.Payload {
 		var (
-			score float64
-			msgId pmsg.MessageId
+			score            float64
+			msgId            pmsg.MessageId
+			anchor_nick_name string
 		)
 		jsonByte, err := json.Marshal(v)
 		if err != nil {
@@ -88,7 +89,11 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 			// 后端记录数据库
 			anchorName, err := userInfoGet(data.Data.AuthorOpenId)
 			if err != nil {
-				ziLog.Error(fmt.Sprintf("ksPushBasePayloay giftSend userInfoGet err:  %v", err), debug)
+				_, anchor_nick_name, err = mysql.QueryPlayerInfo(data.Data.AuthorOpenId)
+				if err != nil {
+					ziLog.Error(fmt.Sprintf("ksPushBasePayloay giftSend userInfoGet err:  %v", err), debug)
+				}
+				anchorName.NickName = anchor_nick_name
 			}
 			roundId, _ := queryRoomIdToRoundId(data.Data.RoomCode)
 			if !(strings.HasPrefix(data.Data.UniqueMessageId, "test_") || strings.HasPrefix(data.Data.UniqueMessageId, "stress_")) {
@@ -310,9 +315,10 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 	giftsendSet(data.RoomCode, data.UniqueMessageId)
 	for _, v := range data.Payload {
 		var (
-			score     float64
-			isLottery bool           = false //是否抽奖
-			msgId     pmsg.MessageId = pmsg.MessageId_liveGift
+			score            float64
+			isLottery        bool           = false //是否抽奖
+			msgId            pmsg.MessageId = pmsg.MessageId_liveGift
+			anchor_nick_name string
 		)
 		jsonByte, err := json.Marshal(v)
 		if err != nil {
@@ -331,7 +337,11 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 		// 后端记录数据库
 		anchorName, err := userInfoGet(data.AuthorOpenId)
 		if err != nil {
-			ziLog.Error(fmt.Sprintf("ksPushGiftSendPayloay userInfoGet err:  %v", err), debug)
+			_, anchor_nick_name, err = mysql.QueryPlayerInfo(data.AuthorOpenId)
+			if err != nil {
+				ziLog.Error(fmt.Sprintf("ksPushBasePayloay giftSend userInfoGet err:  %v", err), debug)
+			}
+			anchorName.NickName = anchor_nick_name
 		}
 		roundId, _ := queryRoomIdToRoundId(data.RoomCode)
 		//

@@ -28,10 +28,17 @@ func pushDyBasePayloayDirect(roomId, anchorOpenId, msgType string, data []byte) 
 	var (
 		score   float64
 		isFirst bool = true
+		// avatarUrl string
+		nickName string
 	)
 	anchorName, err := userInfoGet(anchorOpenId)
 	if err != nil {
-		ziLog.Error(fmt.Sprintf("ksPushBasePayloay giftSend userInfoGet err:  %v", err), debug)
+		_, nickName, err = mysql.QueryPlayerInfo(anchorOpenId)
+		if err != nil {
+			ziLog.Error(fmt.Sprintf("ksPushBasePayloay giftSend userInfoGet err:  %v", err), debug)
+		}
+		anchorName.NickName = nickName
+		// anchorName.AvatarUrl = avatarUrl
 	}
 	roundId, _ := queryRoomIdToRoundId(roomId)
 	switch msgType {

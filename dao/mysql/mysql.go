@@ -338,3 +338,20 @@ func (m *MysqlClient) UpdateGroupWinCount(about bool) error {
 	}
 	return nil
 }
+
+// 查询玩家信息
+func (m *MysqlClient) QueryPlayerInfo(openid string) (string, string, error) {
+	if !m.isUse {
+		return "", "", nil
+	}
+	var (
+		avatarUrl string
+		nickName  string
+	)
+	err := m.Client.QueryRow("SELECT avatar_url,nick_name FROM player_info WHERE open_id = ?", openid).Scan(&avatarUrl, &nickName)
+	if err != nil {
+		log.Println("mysql 查询玩家信息失败", err)
+		return "", "", err
+	}
+	return avatarUrl, nickName, nil
+}
