@@ -82,10 +82,12 @@ func endClean(roomId, openId string) {
 			battlematchv1.DisconnectMatchRegister(first_ctx, openId)
 		}
 	}
-	ok := rdb.IsExistKey(integral_pool_Prefix + openId)
-	// 设置过期时间
-	if ok {
-		rdb.Expire(integral_pool_Prefix+openId, expireTime)
+	if expireTime > 0 {
+		ok := rdb.IsExistKey(integral_pool_Prefix + openId)
+		// 设置过期时间
+		if ok {
+			rdb.Expire(integral_pool_Prefix+openId, expireTime)
+		}
 	}
 	//删除对战信息
 	if err := liveCurrentRoundDel(roomId); err != nil {
