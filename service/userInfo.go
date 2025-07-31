@@ -12,19 +12,19 @@ func userInfoStore(user UserInfoStruct) error {
 	if err != nil {
 		return errors.New("UserInfoStore err: " + err.Error())
 	}
-	// ok, err := mysql.IsPlayerExist(user.OpenId)
-	// if err != nil {
-	// 	ziLog.Error( fmt.Sprintf("UserInfoStore err: %v,openId： %v", err, user.OpenId), debug)
-	// }
-	// if !ok {
-	// 	if err := mysql.InsertPlayerBaseInfo(user.OpenId, user.AvatarUrl, user.NickName); err != nil {
-	// 		ziLog.Error( fmt.Sprintf("UserInfoStore InsertPlayerBaseInfo err: %v,openId： %v", err, user.OpenId), debug)
-	// 	}
-	// } else {
-	if err := mysql.UpdatePlayerBaseInfo(user.OpenId, user.AvatarUrl, user.NickName); err != nil {
-		ziLog.Error(fmt.Sprintf("userInfoStore UpdatePlayerBaseInfo err: %v,openId： %v", err, user.OpenId), debug)
+	ok, err := mysql.IsPlayerExist(user.OpenId)
+	if err != nil {
+		ziLog.Error(fmt.Sprintf("UserInfoStore err: %v,openId： %v", err, user.OpenId), debug)
 	}
-	// }
+	if !ok {
+		if err := mysql.InsertPlayerBaseInfo(user.OpenId, user.AvatarUrl, user.NickName); err != nil {
+			ziLog.Error(fmt.Sprintf("UserInfoStore InsertPlayerBaseInfo err: %v,openId： %v", err, user.OpenId), debug)
+		}
+	} else {
+		if err := mysql.UpdatePlayerBaseInfo(user.OpenId, user.AvatarUrl, user.NickName); err != nil {
+			ziLog.Error(fmt.Sprintf("userInfoStore UpdatePlayerBaseInfo err: %v,openId： %v", err, user.OpenId), debug)
+		}
+	}
 	return rdb.HSet(user_info_db, user.OpenId, data)
 }
 
