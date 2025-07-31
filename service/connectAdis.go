@@ -60,10 +60,12 @@ func connect(roomId string, openId string) bool {
 	// if err := rdb.HSet(integral_pool_db, roomId, 0); err != nil {
 	// 	log.Printf("清空积分池失败, roomId : %v,err: %v", roomId, err)
 	// }
-	ok := rdb.IsExistKey(integral_pool_Prefix + openId)
-	// 设置过期时间
-	if ok {
-		rdb.Expire(integral_pool_Prefix+openId, 0)
+	if expireTime > 0 {
+		ok := rdb.IsExistKey(integral_pool_Prefix + openId)
+		// 设置过期时间
+		if ok {
+			rdb.Expire(integral_pool_Prefix+openId, 0)
+		}
 	}
 	if _, err := rdb.SAdd(room_id_list_db, roomId); err != nil {
 		ziLog.Error(fmt.Sprintf("connect 添加房间id失败, roomId : %v,err: %v, openId: %v", roomId, err, openId), debug)
