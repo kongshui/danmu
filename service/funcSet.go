@@ -29,7 +29,8 @@ func ConnectInit(conf *conf.Config, etcClient *dao_etcd.Etcd, mysqlClient *dao_m
 }
 
 // 初始化时间
-func InitTime(d time.Weekday, h int) {
+func InitTime(d time.Weekday, h int, expireT time.Duration) {
 	scrollDay = d
 	scrollHour = h
+	expireTime = expireT
 }

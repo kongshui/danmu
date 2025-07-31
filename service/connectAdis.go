@@ -60,25 +60,16 @@ func connect(roomId string, openId string) bool {
 	// if err := rdb.HSet(integral_pool_db, roomId, 0); err != nil {
 	// 	log.Printf("清空积分池失败, roomId : %v,err: %v", roomId, err)
 	// }
-	ok, err := rdb.SetKeyNX(integral_pool_Prefix+openId, 0, 0)
-	if err != nil {
-		ziLog.Error(fmt.Sprintf("connect 设置积分池失败, roomId : %v,err: %v", roomId, err), debug)
-	}
+	ok := rdb.IsExistKey(integral_pool_Prefix + openId)
 	// 设置过期时间
 	if ok {
-		expireTime := getNextExpireTime()
-		rdb.Expire(integral_pool_Prefix+openId, expireTime)
-	} else {
-		if ttl, _ := rdb.TTL(integral_pool_Prefix + openId); ttl < 0 {
-			expireTime := getNextExpireTime()
-			rdb.Expire(integral_pool_Prefix+openId, expireTime)
-		}
+		rdb.Expire(integral_pool_Prefix+openId, 0)
 	}
 	if _, err := rdb.SAdd(room_id_list_db, roomId); err != nil {
-		ziLog.Error(fmt.Sprintf("connect 添加房间id失败, roomId : %v,err: %v", roomId, err), debug)
+		ziLog.Error(fmt.Sprintf("connect 添加房间id失败, roomId : %v,err: %v, openId: %v", roomId, err, openId), debug)
 		return false
 	}
-	ziLog.Info(fmt.Sprintf("connect 添加房间id成功, roomId : %v", roomId), debug)
+	ziLog.Info(fmt.Sprintf("connect 添加房间id成功, roomId : %v,openId: %v", roomId, openId), debug)
 	return true
 }
 
@@ -91,7 +82,11 @@ func endClean(roomId, openId string) {
 			battlematchv1.DisconnectMatchRegister(first_ctx, openId)
 		}
 	}
-
+	ok := rdb.IsExistKey(integral_pool_Prefix + openId)
+	// 设置过期时间
+	if ok {
+		rdb.Expire(integral_pool_Prefix+openId, expireTime)
+	}
 	//删除对战信息
 	if err := liveCurrentRoundDel(roomId); err != nil {
 		ziLog.Error(fmt.Sprintf("endClean 删除对战信息, roomId : %v,err: %v", roomId, err), debug)

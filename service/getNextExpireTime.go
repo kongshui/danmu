@@ -3,7 +3,7 @@ package service
 import "time"
 
 // 获取到下一次清榜的时间
-func getNextExpireTime() time.Duration {
+func GetNextExpireTime() time.Duration {
 	daysUntilNextScroll := (int(scroll_time_week-time.Now().Weekday()) + 7) % 7
 	if daysUntilNextScroll == 0 {
 		daysUntilNextScroll = 7
