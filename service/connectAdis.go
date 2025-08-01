@@ -62,9 +62,9 @@ func connect(roomId string, openId string) bool {
 	// }
 	if expireTime > 0 {
 		ok := rdb.IsExistKey(integral_pool_Prefix + openId)
-		// 设置过期时间
+		// 移除过期时间
 		if ok {
-			rdb.Expire(integral_pool_Prefix+openId, 0)
+			rdb.Persist(integral_pool_Prefix + openId)
 		}
 	}
 	if _, err := rdb.SAdd(room_id_list_db, roomId); err != nil {
