@@ -43,62 +43,62 @@ func websocketMessageFunc(msg *pmsg.MessageBody) error {
 	case pmsg.MessageId_ReLogin.String(): // 重连
 		return reconnect(msg)
 	case pmsg.MessageId_MatchBattleV1Apply.String(): // 1v1匹配
-		if is_connect {
+		if is_pk_match {
 			return matchV1(msg)
 		}
 		return nil
 	case pmsg.MessageId_MatchBattleV1Ready.String(): // 1v1匹配准备
-		if is_connect {
+		if is_pk_match {
 			return readyV1(msg)
 		}
 		return nil
 	case pmsg.MessageId_MatchBattleV1ReadyAck.String(): // 1v1匹配准备返回
-		if is_connect {
+		if is_pk_match {
 			return readyV1Ack(msg)
 		}
 		return nil
 	case pmsg.MessageId_MatchBattleV1TimeCheckAck.String(): // 1v1匹配时间确定
-		if is_connect {
+		if is_pk_match {
 			return matchV1TimeAck(msg)
 		}
 		return nil
 	case pmsg.MessageId_MatchBattleV1StartConfirm.String(): // 1v1匹配开始确认
-		if is_connect {
+		if is_pk_match {
 			return matchV1Confirm(msg)
 		}
 		return nil
 	case pmsg.MessageId_MatchBattleV1StartConfirmAck.String(): // 1v1匹配开始确认返回
-		if is_connect {
+		if is_pk_match {
 			return matchV1ConfirmAck(msg)
 		}
 		return nil
 	case pmsg.MessageId_MatchBattleV1AskRoundIdAck.String(): // 1v1匹配获取对局id返回
-		if is_connect {
+		if is_pk_match {
 			return askMatchV1RoundId(msg)
 		}
 		return nil
 	case pmsg.MessageId_MatchBattleV1Start.String(): // 1v1匹配开始
-		if is_connect {
+		if is_pk_match {
 			return matchV1Start(msg)
 		}
 		return nil
 	case pmsg.MessageId_MatchBattleV1End.String(): // 1v1匹配结束
-		if is_connect {
+		if is_pk_match {
 			return matchV1End(msg)
 		}
 		return nil
 	case pmsg.MessageId_MatchBattleV1Sync.String(): // pk同步数据
-		if is_connect {
+		if is_pk_match {
 			return matchV1SyncData(msg)
 		}
 		return nil
 	case pmsg.MessageId_MatchBattleV1SyncAck.String(): // pk同步数据返回
-		if is_connect {
+		if is_pk_match {
 			return matchV1SyncDataAck(msg)
 		}
 		return nil
 	case pmsg.MessageId_MatchBattleV1RoundUpload.String(): // pk上传数据
-		if is_connect {
+		if is_pk_match {
 			return matchV1DataUpload(msg)
 		}
 		return nil
@@ -113,7 +113,7 @@ func websocketMessageFunc(msg *pmsg.MessageBody) error {
 		// }
 		return nil
 	case pmsg.MessageId_MatchBattleV1Cancel.String(): // pk取消匹配
-		if is_connect {
+		if is_pk_match {
 			return matchV1Cancel(msg)
 		}
 		return nil
@@ -123,12 +123,12 @@ func websocketMessageFunc(msg *pmsg.MessageBody) error {
 		// }
 		return nil
 	case pmsg.MessageId_MatchBattleStartGamedConfirmAck.String(): // pk开始游戏确认
-		if is_connect {
+		if is_pk_match {
 			return matchStartGamedConfirmAck(msg)
 		}
 		return nil
 	case pmsg.MessageId_MatchBattleQuitWithError.String():
-		if is_connect {
+		if is_pk_match {
 			return matchBattleQuitWithError(msg)
 		}
 		return nil

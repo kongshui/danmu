@@ -28,6 +28,11 @@ func ConnectInit(conf *conf.Config, etcClient *dao_etcd.Etcd, mysqlClient *dao_m
 	ziLog = logWirte
 }
 
+// 初始化全局变量
+func InitGlobalVar(isPkMatch bool) {
+	is_pk_match = isPkMatch // 是否开启pk匹配
+}
+
 // 初始化时间
 func InitTime(d time.Weekday, h int, expireT time.Duration) {
 	scrollDay = d

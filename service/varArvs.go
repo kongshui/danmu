@@ -55,7 +55,7 @@ var (
 	mysql       = dao_mysql.NewMysqlClient()
 	nodeUuid    string //全局uid，识别客户端
 	is_maintain bool   //是否维护
-	is_connect  bool   //是否连接
+	is_pk_match bool   //是否开启pk匹配
 	// pubsubNameList       []string                 // 推送数据的关键字
 	forward_domain = common.NewStringList() //前端转发域名
 	//grpc域名
