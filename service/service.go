@@ -83,9 +83,10 @@ func ServiceInit() {
 	if config.Server.Grpc {
 		go getGrpcDomain(first_ctx)
 		// 匹配心跳
+	}
+	if is_pk_match {
 		go matchV1HeardBeat()
 	}
-
 	// testChat
 	// go TestChat()
 	// 失败消息获取
