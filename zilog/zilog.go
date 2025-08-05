@@ -250,6 +250,10 @@ func (logS *LogStruct) Write(label string, data string) {
 		logS.debugWrite(dataByte)
 	}
 	switch label {
+	case "debug":
+		if logS.level != "debug" {
+			logS.debugWrite(dataByte)
+		}
 	case "info":
 		logS.infoFile.Lock.Lock()
 		if logS.infoFile.File != nil {
@@ -317,6 +321,16 @@ func (logS *LogStruct) Gift(data string, debug bool) {
 		fmt.Print(data)
 	}
 	logS.Write(Gift, data)
+}
+
+// debug日志写入
+func (logS *LogStruct) Debug(data string, debug bool) {
+	timeFormat := time.Now().Format("2006-01-02 15:04:05")
+	data = timeFormat + " " + data + "\n"
+	if debug {
+		fmt.Print(data)
+	}
+	logS.Write(Debug, data)
 }
 
 // logtotate

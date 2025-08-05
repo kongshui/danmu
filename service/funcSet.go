@@ -23,6 +23,7 @@ func ConnectInit(conf *conf.Config, etcClient *dao_etcd.Etcd, mysqlClient *dao_m
 	config = conf
 	etcdClient = etcClient
 	battlematchv1.InitEtcd(etcClient)
+	battlematchv1.InitProjectName(config.Project)
 	mysql = mysqlClient
 	rdb = redisClient
 	ziLog = logWirte

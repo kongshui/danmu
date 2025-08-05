@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/kongshui/danmu/model/pmsg"
 )
@@ -9,6 +10,7 @@ import (
 // websocketMessageFunc   websocket
 func websocketMessageFunc(msg *pmsg.MessageBody) error {
 	// log.Println("websocketMessageFunc: ", msg.MessageType)
+	ziLog.Debug(fmt.Sprintf("websocketMessageFunc: %v,uid: %v", msg.MessageType, msg.Uuid), debug)
 	switch msg.MessageType {
 	case pmsg.MessageId_StartBind.String(): //快手绑定
 		return KsBind(msg, "start")
