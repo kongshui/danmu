@@ -79,10 +79,13 @@ func playerGroupAdd(roomId, uidStr string, userMap []*pmsg.SingleRoomAddGroupInf
 //
 
 func usersRoundUpload(roomid, anchorOpenId string, result RoundUploadStruct) error {
-	err := setWinnerScoreFunc(anchorOpenId, result)
-	if err != nil {
-		ziLog.Error(fmt.Sprintf("usersRoundUpload setWinnerScore err: %v", err), debug)
+	var err error
+	if setWinnerScoreFunc != nil {
+		if err = setWinnerScoreFunc(anchorOpenId, result); err != nil {
+			ziLog.Error(fmt.Sprintf("usersRoundUpload setWinnerScore err: %v", err), debug)
+		}
 	}
+
 	switch platform {
 	case "ks":
 		return err

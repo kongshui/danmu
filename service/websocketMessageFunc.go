@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/kongshui/danmu/model/pmsg"
@@ -143,6 +144,10 @@ func websocketMessageFunc(msg *pmsg.MessageBody) error {
 	case pmsg.MessageId_LevelQuery.String(): // 等级查询
 		return levelQuery(msg)
 	default:
-		return otherWebsocketFunc(msg)
+		if otherWebsocketFunc != nil {
+			return otherWebsocketFunc(msg)
+		}
+		return errors.New("websocket消息类型不存在")
+
 	}
 }
