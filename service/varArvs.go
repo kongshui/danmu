@@ -87,5 +87,6 @@ var (
 	first_ctx       = context.Background()
 	scrollDay       time.Weekday
 	scrollHour      int
-	is_level_scroll bool //是否开启等级滚动
+	is_level_scroll bool  //是否开启等级滚动
+	store_level     int64 //存储等级
 )

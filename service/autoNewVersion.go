@@ -33,6 +33,11 @@ func autoNewVersion() {
 
 				// 设置版本号
 				currentRankVersion = nowWorldRankVersion
+				// 设置是否是第一次进行
+				if is_level_scroll {
+					// 等级滚动
+					scrollClearLevelInfo(currentRankVersion)
+				}
 				// 设置排行榜生效版本
 				worldRankSet(currentRankVersion)
 				// 版本号初始化
@@ -40,11 +45,7 @@ func autoNewVersion() {
 					ziLog.Error("autoNewVersion 初始化版本信息失败： "+err.Error(), debug)
 					continue
 				}
-				// 设置是否是第一次进行
-				if is_level_scroll {
-					// 等级滚动
-					scrollClearLevelInfo()
-				}
+
 			}
 		} else {
 			isFirst = true

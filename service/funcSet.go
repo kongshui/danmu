@@ -31,9 +31,10 @@ func ConnectInit(conf *conf.Config, etcClient *dao_etcd.Etcd, mysqlClient *dao_m
 }
 
 // 初始化全局变量
-func InitGlobalVar(isPkMatch, levelScorll bool) {
+func InitGlobalVar(isPkMatch, levelScorll bool, storeLevel int64) {
 	is_pk_match = isPkMatch       // 是否开启pk匹配
 	is_level_scroll = levelScorll // 是否开启等级滚动
+	store_level = storeLevel      // 存储等级
 }
 
 // 初始化时间

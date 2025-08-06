@@ -11,6 +11,15 @@ func QueryLevelInfo(openId string) (int64, error) {
 	return int64(level), nil
 }
 
+// 查询旧库信息
+func QueryOldLevelInfo(openId, old_level_db string) (float64, error) {
+	level, err := rdb.ZScore(old_level_db, openId)
+	if err != nil {
+		return 0, err
+	}
+	return level, nil
+}
+
 // 更新等级信息
 func UpdateLevelInfo(openId string, level int64) error {
 	_, err := rdb.ZIncrBy(level_db, float64(level), openId)
@@ -30,8 +39,8 @@ func DeleteLevelInfo(openId string) error {
 }
 
 // scorll清除等级信息
-func scrollClearLevelInfo() error {
-	key := level_db + currentRankVersion
+func scrollClearLevelInfo(version string) error {
+	key := level_db + version
 	err := rdb.Rename(level_db, key)
 	if err != nil {
 		return err
@@ -41,6 +50,24 @@ func scrollClearLevelInfo() error {
 	if err != nil {
 		return err
 	}
-
+	// 读取前store_level名单
+	if store_level > 0 {
+		topLeverList, err := rdb.ZRevRange(world_rank_week, 0, store_level-1)
+		if err != nil {
+			ziLog.Error("scrollClearLevelInfo 读取前store_level名单失败： "+err.Error(), debug)
+			return err
+		}
+		for _, openId := range topLeverList {
+			level, err := QueryOldLevelInfo(openId, key)
+			if err != nil {
+				ziLog.Error("scrollClearLevelInfo 读取等级信息失败： "+err.Error(), debug)
+			}
+			_, err = rdb.ZIncrBy(level_db, float64(level), openId)
+			if err != nil {
+				ziLog.Error("scrollClearLevelInfo 等级滚动失败： "+err.Error(), debug)
+				return err
+			}
+		}
+	}
 	return nil
 }
