@@ -1,7 +1,6 @@
 package service
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/kongshui/danmu/model/pmsg"
@@ -141,7 +140,9 @@ func websocketMessageFunc(msg *pmsg.MessageBody) error {
 		return nil
 	case "get_top_100_rank":
 		return getLastTop100Rank(msg)
+	case pmsg.MessageId_LevelQuery.String(): // 等级查询
+		return levelQuery(msg)
 	default:
-		return errors.New("msgTypeError")
+		return otherWebsocketFunc(msg)
 	}
 }

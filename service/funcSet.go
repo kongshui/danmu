@@ -12,10 +12,11 @@ import (
 )
 
 // 函数初始化
-func ServiceFuncSet(suf SingleUserFunc, sts SetWinScoreFunc, ltf LotteryFunc) {
+func ServiceFuncSet(suf SingleUserFunc, sts SetWinScoreFunc, ltf LotteryFunc, webSocketFunc WebsocketFunc) {
 	playerGroupAddinFunc = suf
 	setWinnerScoreFunc = sts
 	lotteryFunc = ltf
+	otherWebsocketFunc = webSocketFunc
 }
 
 // 所有链接初始化
@@ -30,8 +31,9 @@ func ConnectInit(conf *conf.Config, etcClient *dao_etcd.Etcd, mysqlClient *dao_m
 }
 
 // 初始化全局变量
-func InitGlobalVar(isPkMatch bool) {
-	is_pk_match = isPkMatch // 是否开启pk匹配
+func InitGlobalVar(isPkMatch, levelScorll bool) {
+	is_pk_match = isPkMatch       // 是否开启pk匹配
+	is_level_scroll = levelScorll // 是否开启等级滚动
 }
 
 // 初始化时间

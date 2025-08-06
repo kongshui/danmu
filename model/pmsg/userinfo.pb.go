@@ -30,6 +30,7 @@ type UserInfo struct {
 	Rank              int64                  `protobuf:"varint,5,opt,name=Rank,proto3" json:"Rank,omitempty"`                           // 用户的排名
 	WinningStreamCoin int64                  `protobuf:"varint,6,opt,name=WinningStreamCoin,proto3" json:"WinningStreamCoin,omitempty"` // 用户的连胜币
 	SwallowCount      int64                  `protobuf:"varint,7,opt,name=SwallowCount,proto3" json:"SwallowCount,omitempty"`           // 用户的吞噬次数
+	Level             int64                  `protobuf:"varint,8,opt,name=Level,proto3" json:"Level,omitempty"`                         // 用户的等级
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -113,11 +114,18 @@ func (x *UserInfo) GetSwallowCount() int64 {
 	return 0
 }
 
+func (x *UserInfo) GetLevel() int64 {
+	if x != nil {
+		return x.Level
+	}
+	return 0
+}
+
 var File_proto_userinfo_proto protoreflect.FileDescriptor
 
 const file_proto_userinfo_proto_rawDesc = "" +
 	"\n" +
-	"\x14proto/userinfo.proto\x12\x04pmsg\"\xd8\x01\n" +
+	"\x14proto/userinfo.proto\x12\x04pmsg\"\xee\x01\n" +
 	"\bUserInfo\x12\x16\n" +
 	"\x06OpenId\x18\x01 \x01(\tR\x06OpenId\x12\x1a\n" +
 	"\bNickName\x18\x02 \x01(\tR\bNickName\x12\x1c\n" +
@@ -125,7 +133,8 @@ const file_proto_userinfo_proto_rawDesc = "" +
 	"\x05Score\x18\x04 \x01(\x03R\x05Score\x12\x12\n" +
 	"\x04Rank\x18\x05 \x01(\x03R\x04Rank\x12,\n" +
 	"\x11WinningStreamCoin\x18\x06 \x01(\x03R\x11WinningStreamCoin\x12\"\n" +
-	"\fSwallowCount\x18\a \x01(\x03R\fSwallowCountB\bZ\x06./pmsgb\x06proto3"
+	"\fSwallowCount\x18\a \x01(\x03R\fSwallowCount\x12\x14\n" +
+	"\x05Level\x18\b \x01(\x03R\x05LevelB\bZ\x06./pmsgb\x06proto3"
 
 var (
 	file_proto_userinfo_proto_rawDescOnce sync.Once

@@ -39,6 +39,9 @@ func AddUserWinStreamCoin(openId string, coin int64) (int64, error) {
 	}
 	if nCoin < 0 {
 		rdb.ZRem(winning_streak_coin_db, openId)
+		if err := mysql.UpdateCoin(openId, 0); err != nil {
+			ziLog.Error(fmt.Sprintf("更新添加玩家连胜币失败，玩家OpenId： %v,玩家获得的连胜币为： %v,err： %v", openId, coin, err), debug)
+		}
 		return 0, nil
 	}
 	if err := mysql.UpdateCoin(openId, coin); err != nil {

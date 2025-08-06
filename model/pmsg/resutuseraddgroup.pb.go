@@ -80,6 +80,7 @@ type UserInfoStruct struct {
 	VersionRank       int64                  `protobuf:"varint,3,opt,name=VersionRank,proto3" json:"VersionRank,omitempty"`             //世界排名
 	WinningStreamCoin int64                  `protobuf:"varint,4,opt,name=WinningStreamCoin,proto3" json:"WinningStreamCoin,omitempty"` //连胜币
 	IsFirstConsume    bool                   `protobuf:"varint,5,opt,name=IsFirstConsume,proto3" json:"IsFirstConsume,omitempty"`       //是否是第一次消费
+	Level             int64                  `protobuf:"varint,6,opt,name=Level,proto3" json:"Level,omitempty"`                         //玩家等级
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -149,6 +150,13 @@ func (x *UserInfoStruct) GetIsFirstConsume() bool {
 	return false
 }
 
+func (x *UserInfoStruct) GetLevel() int64 {
+	if x != nil {
+		return x.Level
+	}
+	return 0
+}
+
 var File_proto_resutuseraddgroup_proto protoreflect.FileDescriptor
 
 const file_proto_resutuseraddgroup_proto_rawDesc = "" +
@@ -156,13 +164,14 @@ const file_proto_resutuseraddgroup_proto_rawDesc = "" +
 	"\x1dproto/resutuseraddgroup.proto\x12\x04pmsg\"s\n" +
 	"\x19ResultUserAddGroupMessage\x128\n" +
 	"\fUserInfoList\x18\x01 \x03(\v2\x14.pmsg.UserInfoStructR\fUserInfoList\x12\x1c\n" +
-	"\tTimeStamp\x18\x02 \x01(\x03R\tTimeStamp\"\xc4\x01\n" +
+	"\tTimeStamp\x18\x02 \x01(\x03R\tTimeStamp\"\xda\x01\n" +
 	"\x0eUserInfoStruct\x12\x16\n" +
 	"\x06OpenId\x18\x01 \x01(\tR\x06OpenId\x12\"\n" +
 	"\fVersionScore\x18\x02 \x01(\x03R\fVersionScore\x12 \n" +
 	"\vVersionRank\x18\x03 \x01(\x03R\vVersionRank\x12,\n" +
 	"\x11WinningStreamCoin\x18\x04 \x01(\x03R\x11WinningStreamCoin\x12&\n" +
-	"\x0eIsFirstConsume\x18\x05 \x01(\bR\x0eIsFirstConsumeB\bZ\x06./pmsgb\x06proto3"
+	"\x0eIsFirstConsume\x18\x05 \x01(\bR\x0eIsFirstConsume\x12\x14\n" +
+	"\x05Level\x18\x06 \x01(\x03R\x05LevelB\bZ\x06./pmsgb\x06proto3"
 
 var (
 	file_proto_resutuseraddgroup_proto_rawDescOnce sync.Once

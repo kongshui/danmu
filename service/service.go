@@ -80,10 +80,10 @@ func ServiceInit() {
 	// go getFowardDomain(first_ctx)
 
 	// 获取grpc
-	if config.Server.Grpc {
-		go getGrpcDomain(first_ctx)
-		// 匹配心跳
-	}
+	// if config.Server.Grpc {
+	// 	go getGrpcDomain(first_ctx)
+	// 	// 匹配心跳
+	// }
 	if is_pk_match {
 		go matchV1HeardBeat()
 	}

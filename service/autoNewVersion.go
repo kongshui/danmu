@@ -41,6 +41,10 @@ func autoNewVersion() {
 					continue
 				}
 				// 设置是否是第一次进行
+				if is_level_scroll {
+					// 等级滚动
+					scrollClearLevelInfo()
+				}
 			}
 		} else {
 			isFirst = true

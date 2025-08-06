@@ -35,8 +35,11 @@ func playerGroupAdd(roomId, uidStr string, userMap []*pmsg.SingleRoomAddGroupInf
 		if i == 0 {
 			rdb.Expire(name, 21600*time.Second)
 		}
-		// 添加星核
-		playerGroupAddinFunc(roomId, v.GetOpenId())
+		// 其他前置处理
+		if playerGroupAddinFunc != nil {
+			playerGroupAddinFunc(roomId, v.GetOpenId())
+
+		}
 		// 是否是通过小摇杆加入
 		if isChoose {
 			continue

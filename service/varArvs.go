@@ -24,12 +24,14 @@ type (
 	SingleUserFunc  func(string, string) error
 	SetWinScoreFunc func(string, RoundUploadStruct) error
 	LotteryFunc     func(string, string, int64) map[string]int64
+	WebsocketFunc   func(msg *pmsg.MessageBody) error
 )
 
 var (
 	playerGroupAddinFunc SingleUserFunc
 	setWinnerScoreFunc   SetWinScoreFunc
 	lotteryFunc          LotteryFunc
+	otherWebsocketFunc   WebsocketFunc
 	is_mock              bool
 	config               *conf.Config
 	accessToken          *AccessTokenStruct = &AccessTokenStruct{Lock: &sync.RWMutex{}} //全局token使用
@@ -61,7 +63,7 @@ var (
 	//grpc域名
 	// grpc_domain = common.NewStringList() //前端转发域名
 	// grpcpool
-	grpc_pool = newTCPConnectionPool(20)
+	// grpc_pool = newTCPConnectionPool(20)
 	// testMode             bool                     //测试模式
 	ziLog zilog.LogStruct
 	// isMock          bool    = true //是否模拟
@@ -82,7 +84,8 @@ var (
 	}}
 	etcdClient = dao_etcd.NewEtcd()
 	// chanPool   = NewChanPool(10)
-	first_ctx  = context.Background()
-	scrollDay  time.Weekday
-	scrollHour int
+	first_ctx       = context.Background()
+	scrollDay       time.Weekday
+	scrollHour      int
+	is_level_scroll bool //是否开启等级滚动
 )

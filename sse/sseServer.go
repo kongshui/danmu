@@ -76,7 +76,7 @@ func NewChanPool(maxSize int) *ChannelPool {
 	}
 }
 
-// Get 从池中获取一个chan，如果没有可用的，则创建一个新的
+// Get 从池中获取一个chan，如果没有可用的，则创建一个新的-返回空
 func (p *ChannelPool) Get() (*ChanSet, bool) {
 	p.lock.Lock()
 	defer p.lock.Unlock()

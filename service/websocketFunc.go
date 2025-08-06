@@ -248,7 +248,7 @@ func roundDataUpload(msg *pmsg.MessageBody) error {
 // get_user_worldinfo,获取玩家世界列表
 func getUserWorldInfo(msg *pmsg.MessageBody) error {
 	var (
-		data  []WorldInfoStruct
+		data  *pmsg.UserInfoListMessage
 		msgId pmsg.MessageId
 	)
 	// 获取前一百名用户世界信息
@@ -262,14 +262,9 @@ func getUserWorldInfo(msg *pmsg.MessageBody) error {
 	default:
 		return errors.New("get user world info Unmarshal err: " + msg.MessageType)
 	}
-	sData := &pmsg.UserInfoListMessage{}
-	for _, v := range data {
-		sData.UserInfoList = append(sData.UserInfoList, &pmsg.UserInfo{OpenId: v.OpenId, NickName: v.NickName, AvatarUrl: v.AvatarUrl,
-			Score: v.Score, Rank: v.Rank, WinningStreamCoin: v.WinningStreamCoin})
-	}
 	// sdatabyte
-	sData.Timestamp = time.Now().Unix()
-	sDataByte, err := proto.Marshal(sData)
+	data.Timestamp = time.Now().Unix()
+	sDataByte, err := proto.Marshal(data)
 	if err != nil {
 		return errors.New("get user world info proto Marshal err: " + err.Error())
 	}
@@ -630,3 +625,31 @@ func dytoken(msg *pmsg.MessageBody) error {
 // 	sdata.Data = string(temp)
 // 	return msgAckSend(sdata)
 // }
+
+func levelQuery(msg *pmsg.MessageBody) error {
+	data := &pmsg.QueryLevelMessage{}
+	err := proto.Unmarshal(msg.MessageData, data)
+	if err != nil {
+		return errors.New("levelQuery Unmarshal err: " + err.Error())
+	}
+	sData := &pmsg.QueryLevelResponse{}
+	// 查询
+	for _, v := range data.GetOpenidList() {
+		level, err := QueryLevelInfo(v)
+		if err != nil {
+			return errors.New("queryLevel err: " + err.Error())
+		}
+		sData.UserLevelList = append(sData.UserLevelList, &pmsg.UserLevelStruct{
+			OpenId: v,
+			Level:  level,
+		})
+	}
+	sDataByte, err := proto.Marshal(sData)
+	if err != nil {
+		return errors.New("levelQuery proto Marshal err: " + err.Error())
+	}
+	if err := sse.SseSend(pmsg.MessageId_LevelQueryAck, []string{msg.Uuid}, sDataByte); err != nil {
+		return errors.New("levelQuery 玩家查询等级 err: " + err.Error())
+	}
+	return nil
+}

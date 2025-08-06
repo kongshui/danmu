@@ -1,0 +1,24 @@
+syntax = "proto3";
+package pmsg;
+
+option go_package="./pmsg";
+
+message UserLevelStruct {
+    string OpenId = 1;              //玩家用户id
+    int64 Level = 2;                //玩家等级
+}
+
+// QueryLevelMessage is used to query user levels
+// It contains a list of user OpenIDs and a timestamp
+message QueryLevelMessage {
+    repeated string openid_list = 1; //userInfoList
+    int64 TimeStamp = 2;
+}
+
+// QueryLevelResponse is the response for querying user levels
+// It contains a list of UserLevelStruct and a timestamp
+// If a user is not found, their level will be set to 0
+message QueryLevelResponse {
+    repeated UserLevelStruct user_level_list = 1; //userInfoList
+    int64 TimeStamp = 2;
+}

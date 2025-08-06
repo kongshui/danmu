@@ -88,6 +88,8 @@ enum MessageId {
     SingleRoomAddGroupAck = 101;    // 单个直播间加入分组返回
     SingleUserAddGroup = 102; // 单个用户加入分组
     SingleUserAddGroupAck = 103;  // 单个用户加入分组返回
+    LevelQuery = 104; // 等级查询
+    LevelQueryAck = 105;  // 等级查询返回
     LiveComment = 108;   // 直播间弹幕消息
     liveGift = 109; // 直播间礼物消息
     liveLike = 110; // 直播间点赞消息

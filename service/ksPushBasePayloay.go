@@ -24,7 +24,7 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 	// 	ziLog.Write(logError, fmt.Sprintf("ksPushBasePayloay queryRoomIdToUid nil， roomId: %v, openId, %v, 数据为： %v", data.Data.RoomCode, data.Data.AuthorOpenId, data), debug)
 	// 	return
 	// }
-	sendUidList, openIdList, isGroup, groupId := getUidListByOpenId(data.Data.AuthorOpenId)
+	sendUidList, _, isGroup, _ := getUidListByOpenId(data.Data.AuthorOpenId)
 	if len(sendUidList) == 0 {
 		ziLog.Error(fmt.Sprintf("ksPushBasePayloay queryRoomIdToUid nil， roomId: %v, openId, %v, 数据为： %v", data.Data.RoomCode, data.Data.AuthorOpenId, data), debug)
 		return
@@ -54,11 +54,11 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 	// 添加uniqueMessageId到redis中，防止重复推送
 	giftsendSet(data.Data.RoomCode, data.Data.UniqueMessageId)
 	// 是否是group
-	if isGroup {
-		groupGrpc.GroupId = groupId
-		groupGrpc.AnchorOpenId = data.Data.AuthorOpenId
-		groupGrpc.AnchorOpenIdList = openIdList
-	}
+	// if isGroup {
+	// 	groupGrpc.GroupId = groupId
+	// 	groupGrpc.AnchorOpenId = data.Data.AuthorOpenId
+	// 	groupGrpc.AnchorOpenIdList = openIdList
+	// }
 
 	for _, v := range data.Data.Payload {
 		var (
@@ -122,7 +122,7 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 						groupGrpc.OpenId = gift.UserInfo.UserId
 						groupGrpc.GiftId = giftId
 						groupGrpc.GiftNum = giftCount
-						go grpcSend(groupGrpc, 0)
+						// go grpcSend(groupGrpc, 0)
 					}
 				}
 				giftMapByte, _ := json.Marshal(giftMap)
@@ -142,13 +142,13 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 				}
 			} else {
 				score = giftToScoreMap[gift.GiftId] * float64(gift.GiftCount)
-				if isGroup {
-					groupGrpc.IsComment = false
-					groupGrpc.OpenId = gift.UserInfo.UserId
-					groupGrpc.GiftId = gift.GiftId
-					groupGrpc.GiftNum = gift.GiftCount
-					go grpcSend(groupGrpc, 0)
-				}
+				// if isGroup {
+				// 	groupGrpc.IsComment = false
+				// 	groupGrpc.OpenId = gift.UserInfo.UserId
+				// 	groupGrpc.GiftId = gift.GiftId
+				// 	groupGrpc.GiftNum = gift.GiftCount
+				// 	go grpcSend(groupGrpc, 0)
+				// }
 			}
 			if strings.HasPrefix(data.Data.UniqueMessageId, "test_") || strings.HasPrefix(data.Data.UniqueMessageId, "stress_") {
 				score = 0
@@ -173,7 +173,7 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 						groupGrpc.OpenId = commentData.UserInfo.UserId
 						groupGrpc.GiftId = "0"
 						groupGrpc.GiftNum = 1
-						go grpcSend(groupGrpc, 0)
+						// go grpcSend(groupGrpc, 0)
 					}
 				} else {
 					if isGroup {
@@ -187,7 +187,7 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 							groupGrpc.OpenId = commentData.UserInfo.UserId
 							groupGrpc.GiftId = value
 							groupGrpc.GiftNum = 1
-							go grpcSend(groupGrpc, 0)
+							// go grpcSend(groupGrpc, 0)
 						} else {
 							isJoin1 := strings.HasPrefix(commentData.Content, "1")
 							isJoin11 := strings.HasSuffix(commentData.Content, "1")
@@ -196,7 +196,7 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 							isJoin3 := strings.HasPrefix(commentData.Content, "加入")
 							if (isJoin1 && isJoin11) || (isJoin2 && isJoin22) || isJoin3 {
 								groupGrpc.OpenId = commentData.UserInfo.UserId
-								go grpcSend(groupGrpc, 0)
+								// go grpcSend(groupGrpc, 0)
 							}
 						}
 					}
@@ -225,7 +225,7 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 					groupGrpc.OpenId = liveLikeData.UserInfo.UserId
 					groupGrpc.GiftId = "0"
 					groupGrpc.GiftNum = 1
-					go grpcSend(groupGrpc, 0)
+					// go grpcSend(groupGrpc, 0)
 				}
 			}
 			msgId = pmsg.MessageId_liveLike
@@ -294,7 +294,7 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 	}
 	ziLog.Error(fmt.Sprintf("ksPushGiftSendPayloay giftdata： %v", data), debug)
 	// 获取房间信息
-	sendUidList, openIdList, isGroup, groupId := getUidListByOpenId(data.AuthorOpenId)
+	sendUidList, _, isGroup, _ := getUidListByOpenId(data.AuthorOpenId)
 	if len(sendUidList) == 0 {
 		ziLog.Error(fmt.Sprintf("ksPushBasePayloay queryRoomIdToUid nil， roomId: %v, openId, %v, 数据为： %v", data.RoomCode, data.AuthorOpenId, data), debug)
 		return
@@ -306,11 +306,11 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 		avatarUrl string
 	)
 	// 是否是group
-	if isGroup {
-		groupGrpc.GroupId = groupId
-		groupGrpc.AnchorOpenId = data.AuthorOpenId
-		groupGrpc.AnchorOpenIdList = openIdList
-	}
+	// if isGroup {
+	// 	groupGrpc.GroupId = groupId
+	// 	groupGrpc.AnchorOpenId = data.AuthorOpenId
+	// 	groupGrpc.AnchorOpenIdList = openIdList
+	// }
 	// 添加uniqueMessageId到redis中，防止重复推送
 	giftsendSet(data.RoomCode, data.UniqueMessageId)
 	for _, v := range data.Payload {
@@ -370,7 +370,7 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 					groupGrpc.OpenId = gift.UserInfo.UserId
 					groupGrpc.GiftId = giftId
 					groupGrpc.GiftNum = giftCount
-					go grpcSend(groupGrpc, 0)
+					// go grpcSend(groupGrpc, 0)
 				}
 			}
 			giftMapByte, _ := json.Marshal(giftMap)
@@ -396,7 +396,7 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 				groupGrpc.OpenId = gift.UserInfo.UserId
 				groupGrpc.GiftId = gift.GiftId
 				groupGrpc.GiftNum = gift.GiftCount
-				go grpcSend(groupGrpc, 0)
+				// go grpcSend(groupGrpc, 0)
 			}
 		}
 		if strings.HasPrefix(data.UniqueMessageId, "test_") {

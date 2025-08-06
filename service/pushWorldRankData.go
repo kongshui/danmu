@@ -7,6 +7,8 @@ import (
 	"log"
 	"math"
 	"time"
+
+	"github.com/kongshui/danmu/model/pmsg"
 )
 
 // 推送世界榜单数据
@@ -242,48 +244,54 @@ func GetWorldRankData(openIdList []string) []WorldInfoStruct {
 }
 
 // 返回世界排行榜前100名
-func getTopWorldRankData() []WorldInfoStruct {
-	var worldInfoList []WorldInfoStruct
+func getTopWorldRankData() *pmsg.UserInfoListMessage {
+	data := &pmsg.UserInfoListMessage{}
 	openIdList, err := rdb.ZRevRangeWithScores(world_rank_week, 0, 99)
 	if err != nil {
 		ziLog.Error(fmt.Sprintf("getTopWorldRankData err: %v", err), debug)
-		return worldInfoList
+		return data
 	}
 	for i, userInfo := range openIdList {
 		openId := userInfo.Member.(string)
 		user, _ := userInfoGet(openId)
 		coin, _ := QueryUserWinStreamCoin(openId)
-		worldInfoList = append(worldInfoList, WorldInfoStruct{
+		level, _ := QueryLevelInfo(openId)
+
+		data.UserInfoList = append(data.UserInfoList, &pmsg.UserInfo{
 			OpenId:            openId,
 			Rank:              int64(i + 1),
 			Score:             int64(userInfo.Score),
 			AvatarUrl:         user.AvatarUrl,
 			NickName:          user.NickName,
 			WinningStreamCoin: coin,
+			Level:             level,
 		})
 	}
-	return worldInfoList
+	return data
 }
 
 // 返回世界排行榜前100名
-func getTopMonthRankData() []WorldInfoStruct {
-	var worldInfoList []WorldInfoStruct
+func getTopMonthRankData() *pmsg.UserInfoListMessage {
+	data := &pmsg.UserInfoListMessage{}
 	openIdList, err := rdb.ZRevRangeWithScores(monthVersionRankDb, 0, 99)
 	if err != nil {
-		return worldInfoList
+		return data
 	}
 	for i, userInfo := range openIdList {
 		openId := userInfo.Member.(string)
 		user, _ := userInfoGet(openId)
 		coin, _ := QueryUserWinStreamCoin(openId)
-		worldInfoList = append(worldInfoList, WorldInfoStruct{
+		level, _ := QueryLevelInfo(openId)
+
+		data.UserInfoList = append(data.UserInfoList, &pmsg.UserInfo{
 			OpenId:            openId,
 			Rank:              int64(i + 1),
 			Score:             int64(userInfo.Score),
 			AvatarUrl:         user.AvatarUrl,
 			NickName:          user.NickName,
 			WinningStreamCoin: coin,
+			Level:             level,
 		})
 	}
-	return worldInfoList
+	return data
 }

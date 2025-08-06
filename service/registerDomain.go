@@ -8,8 +8,6 @@ import (
 	"path"
 	"time"
 
-	pb "github.com/kongshui/danmu/model/battlecalv1pb"
-
 	"errors"
 
 	clientv3 "go.etcd.io/etcd/client/v3"
@@ -85,75 +83,75 @@ func oneGetFowardDomain() error {
 
 // 获取grpc前端服务器
 // 获取前端服务器
-func oneGetGrpcDomain() error {
-	respond, err := etcdClient.Client.Get(first_ctx, path.Join("/", config.Project, grpc_domain_key), clientv3.WithPrefix())
-	if err != nil {
-		log.Println("获取前端服务器失败", err)
-		return errors.New("获取前端服务器失败: " + err.Error())
-	}
-	if len(respond.Kvs) == 0 {
-		return errors.New("获取前端服务器失败: 前端服务器数量为零")
-	}
-	for _, kv := range respond.Kvs {
-		log.Println("获取到的grpc服务器", string(kv.Value))
-		grpcConn(string(kv.Value))
-	}
-	if grpc_pool.Len() < 5 {
-		oneGetGrpcDomain()
-	}
-	log.Println("获取到的grpc服务器数量", grpc_pool.Len())
-	return nil
-}
+// func oneGetGrpcDomain() error {
+// 	respond, err := etcdClient.Client.Get(first_ctx, path.Join("/", config.Project, grpc_domain_key), clientv3.WithPrefix())
+// 	if err != nil {
+// 		log.Println("获取前端服务器失败", err)
+// 		return errors.New("获取前端服务器失败: " + err.Error())
+// 	}
+// 	if len(respond.Kvs) == 0 {
+// 		return errors.New("获取前端服务器失败: 前端服务器数量为零")
+// 	}
+// 	for _, kv := range respond.Kvs {
+// 		log.Println("获取到的grpc服务器", string(kv.Value))
+// 		grpcConn(string(kv.Value))
+// 	}
+// 	if grpc_pool.Len() < 5 {
+// 		oneGetGrpcDomain()
+// 	}
+// 	log.Println("获取到的grpc服务器数量", grpc_pool.Len())
+// 	return nil
+// }
 
 // get grpc
-func getGrpcDomain(ctx context.Context) {
-	oneGetGrpcDomain()
-	respond := etcdClient.Client.Watch(ctx, path.Join("/", config.Project, grpc_domain_key), clientv3.WithPrefix(), clientv3.WithPrevKV())
-	for wresp := range respond {
-		for _, ev := range wresp.Events {
-			switch ev.Type {
-			case clientv3.EventTypePut:
-				// 处理新增事件
-				// grpc_domain.Add(string(ev.Kv.Value))
-				grpcConn(string(ev.Kv.Value))
-			case clientv3.EventTypeDelete:
-				// 处理删除事件
-				ziLog.Info(fmt.Sprintf("getFowardDomain 删除前端http节点信息, key: %v, value: %v", string(ev.Kv.Key), string(ev.Kv.Value)), debug)
-				// key := path.Base(string(ev.Kv.Key))
-				// grpc_domain.Remove(key)
-				continue
-			}
-		}
-	}
-}
+// func getGrpcDomain(ctx context.Context) {
+// 	oneGetGrpcDomain()
+// 	respond := etcdClient.Client.Watch(ctx, path.Join("/", config.Project, grpc_domain_key), clientv3.WithPrefix(), clientv3.WithPrevKV())
+// 	for wresp := range respond {
+// 		for _, ev := range wresp.Events {
+// 			switch ev.Type {
+// 			case clientv3.EventTypePut:
+// 				// 处理新增事件
+// 				// grpc_domain.Add(string(ev.Kv.Value))
+// 				grpcConn(string(ev.Kv.Value))
+// 			case clientv3.EventTypeDelete:
+// 				// 处理删除事件
+// 				ziLog.Info(fmt.Sprintf("getFowardDomain 删除前端http节点信息, key: %v, value: %v", string(ev.Kv.Key), string(ev.Kv.Value)), debug)
+// 				// key := path.Base(string(ev.Kv.Key))
+// 				// grpc_domain.Remove(key)
+// 				continue
+// 			}
+// 		}
+// 	}
+// }
 
 // grpcConnTest
-func TestGrpcConn() {
-	t := time.NewTicker(100 * time.Millisecond)
-	defer t.Stop()
-	groupGrpc := &pb.AddGiftToGroupReq{}
-	groupGrpc.AnchorOpenId = "1"
-	groupGrpc.AnchorOpenIdList = []string{"1", "2"}
-	groupGrpc.GiftId = "0"
-	groupGrpc.GroupId = "10000"
-	groupGrpc.IsComment = true
-	groupGrpc.OpenId = "666666"
-	groupGrpc.IsJoin = true
-	if err := grpcSend(groupGrpc, 0); err != nil {
-		log.Println("TestGrpcConn 发送消息至etcd失败111111", err)
-	}
-	groupGrpc.IsJoin = false
-	var count int64
-	for {
-		<-t.C
-		count++
-		groupGrpc.GiftNum = count
-		if err := grpcSend(groupGrpc, 0); err != nil {
-			log.Println("TestGrpcConn 发送消息至etcd失败", err)
-			continue
-		}
-		if count > 200 {
-			break
-		}
-	}
-}
+// func TestGrpcConn() {
+// 	t := time.NewTicker(100 * time.Millisecond)
+// 	defer t.Stop()
+// 	groupGrpc := &pb.AddGiftToGroupReq{}
+// 	groupGrpc.AnchorOpenId = "1"
+// 	groupGrpc.AnchorOpenIdList = []string{"1", "2"}
+// 	groupGrpc.GiftId = "0"
+// 	groupGrpc.GroupId = "10000"
+// 	groupGrpc.IsComment = true
+// 	groupGrpc.OpenId = "666666"
+// 	groupGrpc.IsJoin = true
+// 	if err := grpcSend(groupGrpc, 0); err != nil {
+// 		log.Println("TestGrpcConn 发送消息至etcd失败111111", err)
+// 	}
+// 	groupGrpc.IsJoin = false
+// 	var count int64
+// 	for {
+// 		<-t.C
+// 		count++
+// 		groupGrpc.GiftNum = count
+// 		if err := grpcSend(groupGrpc, 0); err != nil {
+// 			log.Println("TestGrpcConn 发送消息至etcd失败", err)
+// 			continue
+// 		}
+// 		if count > 200 {
+// 			break
+// 		}
+// 	}
+// }
