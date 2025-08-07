@@ -15,7 +15,7 @@ import (
 
 // 注册后端域名
 func registerBackDomain(ctx context.Context) {
-	time.Sleep(3 * time.Second)
+	time.Sleep(6 * time.Second)
 	domain := "http://" + config.Server.Addr + ":" + config.Server.Port
 	// 租约
 	listenId := etcdClient.NewLease(ctx, 3)
@@ -23,13 +23,13 @@ func registerBackDomain(ctx context.Context) {
 		ziLog.Error("registerBackDomain err: 创建租约失败", debug)
 		os.Exit(10)
 	}
-	go func(doma string, ctx context.Context) {
-		t := time.NewTicker(3 * time.Second)
+	go func(doma string, ctx context.Context, id clientv3.LeaseID) {
+		t := time.NewTicker(1 * time.Second)
 		defer t.Stop()
 		for {
 			select {
 			case <-t.C:
-				_, err := etcdClient.Client.Put(ctx, path.Join("/", config.Project, backend_domain_key, config.Server.Addr+":"+config.Server.Port), domain, clientv3.WithLease(listenId))
+				_, err := etcdClient.Client.Put(ctx, path.Join("/", config.Project, backend_domain_key, config.Server.Addr+":"+config.Server.Port), domain, clientv3.WithLease(id))
 				if err != nil {
 					log.Println("发送消息至etcd失败", err)
 					continue
@@ -39,7 +39,8 @@ func registerBackDomain(ctx context.Context) {
 				return
 			}
 		}
-	}(domain, ctx)
+	}(domain, ctx, listenId)
+
 	etcdClient.KeepLease(ctx, listenId)
 }
 
