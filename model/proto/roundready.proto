@@ -7,6 +7,6 @@ message RoundReadyMessage {
     int64 RoundId = 1;          //对局id
     string RoomId = 2;          //房间id
     int64 Timestamp = 3;        //时间戳
-    int64 LiveLikeScore = 4;    //点赞积分
+    double LiveLikeScore = 4;    //点赞积分
     int64 Integral = 5;   // 积分池积分
 }

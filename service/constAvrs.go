@@ -44,7 +44,7 @@ const (
 	group_integral_pool_key      = "groupIntegralPool" // pk积分池
 	scroll_time_hours            = 20                  // 清榜时间小时,晚8点
 	scroll_time_week             = time.Thursday       // 清榜时间周
-	live_like_score              = 1                   // 点赞或者666的积分
+	// live_like_score              = 1                   // 点赞或者666的积分
 	// 抖音相关接口
 	url_start_push_url                 = "https://webcast.bytedance.com/api/live_data/task/start"                              // 开始推送地址
 	url_stop_push_url                  = "https://webcast.bytedance.com/api/live_data/task/stop"                               // 停止推送地址

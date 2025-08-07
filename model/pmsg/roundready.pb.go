@@ -23,11 +23,11 @@ const (
 
 type RoundReadyMessage struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	RoundId       int64                  `protobuf:"varint,1,opt,name=RoundId,proto3" json:"RoundId,omitempty"`             //对局id
-	RoomId        string                 `protobuf:"bytes,2,opt,name=RoomId,proto3" json:"RoomId,omitempty"`                //房间id
-	Timestamp     int64                  `protobuf:"varint,3,opt,name=Timestamp,proto3" json:"Timestamp,omitempty"`         //时间戳
-	LiveLikeScore int64                  `protobuf:"varint,4,opt,name=LiveLikeScore,proto3" json:"LiveLikeScore,omitempty"` //点赞积分
-	Integral      int64                  `protobuf:"varint,5,opt,name=Integral,proto3" json:"Integral,omitempty"`           // 积分池积分
+	RoundId       int64                  `protobuf:"varint,1,opt,name=RoundId,proto3" json:"RoundId,omitempty"`              //对局id
+	RoomId        string                 `protobuf:"bytes,2,opt,name=RoomId,proto3" json:"RoomId,omitempty"`                 //房间id
+	Timestamp     int64                  `protobuf:"varint,3,opt,name=Timestamp,proto3" json:"Timestamp,omitempty"`          //时间戳
+	LiveLikeScore float64                `protobuf:"fixed64,4,opt,name=LiveLikeScore,proto3" json:"LiveLikeScore,omitempty"` //点赞积分
+	Integral      int64                  `protobuf:"varint,5,opt,name=Integral,proto3" json:"Integral,omitempty"`            // 积分池积分
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -83,7 +83,7 @@ func (x *RoundReadyMessage) GetTimestamp() int64 {
 	return 0
 }
 
-func (x *RoundReadyMessage) GetLiveLikeScore() int64 {
+func (x *RoundReadyMessage) GetLiveLikeScore() float64 {
 	if x != nil {
 		return x.LiveLikeScore
 	}
@@ -106,7 +106,7 @@ const file_proto_roundready_proto_rawDesc = "" +
 	"\aRoundId\x18\x01 \x01(\x03R\aRoundId\x12\x16\n" +
 	"\x06RoomId\x18\x02 \x01(\tR\x06RoomId\x12\x1c\n" +
 	"\tTimestamp\x18\x03 \x01(\x03R\tTimestamp\x12$\n" +
-	"\rLiveLikeScore\x18\x04 \x01(\x03R\rLiveLikeScore\x12\x1a\n" +
+	"\rLiveLikeScore\x18\x04 \x01(\x01R\rLiveLikeScore\x12\x1a\n" +
 	"\bIntegral\x18\x05 \x01(\x03R\bIntegralB\bZ\x06./pmsgb\x06proto3"
 
 var (
