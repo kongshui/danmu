@@ -279,7 +279,7 @@ func getUserWorldInfo(msg *pmsg.MessageBody) error {
 }
 
 // useWinningStreamCoin,使用奖池 连胜币
-func UseUserWinningStreamCoin(msg *pmsg.MessageBody) error {
+func useUserWinningStreamCoin(msg *pmsg.MessageBody) error {
 
 	data := &pmsg.RequestwinnerstreamcoinMessage{}
 	err := proto.Unmarshal(msg.MessageData, data)
@@ -312,7 +312,7 @@ func UseUserWinningStreamCoin(msg *pmsg.MessageBody) error {
 }
 
 // 玩家获取连胜币
-func AddUsersWinningStreamCoin(msg *pmsg.MessageBody) error {
+func addUsersWinningStreamCoin(msg *pmsg.MessageBody) error {
 	data := &pmsg.AddWinnerStreamCoinMessage{}
 	err := proto.Unmarshal(msg.MessageData, data)
 	if err != nil {
@@ -577,7 +577,7 @@ func ksMsgAck(msg *pmsg.MessageBody) error {
 }
 
 // 增加节点积分
-func AddIntegral(msg *pmsg.MessageBody) error {
+func addIntegral(msg *pmsg.MessageBody) error {
 	data := &pmsg.AddIntegralReq{}
 	err := proto.Unmarshal(msg.MessageData, data)
 	if err != nil {

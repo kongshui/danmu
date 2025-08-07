@@ -1,0 +1,14 @@
+[Unit]
+Description=gateway
+After=network.target
+ 
+[Service]
+Type=simple
+LimitNOFILE=100000
+ExecStart=/data/gateway/start.sh
+WorkingDirectory=/data/gateway
+User=gamed
+Restart=on-failure
+ 
+[Install]
+WantedBy=multi-user.target

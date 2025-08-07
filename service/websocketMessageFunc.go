@@ -28,10 +28,10 @@ func websocketMessageFunc(msg *pmsg.MessageBody) error {
 		return getUserWorldInfo(msg)
 	case pmsg.MessageId_TestMsg.String(): // 测试消息
 		return testMsg(msg)
-	// case pmsg.MessageId_UseWinnerStreamCoin.String(): // 使用用户的获胜币
-	// 	return useUserWinningStreamCoin(msg)
-	// case pmsg.MessageId_UserAddWinnerStreamCoin.String(): // 添加用户的获胜币
-	// 	return addUsersWinningStreamCoin(msg)
+	case pmsg.MessageId_UseWinnerStreamCoin.String(): // 使用用户的获胜币
+		return useUserWinningStreamCoin(msg)
+	case pmsg.MessageId_UserAddWinnerStreamCoin.String(): // 添加用户的获胜币
+		return addUsersWinningStreamCoin(msg)
 	case pmsg.MessageId_QueryWinnerStreamCoin.String(): // 查询用户的获胜币
 		return queryUserWinningStreamCoin(msg)
 	case pmsg.MessageId_IsFirstComsume.String(): // 是否第一次消费
@@ -40,8 +40,8 @@ func websocketMessageFunc(msg *pmsg.MessageBody) error {
 		return disconnect(msg)
 	case pmsg.MessageId_MsgAckSendAck.String(): // 快手、抖音信息消费接口
 		return ksMsgAck(msg)
-	// case pmsg.MessageId_AddIntegral.String(): // 添加选边接口
-	// 	return addIntegral(msg)
+	case pmsg.MessageId_AddIntegral.String(): // 添加选边接口
+		return addIntegral(msg)
 	case pmsg.MessageId_ReLogin.String(): // 重连
 		return reconnect(msg)
 	case pmsg.MessageId_MatchBattleV1Apply.String(): // 1v1匹配

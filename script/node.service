@@ -1,0 +1,14 @@
+[Unit]
+Description=node
+After=network.target
+ 
+[Service]
+Type=simple
+LimitNOFILE=100000
+ExecStart=/data/node/start.sh
+WorkingDirectory=/data/node
+User=gamed
+Restart=on-failure
+ 
+[Install]
+WantedBy=multi-user.target

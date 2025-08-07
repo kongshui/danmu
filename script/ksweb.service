@@ -1,0 +1,14 @@
+[Unit]
+Description=ksWeb
+After=network.target
+ 
+[Service]
+Type=simple
+LimitNOFILE=100000
+ExecStart=/data/web/start.sh
+WorkingDirectory=/data/web
+User=gamed
+Restart=on-failure
+ 
+[Install]
+WantedBy=multi-user.target
