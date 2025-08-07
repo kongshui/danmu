@@ -25,6 +25,7 @@ type (
 	SetWinScoreFunc func(string, RoundUploadStruct) error
 	LotteryFunc     func(string, string, int64) map[string]int64
 	WebsocketFunc   func(msg *pmsg.MessageBody) error
+	InteractiveFunc func(roomId, roundId string, label int) bool //自动选边
 )
 
 var (
@@ -32,6 +33,7 @@ var (
 	setWinnerScoreFunc   SetWinScoreFunc
 	lotteryFunc          LotteryFunc
 	otherWebsocketFunc   WebsocketFunc
+	interactive          InteractiveFunc
 	is_mock              bool
 	config               *conf.Config
 	accessToken          *AccessTokenStruct = &AccessTokenStruct{Lock: &sync.RWMutex{}} //全局token使用

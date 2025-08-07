@@ -12,7 +12,8 @@ import (
 )
 
 // 函数初始化
-func ServiceFuncSet(suf SingleUserFunc, sts SetWinScoreFunc, ltf LotteryFunc, webSocketFunc WebsocketFunc) {
+func ServiceFuncSet(suf SingleUserFunc, sts SetWinScoreFunc, ltf LotteryFunc, webSocketFunc WebsocketFunc, interFunc InteractiveFunc) {
+	interactive = interFunc
 	playerGroupAddinFunc = suf
 	setWinnerScoreFunc = sts
 	lotteryFunc = ltf

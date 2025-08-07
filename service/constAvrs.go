@@ -68,8 +68,8 @@ const (
 	url_CpShowAckUrl      = "https://open.kuaishou.com/openapi/developer/live/data/interactive/ack/show"       //cp客户端展示消息ack接口
 	url_MessageQueryUrl   = "https://open.kuaishou.com/openapi/developer/live/data/interactive/pushdata/query" //消息回查接口
 	url_TopGiftUrl        = "https://open.kuaishou.com/openapi/developer/live/smallPlay/gift"                  //礼物置顶接口
-	url_InteractiveUrl    = "https://open.kuaishou.com/openapi/developer/live/data/interactive/start"          //快捷选边
-	url_ChatUrl           = "https://open.kuaishou.com/openapi/developer/live/data/interactive/action/chat"    // 连线对局url
+	// url_InteractiveUrl    = "https://open.kuaishou.com/openapi/developer/live/data/interactive/start"          //快捷选边
+	url_ChatUrl = "https://open.kuaishou.com/openapi/developer/live/data/interactive/action/chat" // 连线对局url
 	// is_maintain_db                = "is_maintain"                              //维护开关
 	// integral_pool_db               = "integral_pool"                                                                       //积分池
 )

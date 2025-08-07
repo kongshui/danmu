@@ -336,10 +336,14 @@ func matchV1Start(msg *pmsg.MessageBody) error {
 		AnchorOpenId: data.GetOpenId(),
 	}, "start", true)
 	if data.OpenId != data.GetOpenIdList()[0] {
-		interactive(data.GetRoomId(), strconv.FormatInt(data.GetRoundId(), 10), 2)
+		if interactive != nil {
+			interactive(data.GetRoomId(), strconv.FormatInt(data.GetRoundId(), 10), 2)
+		}
 		return nil
 	}
-	interactive(data.GetRoomId(), strconv.FormatInt(data.GetRoundId(), 10), 1)
+	if interactive != nil {
+		interactive(data.GetRoomId(), strconv.FormatInt(data.GetRoundId(), 10), 1)
+	}
 	if err := battlematchv1.MatchGroupStatusSet(first_ctx, data.GetMatchBattleRoomId(), match_battle_status_start); err != nil {
 		if err.Error() == "equal" { // 状态相同
 			return nil
