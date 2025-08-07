@@ -32,9 +32,9 @@ func ksStartFinishGameInfo(roomId, url, label, uid string, isSend bool) bool {
 	headers := map[string]string{
 		"Content-Type": "application/json;charset=UTF-8",
 	}
-	urlPath := urlSet(url)
+	urlPath := KsUrlSet(url)
 	if urlPath == "" {
-		ziLog.Error( "startFinishGameInfo urlSet err: urlPath is nil", debug)
+		ziLog.Error("startFinishGameInfo urlSet err: urlPath is nil", debug)
 		return false
 	}
 	// fmt.Println(urlPath)
@@ -42,7 +42,7 @@ func ksStartFinishGameInfo(roomId, url, label, uid string, isSend bool) bool {
 	jsonData, _ := json.Marshal(data)
 	response, err := common.HttpRespond("POST", urlPath, kuaiShouBindBodyToByte(roomId, "bind", label, string(jsonData)), headers)
 	if err != nil {
-		ziLog.Error( fmt.Sprintf("startFinishGameInfo response err: %v", err), debug)
+		ziLog.Error(fmt.Sprintf("startFinishGameInfo response err: %v", err), debug)
 		return false
 	}
 	defer response.Body.Close()
@@ -51,16 +51,16 @@ func ksStartFinishGameInfo(roomId, url, label, uid string, isSend bool) bool {
 	)
 
 	if err := json.NewDecoder(response.Body).Decode(&request); err != nil {
-		ziLog.Error( fmt.Sprintf("startFinishGameInfo json.NewDecoder err: %v", err), debug)
+		ziLog.Error(fmt.Sprintf("startFinishGameInfo json.NewDecoder err: %v", err), debug)
 		return false
 	}
 
 	if response.StatusCode != 200 {
-		ziLog.Error( fmt.Sprintf("startFinishGameInfo response err ,statusCode 非200: %v, data: %v", response.StatusCode, request), debug)
+		ziLog.Error(fmt.Sprintf("startFinishGameInfo response err ,statusCode 非200: %v, data: %v", response.StatusCode, request), debug)
 		return false
 	}
 	if int64(request.(map[string]any)["result"].(float64)) != 1 {
-		ziLog.Error( fmt.Sprintf("startFinishGameInfo err: %v,roomId: %v", request, roomId), debug)
+		ziLog.Error(fmt.Sprintf("startFinishGameInfo err: %v,roomId: %v", request, roomId), debug)
 		return false
 	}
 	if label == "start" {
@@ -68,7 +68,7 @@ func ksStartFinishGameInfo(roomId, url, label, uid string, isSend bool) bool {
 		roomInfoJson := KsRoomInfoStruct{}
 		dataStr := request.(map[string]any)["data"].(string)
 		if err := json.Unmarshal([]byte(dataStr), &roomInfoJson); err != nil {
-			ziLog.Error( fmt.Sprintf("startFinishGameInfo json.Unmarshal: %v", err), debug)
+			ziLog.Error(fmt.Sprintf("startFinishGameInfo json.Unmarshal: %v", err), debug)
 			return true
 		}
 		roomInfo.RoomId = roomId
@@ -80,7 +80,7 @@ func ksStartFinishGameInfo(roomId, url, label, uid string, isSend bool) bool {
 		}
 		dataByte, err := proto.Marshal(roomInfo)
 		if err != nil {
-			ziLog.Error( fmt.Sprintf("startFinishGameInfo proto.Marshal: %v", err), debug)
+			ziLog.Error(fmt.Sprintf("startFinishGameInfo proto.Marshal: %v", err), debug)
 			return false
 		}
 		if isSend {
@@ -88,7 +88,7 @@ func ksStartFinishGameInfo(roomId, url, label, uid string, isSend bool) bool {
 			setRoomInfo(uid, roomInfo)
 			connect(roomId, roomInfo.AnchorOpenId)
 			if err := sse.SseSend(pmsg.MessageId_StartBindAck, []string{uid}, dataByte); err != nil {
-				ziLog.Error( fmt.Sprintf("startFinishGameInfo pushDownLoadMessage: %v, roomId: %v", err, roomId), debug)
+				ziLog.Error(fmt.Sprintf("startFinishGameInfo pushDownLoadMessage: %v, roomId: %v", err, roomId), debug)
 				return false
 			}
 		}
@@ -103,14 +103,14 @@ func getKsGameInfo(roomid, url string) int64 {
 	}
 	data := map[string]any{}
 	jsonData, _ := json.Marshal(data)
-	urlPath := urlSet(url)
+	urlPath := KsUrlSet(url)
 	if urlPath == "" {
-		ziLog.Error( "getGameInfo urlSet err, urlPath is nil", debug)
+		ziLog.Error("getGameInfo urlSet err, urlPath is nil", debug)
 		return 0
 	}
 	response, err := common.HttpRespond("POST", urlPath, kuaiShouBindBodyToByte(roomid, "bind", "status", string(jsonData)), headers)
 	if err != nil {
-		ziLog.Error( fmt.Sprintf("getGameInfo response err: %v", err), debug)
+		ziLog.Error(fmt.Sprintf("getGameInfo response err: %v", err), debug)
 		return 0
 	}
 	defer response.Body.Close()
@@ -119,20 +119,20 @@ func getKsGameInfo(roomid, url string) int64 {
 	)
 
 	if err := json.NewDecoder(response.Body).Decode(&request); err != nil {
-		ziLog.Error( fmt.Sprintf("getGameInfo json.NewDecoder err: %v", err), debug)
+		ziLog.Error(fmt.Sprintf("getGameInfo json.NewDecoder err: %v", err), debug)
 		return 0
 	}
 	if response.StatusCode != 200 {
 		return 0
 	}
 	if int64(request.(map[string]any)["result"].(float64)) != 1 {
-		ziLog.Error( fmt.Sprintf("getGameInfo get err: %v", request), debug)
+		ziLog.Error(fmt.Sprintf("getGameInfo get err: %v", request), debug)
 		return 0
 	}
 	dataStr := request.(map[string]any)["data"].(string)
 	status := make(map[string]int64)
 	if err := json.Unmarshal([]byte(dataStr), &status); err != nil {
-		ziLog.Error( fmt.Sprintf("getGameInfo json.Unmarshal err: %v,data: %v", err, request), debug)
+		ziLog.Error(fmt.Sprintf("getGameInfo json.Unmarshal err: %v,data: %v", err, request), debug)
 		return 0
 	}
 	return status["status"]
@@ -229,14 +229,14 @@ func dyStartPushTask(roomId, openId, uid string, start bool) {
 		}
 		connect(roomId, openId)
 		if err := sse.SseSend(pmsg.MessageId_StartBindAck, []string{uid}, []byte{}); err != nil {
-			ziLog.Error( fmt.Sprintf("startFinishGameInfo pushDownLoadMessage: %v, roomId: %v", err, roomId), debug)
+			ziLog.Error(fmt.Sprintf("startFinishGameInfo pushDownLoadMessage: %v, roomId: %v", err, roomId), debug)
 		}
 		return
 	}
 	for _, v := range pubsubNameList {
 		if getDyGameInfo(roomId, url_check_push_url, v) == 3 {
 			if !dyStartFinishGameInfo(roomId, url_stop_push_url, v) {
-				ziLog.Error( "stop task Error,roomId: "+roomId, debug)
+				ziLog.Error("stop task Error,roomId: "+roomId, debug)
 			}
 		}
 	}

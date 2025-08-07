@@ -28,7 +28,7 @@ func ksMessageQuery(roomId string) {
 	header := map[string]string{
 		"Content-Type": "application/json;charset=UTF-8",
 	}
-	urlPath := urlSet(url_MessageQueryUrl)
+	urlPath := KsUrlSet(url_MessageQueryUrl)
 	if urlPath == "" {
 		ziLog.Error("KsMessageQuery err: urlPath is nil,ackType: ", debug)
 		return

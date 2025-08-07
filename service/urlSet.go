@@ -1,6 +1,6 @@
 package service
 
-func urlSet(url string) string {
+func KsUrlSet(url string) string {
 	if url == "" {
 		return ""
 	}

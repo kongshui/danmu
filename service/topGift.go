@@ -25,14 +25,14 @@ func topGift(roomId string) bool {
 		"giftExtendInfo": giftExtendInfo(),
 	}
 	jsonData, _ := json.Marshal(data)
-	urlPath := urlSet(url_TopGiftUrl)
+	urlPath := KsUrlSet(url_TopGiftUrl)
 	if urlPath == "" {
-		ziLog.Error( "TopGift err, urlPath is nil ", debug)
+		ziLog.Error("TopGift err, urlPath is nil ", debug)
 		return false
 	}
 	response, err := common.HttpRespond("POST", urlPath, kuaiShouBindBodyToByte(roomId, "gift", "top", string(jsonData)), headers)
 	if err != nil {
-		ziLog.Error( fmt.Sprintf("TopGift response err: %v", err), debug)
+		ziLog.Error(fmt.Sprintf("TopGift response err: %v", err), debug)
 		return false
 	}
 	defer response.Body.Close()
@@ -41,14 +41,14 @@ func topGift(roomId string) bool {
 	)
 
 	if err := json.NewDecoder(response.Body).Decode(&request); err != nil {
-		ziLog.Error( fmt.Sprintf("TopGift json.NewDecoder err: %v", err), debug)
+		ziLog.Error(fmt.Sprintf("TopGift json.NewDecoder err: %v", err), debug)
 		return false
 	}
 	if response.StatusCode != 200 {
 		return false
 	}
 	if int64(request.(map[string]any)["result"].(float64)) != 1 {
-		ziLog.Error( fmt.Sprintf("TopGift err, data: %v", request), debug)
+		ziLog.Error(fmt.Sprintf("TopGift err, data: %v", request), debug)
 		return false
 	}
 	return true

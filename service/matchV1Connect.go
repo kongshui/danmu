@@ -74,7 +74,7 @@ func TwoConnect(label, roomId, roomId2, pkId string) error {
 		data["data"] = anyToString(dataMap)
 	}
 	data["sign"] = common.KSSignature(data, app_secret, app_id)
-	urlPath := urlSet(url_ChatUrl)
+	urlPath := KsUrlSet(url_ChatUrl)
 	if urlPath == "" {
 		return errors.New("TwoConnect urlSet err: urlPath is nil")
 	}

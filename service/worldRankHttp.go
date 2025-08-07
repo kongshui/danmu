@@ -58,7 +58,7 @@ func ksSyncGameStatus(data SyncGameStatusStruct, label string, isFirst bool) boo
 		ziLog.Error(fmt.Sprintf("SyncGameStatus1 err: %v", err), debug)
 		return false
 	}
-	urlPath := urlSet(url_SyncGameStatusUrl)
+	urlPath := KsUrlSet(url_SyncGameStatusUrl)
 	if urlPath == "" {
 		ziLog.Error("urlSet err: urlPath is nil", debug)
 		return false
