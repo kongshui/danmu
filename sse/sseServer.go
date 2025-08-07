@@ -80,7 +80,7 @@ func NewChanPool(maxSize int) *ChannelPool {
 func (p *ChannelPool) Get() (*ChanSet, bool) {
 	p.lock.Lock()
 	defer p.lock.Unlock()
-	ctx, cancel := context.WithTimeout(first_ctx, 50*time.Millisecond)
+	ctx, cancel := context.WithTimeout(first_ctx, 100*time.Millisecond)
 	defer cancel()
 	select {
 	case ch := <-p.pool:
@@ -92,9 +92,8 @@ func (p *ChannelPool) Get() (*ChanSet, bool) {
 
 // Put 将一个chan放回池中
 func (p *ChannelPool) Put(ch *ChanSet) {
-	p.lock.Lock()
-	defer p.lock.Unlock()
-
+	// p.lock.Lock()
+	// defer p.lock.Unlock()
 	if len(p.pool) < p.maxSize {
 		p.pool <- ch // 添加到池中
 
@@ -130,20 +129,10 @@ func SseSend(msgId pmsg.MessageId, uidStrList []string, data []byte) error {
 		}
 		ch, ok := ChanPool.Get()
 		if !ok {
-			time.Sleep(10 * time.Millisecond)
 			continue
 		}
 		if ch.Status {
-			ctx, cancel := context.WithTimeout(first_ctx, 100*time.Millisecond)
-			defer cancel()
-			select {
-			case ch.Ch <- sData.String() + "\n":
-			case <-ctx.Done():
-				if !ch.Status {
-					close(ch.Ch)
-					continue
-				}
-			}
+			ch.Ch <- sData.String() + "\n"
 		} else {
 			close(ch.Ch)
 			continue
