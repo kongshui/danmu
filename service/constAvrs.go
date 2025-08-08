@@ -1,9 +1,5 @@
 package service
 
-import (
-	"time"
-)
-
 const (
 	winning_streak_coin_db        = "winning_stream_coin_store"  //存储玩家连胜币
 	world_rank_version_db         = "world_rank_version"         //世界排行版版本信息
@@ -42,8 +38,8 @@ const (
 	match_battle_status_stop     = 5                   // 匹配结束状态
 	match_battle_group_time      = "/match/time/"      // 战斗匹配时间
 	group_integral_pool_key      = "groupIntegralPool" // pk积分池
-	scroll_time_hours            = 20                  // 清榜时间小时,晚8点
-	scroll_time_week             = time.Thursday       // 清榜时间周
+	// scroll_time_hours            = 20                  // 清榜时间小时,晚8点
+	// scroll_time_week             = time.Thursday       // 清榜时间周
 	// live_like_score              = 1                   // 点赞或者666的积分
 	// 抖音相关接口
 	url_start_push_url                 = "https://webcast.bytedance.com/api/live_data/task/start"                              // 开始推送地址
