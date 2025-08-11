@@ -30,41 +30,32 @@ func ServiceInit() {
 
 	//设置uuid
 	nodeUuid = uuid.New().String()
-	//初始化mysql
-	// mysql.MysqlInit(config.Mysql.Username, config.Mysql.Password, config.Mysql.Addr, config.Mysql.Db, config.Mysql.IsUse)
 
-	//初始化推送消息
-	// pubsubNameList = []string{"live_comment", "live_gift", "live_like"}
-
-	// 设置token
 	if !is_mock {
+		// 设置token
 		if err := setToken(); err != nil {
 			log.Println("设置token失败： ", err)
 			ziLog.Error("设置token失败： "+err.Error(), config.Server.Debug)
 			os.Exit(1)
 		}
 		go setAccessToken()
-	}
-
-	// 初始化礼物和名称
-	// ksGiftIdNameInit()
-	// //礼物积分初始胡
-	// giftToScoreInit()
-	// 获取token
-	if !is_mock {
+		//获取token
 		if err := getToken(); err != nil {
 			log.Println("获取token失败： ", err)
 			ziLog.Error("获取token失败： "+err.Error(), config.Server.Debug)
 			os.Exit(1)
 		}
 		go getAccessToken()
-	}
-
-	//初始化世界排行版
-	if err := worldRankInit(); err != nil {
-		log.Println("初始化世界排行版失败： ", err)
-		ziLog.Error("初始化世界排行版失败： "+err.Error(), config.Server.Debug)
-		os.Exit(1)
+		//初始化世界排行版
+		if err := worldRankInit(); err != nil {
+			log.Println("初始化世界排行版失败： ", err)
+			ziLog.Error("初始化世界排行版失败： "+err.Error(), config.Server.Debug)
+			os.Exit(1)
+		}
+		// 失败消息获取
+		go getFailMessage()
+		// 检查断线状态
+		go checkDisconnectRoomIdExpire()
 	}
 
 	// 初始化etcd
@@ -86,17 +77,6 @@ func ServiceInit() {
 	// }
 	if is_pk_match {
 		go matchV1HeardBeat()
-	}
-	// testChat
-	// go TestChat()
-	// 失败消息获取
-	if !is_mock {
-		go getFailMessage()
-	}
-
-	// 检查断线状态
-	if !is_mock {
-		go checkDisconnectRoomIdExpire()
 	}
 
 	// 平台分开推送的内容

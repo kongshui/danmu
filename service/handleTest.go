@@ -115,10 +115,11 @@ func HandlestreamCount(c *gin.Context) {
 // 发送虚拟评论
 func HandleSendFakeComment(c *gin.Context) {
 	type comment struct {
-		OpenId  string `json:"open_id"`
-		RoomId  string `json:"room_id"`
-		Comment string `json:"Comment"`
-		UserId  int64  `json:"user_id"`
+		AnchorOpenId string `json:"anchor_open_id"`
+		Comment      string `json:"Comment"`
+		UserId       string `json:"user_id"`
+		UserName     string `json:"user_name"`
+		UserAvatar   string `json:"user_avatar"`
 	}
 	var commentGet comment
 	if err := c.ShouldBindJSON(&commentGet); err != nil {
@@ -128,55 +129,76 @@ func HandleSendFakeComment(c *gin.Context) {
 		})
 		return
 	}
+	roomId := QueryRoomIdInterconvertAnchorOpenId(commentGet.AnchorOpenId)
+	if roomId == "" {
+		c.JSON(404, gin.H{
+			"err": "该主播未开播",
+		})
+		return
+	}
+
 	switch platform {
 	case "ks":
 		data := KsCallbackDataStruct{}
 		commentData := KsLiveCommentStruct{}
 		data.UniqueMessageId = strconv.FormatInt(time.Now().UnixMilli(), 10)
 		data.PushType = "comment"
-		data.RoomCode = commentGet.RoomId
-		data.AuthorOpenId = commentGet.OpenId
+		data.RoomCode = roomId
+		data.AuthorOpenId = commentGet.AnchorOpenId
 		commentData.Content = commentGet.Comment
-		switch commentGet.UserId {
-		case 0:
-			commentData.UserInfo.NickName = "cccc"
-			commentData.UserInfo.UserId = "1234567890565598"
-			commentData.UserInfo.AvatarUrl = "https://www.keaitupian.cn/cjpic/frombd/2/253/2107631312/3178897554.jpg"
-		case 1:
-			commentData.UserInfo.NickName = "dddd"
-			commentData.UserInfo.UserId = "1234567890565599"
-			commentData.UserInfo.AvatarUrl = "https://ts1.tc.mm.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQHaEo?w=280&h=211&c=8&rs=1&qlt=90&r=0&o=6&pid=3.1&rm=2"
-		}
-		fmt.Println(commentData.UserInfo)
+		commentData.UserInfo.NickName = commentGet.UserName
+		commentData.UserInfo.UserId = commentGet.UserId
+		commentData.UserInfo.AvatarUrl = commentGet.UserAvatar
+
+		// switch commentGet.UserId {
+		// case 0:
+		// 	commentData.UserInfo.NickName = "cccc"
+		// 	commentData.UserInfo.UserId = "1234567890565598"
+		// 	commentData.UserInfo.AvatarUrl = "https://www.keaitupian.cn/cjpic/frombd/2/253/2107631312/3178897554.jpg"
+		// case 1:
+		// 	commentData.UserInfo.NickName = "dddd"
+		// 	commentData.UserInfo.UserId = "1234567890565599"
+		// 	commentData.UserInfo.AvatarUrl = "https://ts1.tc.mm.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQHaEo?w=280&h=211&c=8&rs=1&qlt=90&r=0&o=6&pid=3.1&rm=2"
+		// }
+		// fmt.Println(commentData.UserInfo)
 		data.Payload = append(data.Payload, commentData)
 		ksPushCommentPayloay(data)
 	case "dy":
 		data := []ContentPayloadStruct{}
-		switch commentGet.UserId {
-		case 0:
-			subData := ContentPayloadStruct{
-				MsgId:     strconv.FormatInt(time.Now().UnixMilli(), 10),
-				SecOpenid: "test123456",
-				Content:   commentGet.Comment,
-				AvatarUrl: "https://www.keaitupian.cn/cjpic/frombd/2/253/2107631312/3178897554.jpg",
-				Nickname:  "cccc",
-				TimeStamp: time.Now().UnixMilli(),
-			}
-			data = append(data, subData)
-		case 1:
-			subData := ContentPayloadStruct{
-				MsgId:     strconv.FormatInt(time.Now().UnixMilli(), 10),
-				SecOpenid: "test987654",
-				Content:   commentGet.Comment,
-				AvatarUrl: "https://ww2.sinaimg.cn/mw690/007ut4Uhly1hx4v37mpxcj30u017cgrv.jpg",
-				Nickname:  "dddd",
-				TimeStamp: time.Now().UnixMilli(),
-			}
-			data = append(data, subData)
+		subData := ContentPayloadStruct{
+			MsgId:     strconv.FormatInt(time.Now().UnixMilli(), 10),
+			SecOpenid: commentGet.UserId,
+			Content:   commentGet.Comment,
+			AvatarUrl: commentGet.UserAvatar,
+			Nickname:  commentGet.UserName,
+			TimeStamp: time.Now().UnixMilli(),
 		}
+		data = append(data, subData)
+		// switch commentGet.UserId {
+		// case 0:
+		// 	subData := ContentPayloadStruct{
+		// 		MsgId:     strconv.FormatInt(time.Now().UnixMilli(), 10),
+		// 		SecOpenid: "test123456",
+		// 		Content:   commentGet.Comment,
+		// 		AvatarUrl: "https://www.keaitupian.cn/cjpic/frombd/2/253/2107631312/3178897554.jpg",
+		// 		Nickname:  "cccc",
+		// 		TimeStamp: time.Now().UnixMilli(),
+		// 	}
+		// 	data = append(data, subData)
+		// case 1:
+		// 	subData := ContentPayloadStruct{
+		// 		MsgId:     strconv.FormatInt(time.Now().UnixMilli(), 10),
+		// 		SecOpenid: "test987654",
+		// 		Content:   commentGet.Comment,
+		// 		AvatarUrl: "https://ww2.sinaimg.cn/mw690/007ut4Uhly1hx4v37mpxcj30u017cgrv.jpg",
+		// 		Nickname:  "dddd",
+		// 		TimeStamp: time.Now().UnixMilli(),
+		// 	}
+		// 	data = append(data, subData)
+		// }
 
 		dataByte, _ := json.Marshal(data)
-		pushDyBasePayloayDirect(commentGet.RoomId, commentGet.OpenId, "live_comment", dataByte)
+		pushDyBasePayloayDirect(roomId, commentGet.AnchorOpenId, "live_comment", dataByte)
 	}
 	c.JSON(200, "添加成功")
 }
@@ -185,10 +207,11 @@ func HandleSendFakeComment(c *gin.Context) {
 func HandleSendFakeGift(c *gin.Context) {
 	type gift struct {
 		AnchorOpenId string `json:"anchor_open_id"`
-		RoomId       string `json:"room_id"`
 		GiftId       string `json:"gift_id"`
 		Num          int64  `json:"num"`
 		UserId       string `json:"user_id"`
+		UserName     string `json:"user_name"`
+		UserAvatar   string `json:"user_avatar"`
 	}
 	var giftGet gift
 	if err := c.ShouldBindJSON(&giftGet); err != nil {
@@ -198,18 +221,25 @@ func HandleSendFakeGift(c *gin.Context) {
 		})
 		return
 	}
-	userinfo, err := userInfoGet(giftGet.UserId)
-	if err != nil {
-		userinfo.OpenId = giftGet.UserId
-		userinfo.NickName = "cccc"
-		userinfo.AvatarUrl = "https://www.keaitupian.cn/cjpic/frombd/2/253/2107631312/3178897554.jpg"
+	// userinfo, err := userInfoGet(giftGet.UserId)
+	// if err != nil {
+	// 	userinfo.OpenId = giftGet.UserId
+	// 	userinfo.NickName = giftGet.UserName
+	// 	userinfo.AvatarUrl = giftGet.UserAvatar
+	// }
+	roomId := QueryRoomIdInterconvertAnchorOpenId(giftGet.AnchorOpenId)
+	if roomId == "" {
+		c.JSON(404, gin.H{
+			"err": "该主播未开播",
+		})
+		return
 	}
 	switch platform {
 	case "ks":
 		data := KsCallbackQueryStruct{}
 		giftData := KsGiftSendStruct{}
 		data.AuthorOpenId = giftGet.AnchorOpenId
-		data.RoomCode = giftGet.RoomId
+		data.RoomCode = roomId
 		data.PushType = "giftSend"
 		data.UniqueMessageId = strconv.FormatInt(time.Now().UnixMilli(), 10)
 		data.LiveTimeStamp = time.Now().UnixMilli()
@@ -229,9 +259,9 @@ func HandleSendFakeGift(c *gin.Context) {
 		// 	giftData.UserInfo.UserId = "1234567890565599"
 		// 	giftData.UserInfo.AvatarUrl = "https://ts1.tc.mm.bing.net/th/id/OIP-C.mH9YLFEL5YdVxJM82mjVJQHaEo?w=280&h=211&c=8&rs=1&qlt=90&r=0&o=6&pid=3.1&rm=2"
 		// }
-		giftData.UserInfo.NickName = userinfo.NickName
-		giftData.UserInfo.UserId = userinfo.OpenId
-		giftData.UserInfo.AvatarUrl = userinfo.AvatarUrl
+		giftData.UserInfo.NickName = giftGet.UserName
+		giftData.UserInfo.UserId = giftGet.UserId
+		giftData.UserInfo.AvatarUrl = giftGet.UserAvatar
 
 		data.Payload = append(data.Payload, giftData)
 		ksPushGiftSendPayloay(data)
@@ -263,17 +293,79 @@ func HandleSendFakeGift(c *gin.Context) {
 		// }
 		subData := GiftPayloadStruct{
 			MsgId:     strconv.FormatInt(time.Now().UnixMilli(), 10),
-			SecOpenid: userinfo.OpenId,
+			SecOpenid: giftGet.UserId,
 			SecGiftId: giftGet.GiftId,
 			GiftNum:   int(giftGet.Num),
-			AvatarUrl: userinfo.AvatarUrl,
-			Nickname:  userinfo.NickName,
+			AvatarUrl: giftGet.UserAvatar,
+			Nickname:  giftGet.UserName,
 			TimeStamp: time.Now().UnixMilli(),
 		}
 		data = append(data, subData)
 
 		dataByte, _ := json.Marshal(data)
-		pushDyBasePayloayDirect(giftGet.RoomId, giftGet.AnchorOpenId, "live_gift", dataByte)
+		pushDyBasePayloayDirect(roomId, giftGet.AnchorOpenId, "live_gift", dataByte)
+	}
+	c.JSON(200, "添加成功")
+}
+
+// 发送虚假点赞
+func HandleSendLiveLike(c *gin.Context) {
+	type like struct {
+		AnchorOpenId string `json:"anchor_open_id"`
+		Num          int64  `json:"num"`
+		UserId       string `json:"user_id"`
+		UserName     string `json:"user_name"`
+		UserAvatar   string `json:"user_avatar"`
+	}
+	var giftGet like
+	if err := c.ShouldBindJSON(&giftGet); err != nil {
+		log.Println(err)
+		c.JSON(404, gin.H{
+			"err": err,
+		})
+		return
+	}
+	// userinfo, err := userInfoGet(giftGet.UserId)
+	// if err != nil {
+	// 	userinfo.OpenId = giftGet.UserId
+	// 	userinfo.NickName = giftGet.UserName
+	// 	userinfo.AvatarUrl = giftGet.UserAvatar
+	// }
+	roomId := QueryRoomIdInterconvertAnchorOpenId(giftGet.AnchorOpenId)
+	if roomId == "" {
+		c.JSON(404, gin.H{
+			"err": "该主播未开播",
+		})
+		return
+	}
+	switch platform {
+	case "ks":
+		data := KsCallbackDataStruct{}
+		likeData := KsLiveLikeStruct{}
+		data.AuthorOpenId = giftGet.AnchorOpenId
+		data.RoomCode = roomId
+		data.PushType = "liveLike"
+		data.UniqueMessageId = strconv.FormatInt(time.Now().UnixMilli(), 10)
+		likeData.Count = giftGet.Num
+		likeData.UserInfo.UserId = giftGet.UserId
+		likeData.UserInfo.NickName = giftGet.UserName
+		likeData.UserInfo.AvatarUrl = giftGet.UserAvatar
+		data.Payload = append(data.Payload, likeData)
+		ksPushLiveLikePayloay(data)
+	case "dy":
+		data := []LiveLikePayloadStruct{}
+		subData := LiveLikePayloadStruct{
+			MsgId:     strconv.FormatInt(time.Now().UnixMilli(), 10),
+			SecOpenid: giftGet.UserId,
+			LikeNum:   giftGet.Num,
+			AvatarUrl: giftGet.UserAvatar,
+			Nickname:  giftGet.UserName,
+			TimeStamp: time.Now().UnixMilli(),
+		}
+		data = append(data, subData)
+
+		dataByte, _ := json.Marshal(data)
+		pushDyBasePayloayDirect(roomId, giftGet.AnchorOpenId, "live_gift", dataByte)
 	}
 	c.JSON(200, "添加成功")
 }

@@ -90,7 +90,7 @@ func newConf() *Config {
 		Nats:    Nats{[]string{"nats://localhost:4222"}},
 		Redis:   Redis{"127.0.0.1:6379", 0, "", false},
 		Mysql:   Mysql{"127.0.0.1:3306", "root", "123456", "store_log", true},
-		App:     App{"ks", "ks676384373188706596", "XJpIcKcmjKo0RI3JFll-Ag", "", "", "", "", "", "", false, false},
+		App:     App{"ks", "", "", "", "", "", "", "", "", false, false},
 	}
 }
 

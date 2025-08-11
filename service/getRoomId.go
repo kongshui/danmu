@@ -118,18 +118,7 @@ func setRoomInfo(uid string, roomInfo *pmsg.AnchorInfoMessage) (*pmsg.AnchorInfo
 // 抖音获取主播信息
 func dyGetAnchorInfo(uid, token string) error {
 	if is_mock {
-		go userInfoCompareStore("123456789", "dytest", "http://tupian.geimian.com/pic/2016/11/2016-11-05_213153.jpg")
-		data := &pmsg.AnchorInfoMessage{}
-		data.AnchorOpenId = "123456789"
-		data.AvatarUrl = "http://tupian.geimian.com/pic/2016/11/2016-11-05_213153.jpg"
-		data.NickName = "dytest"
-		data.RoomId = "987654321"
-		databyte, _ := proto.Marshal(data)
-		setRoomInfo(uid, data)
-		connect(data.GetRoomId(), data.GetAnchorOpenId())
-		if err := sse.SseSend(pmsg.MessageId_TokenAck, []string{uid}, databyte); err != nil {
-			return fmt.Errorf("DyGetAnchorInfo pushDownLoadMessage err: %v", err)
-		}
+		CreateRoomId(uid, "")
 		return nil
 	}
 	requestBody, err := json.Marshal(map[string]any{

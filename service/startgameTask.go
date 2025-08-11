@@ -16,19 +16,10 @@ import (
 // 快手开始和结束游戏推送任务请求
 func ksStartFinishGameInfo(roomId, url, label, uid string, isSend bool) bool {
 	// fmt.Println(roomid)
-	// if isMock {
-	// 	return true
-	// 	// roomInfo := &pmsg.AnchorInfoMessage{}
-	// 	// roomInfo.RoomId = roomid
-	// 	// roomInfo.AnchorOpenId = "_666666666666"
-	// 	// roomInfo.NickName = "测试"
-	// 	// roomInfo.AvatarUrl = ""
-	// 	// dataByte, _ := json.Marshal(roomInfo)
-	// 	// if err := pushDownLoadMessage(uint32(pmsg.MessageId_StartBindAck), pmsg.MessageId_StartBindAck.String(), uid, dataByte); err != nil {
-	// 	// 	log.Println("pushDownLoadMessage err: ", err)
-	// 	// }
-	// 	// return true
-	// }
+	if is_mock {
+		CreateRoomId(uid, roomId)
+		return true
+	}
 	headers := map[string]string{
 		"Content-Type": "application/json;charset=UTF-8",
 	}

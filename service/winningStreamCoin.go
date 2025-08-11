@@ -26,10 +26,10 @@ func QueryUserWinStreamCoin(openId string) (int64, error) {
 // 添加玩家连胜币
 func AddUserWinStreamCoin(openId string, coin int64) (int64, error) {
 	if coin == 0 {
-		nCoin, err := rdb.ZScore(winning_streak_coin_db, openId)
-		if err != nil {
-			return 0, err
-		}
+		nCoin, _ := rdb.ZScore(winning_streak_coin_db, openId)
+		// if err != nil {
+		// 	return 0, err
+		// }
 		return int64(nCoin), nil
 	}
 	nCoin, err := rdb.ZIncrBy(winning_streak_coin_db, float64(coin), openId)

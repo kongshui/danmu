@@ -39,7 +39,9 @@ func autoNewVersion() {
 					scrollClearLevelInfo(currentRankVersion)
 				}
 				// 设置排行榜生效版本
-				worldRankSet(currentRankVersion)
+				if !is_mock {
+					worldRankSet(currentRankVersion)
+				}
 				// 版本号初始化
 				if err := worldRankVersionInit(); err != nil {
 					ziLog.Error("autoNewVersion 初始化版本信息失败： "+err.Error(), debug)

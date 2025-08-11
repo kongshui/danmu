@@ -452,9 +452,6 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 
 // 消息推送
 func ksPushCommentPayloay(data KsCallbackDataStruct) {
-	if data.PushType == "giftSend" {
-		ziLog.Gift(fmt.Sprintf("ksPushGiftSendPayloay giftdata： %v", data), debug)
-	}
 	endSendData := platFormPool.Get().(*pmsg.PlatFormDataSend)
 	defer platFormPool.Put(endSendData)
 	endSendData.OpenId = data.AuthorOpenId
@@ -482,6 +479,40 @@ func ksPushCommentPayloay(data KsCallbackDataStruct) {
 		// 推送消息
 		if err := sse.SseSend(msgId, sendUidList, endSendDatabyte); err != nil {
 			ziLog.Error(fmt.Sprintf("ksPushCommentPayloay 推送消息失败: %v, data: %v", err, v), debug)
+		}
+	}
+
+}
+
+// 消息推送
+func ksPushLiveLikePayloay(data KsCallbackDataStruct) {
+	endSendData := platFormPool.Get().(*pmsg.PlatFormDataSend)
+	defer platFormPool.Put(endSendData)
+	endSendData.OpenId = data.AuthorOpenId
+	endSendData.RoomId = data.RoomCode
+	endSendData.PushType = data.PushType
+	for _, v := range data.Payload {
+		var (
+			msgId pmsg.MessageId = pmsg.MessageId_liveLike
+		)
+		// 格式化消息
+		jData, err := json.Marshal(v)
+		if err != nil {
+			ziLog.Error(fmt.Sprintf("ksPushLiveLikePayloay json.Marshal err: %v", err), debug)
+			return
+		}
+		sendUidList, _, _, _ := getUidListByOpenId(data.AuthorOpenId)
+		log.Println("ksPushLiveLikePayloay sendUidList", sendUidList)
+		if len(sendUidList) == 0 {
+			ziLog.Error(fmt.Sprintf("ksPushBasePayloay queryRoomIdToUid nil， roomId: %v, openId, %v, 数据为： %v", data.RoomCode, data.AuthorOpenId, data), debug)
+			return
+		}
+		endSendData.Data = jData
+		endSendData.TimeStamp = time.Now().UnixMilli()
+		endSendDatabyte, _ := proto.Marshal(endSendData)
+		// 推送消息
+		if err := sse.SseSend(msgId, sendUidList, endSendDatabyte); err != nil {
+			ziLog.Error(fmt.Sprintf("ksPushLiveLikePayloay 推送消息失败: %v, data: %v", err, v), debug)
 		}
 	}
 
