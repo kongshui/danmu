@@ -28,7 +28,7 @@ func ConnectInit(conf *conf.Config, etcClient *dao_etcd.Etcd, mysqlClient *dao_m
 	battlematchv1.InitProjectName(config.Project)
 	mysql = mysqlClient
 	rdb = redisClient
-	ziLog = *logWirte
+	ziLog = logWirte
 }
 
 // 初始化全局变量

@@ -67,7 +67,7 @@ var (
 	// grpcpool
 	// grpc_pool = newTCPConnectionPool(20)
 	// testMode             bool                     //测试模式
-	ziLog zilog.LogStruct
+	ziLog *zilog.LogStruct
 	// isMock          bool    = true //是否模拟
 	// testChat []string = make([]string, 0)
 	msgBodyPool sync.Pool = sync.Pool{New: func() any {
