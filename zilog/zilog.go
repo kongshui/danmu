@@ -54,12 +54,13 @@ func (logS *LogStruct) Init(dataDir, level string, maxSize int64, maxBacks, maxA
 	if dataDir == "" {
 		dataDir, err = os.Executable()
 		if err != nil {
-			panic("获取日志目录失败: " + err.Error())
+			panic("get log dir err: " + err.Error())
+
 		}
 		dataDir = filepath.Join(filepath.Dir(dataDir), "logs")
 		if !pathExists(dataDir) {
 			if err := os.MkdirAll(dataDir, 0755); err != nil {
-				panic("创建日志目录失败: " + err.Error())
+				panic("create log dir err: " + err.Error())
 			}
 		}
 	}
@@ -86,13 +87,14 @@ func (logS *LogStruct) Init(dataDir, level string, maxSize int64, maxBacks, maxA
 				continue
 			}
 			if err := logS.open(label, filepath.Join(dataDir, "."+label)); err != nil {
-				panic("日志初始化失败： " + err.Error())
+				panic("log info init err: " + err.Error())
+
 			}
 			logS.getLogInfoContext()
 			continue
 		}
 		if err := logS.open(label, filepath.Join(dataDir, label+".log")); err != nil {
-			panic("日志初始化失败： " + err.Error())
+			panic("log init err: " + err.Error())
 		}
 	}
 	go logS.checkLogRotate()
@@ -438,7 +440,8 @@ func (logS *LogStruct) checkLogRotate() {
 func (logS *LogStruct) sizeLogRorate(label string) {
 	size, err := logS.getLogSize(label)
 	if err != nil {
-		logS.Write("error", "获取日志大小失败: "+err.Error())
+		logS.Write("error", "get log size err: "+err.Error())
+
 		return
 	}
 	if size <= 0 {
@@ -446,9 +449,9 @@ func (logS *LogStruct) sizeLogRorate(label string) {
 	}
 	if size >= int64(logS.maxSize) {
 		if err := logS.logRotate(label); err != nil {
-			logS.Write("error", label+"日志轮转失败: "+err.Error())
+			logS.Write("error", label+" log rotate err: "+err.Error()+"\n")
 		} else {
-			logS.Write(label, label+"日志文件已轮转")
+			logS.Write(label, label+" log file rotated"+"\n")
 		}
 	}
 }
@@ -458,9 +461,9 @@ func (logS *LogStruct) timeLogRorate(label string) {
 	// 测试更改时间设置
 	if time.Now().Unix()-logS.getLogOpenTime(label) >= int64(logS.maxAge)*logS.rotateTime {
 		if err := logS.logRotate(label); err != nil {
-			logS.Write("error", label+"日志轮转失败: "+err.Error())
+			logS.Write("error", label+" log rotate err: "+err.Error()+"\n")
 		} else {
-			logS.Write(label, label+"日志文件已轮转")
+			logS.Write(label, label+" log file rotated"+"\n")
 			return
 		}
 	}
