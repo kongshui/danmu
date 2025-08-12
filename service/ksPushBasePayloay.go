@@ -292,7 +292,7 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 		PushType:            data.PushType,
 		CpServerReceiveTime: time.Now().UnixMilli(),
 	}
-	ziLog.Error(fmt.Sprintf("ksPushGiftSendPayloay giftdata： %v", data), debug)
+	ziLog.Gift(fmt.Sprintf("ksPushGiftSendPayloay giftdata： %v", data), debug)
 	// 获取房间信息
 	sendUidList, _, isGroup, _ := getUidListByOpenId(data.AuthorOpenId)
 	if len(sendUidList) == 0 {

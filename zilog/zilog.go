@@ -40,6 +40,7 @@ type (
 		maxSize     int64
 		maxBackups  int
 		maxAge      int
+		rotateTime  int64
 	}
 )
 
@@ -48,7 +49,7 @@ var (
 )
 
 // 日志结构体初始化
-func (logS *LogStruct) Init(dataDir, level string, maxSize int64, maxBacks, maxAge int) {
+func (logS *LogStruct) Init(dataDir, level string, maxSize int64, maxBacks, maxAge int, rotateTime int64) {
 	var err error
 	if dataDir == "" {
 		dataDir, err = os.Executable()
@@ -62,6 +63,7 @@ func (logS *LogStruct) Init(dataDir, level string, maxSize int64, maxBacks, maxA
 			}
 		}
 	}
+	logS.rotateTime = rotateTime
 	logS.level = level
 	logS.maxSize = maxSize
 	logS.maxBackups = maxBacks
@@ -290,7 +292,7 @@ func (logS *LogStruct) Info(data string, debug bool) {
 	if debug {
 		fmt.Print(data)
 	}
-	logS.Write(Info, data)
+	go logS.Write(Info, data)
 }
 
 // error日志写入
@@ -300,7 +302,7 @@ func (logS *LogStruct) Error(data string, debug bool) {
 	if debug {
 		fmt.Print(data)
 	}
-	logS.Write(Error, data)
+	go logS.Write(Error, data)
 }
 
 // warn日志写入
@@ -310,7 +312,7 @@ func (logS *LogStruct) Warn(data string, debug bool) {
 	if debug {
 		fmt.Print(data)
 	}
-	logS.Write(Warn, data)
+	go logS.Write(Warn, data)
 }
 
 // gift日志写入
@@ -320,7 +322,7 @@ func (logS *LogStruct) Gift(data string, debug bool) {
 	if debug {
 		fmt.Print(data)
 	}
-	logS.Write(Gift, data)
+	go logS.Write(Gift, data)
 }
 
 // debug日志写入
@@ -330,26 +332,36 @@ func (logS *LogStruct) Debug(data string, debug bool) {
 	if debug {
 		fmt.Print(data)
 	}
-	logS.Write(Debug, data)
+	go logS.Write(Debug, data)
 }
 
 // logtotate
 func (logS *LogStruct) logRotate(label string) error {
-	var file *os.File
+	var (
+		file *os.File
+		lock *sync.RWMutex
+	)
 	switch label {
 	case "debug":
 		file = logS.debugFile.File
+		lock = logS.debugFile.Lock
 	case "info":
 		file = logS.infoFile.File
+		lock = logS.infoFile.Lock
 	case "error":
 		file = logS.errorFile.File
+		lock = logS.errorFile.Lock
 	case "warn":
 		file = logS.warnFile.File
+		lock = logS.warnFile.Lock
 	case "gift":
 		file = logS.giftFile.File
+		lock = logS.giftFile.Lock
 	default:
 		return nil
 	}
+	lock.Lock()
+	defer lock.Unlock()
 	fileName := file.Name()
 	logS.close(label)
 	bakFileName := fileName + "." + time.Now().Format("2006_01_02_15_04_05")
@@ -443,7 +455,8 @@ func (logS *LogStruct) sizeLogRorate(label string) {
 
 // 时间轮转
 func (logS *LogStruct) timeLogRorate(label string) {
-	if time.Now().Unix()-logS.getLogOpenTime(label) >= int64(logS.maxAge)*3600 {
+	// 测试更改时间设置
+	if time.Now().Unix()-logS.getLogOpenTime(label) >= int64(logS.maxAge)*logS.rotateTime {
 		if err := logS.logRotate(label); err != nil {
 			logS.Write("error", label+"日志轮转失败: "+err.Error())
 		} else {
@@ -501,8 +514,6 @@ func (logS *LogStruct) compressLogFile(filename, label string) error {
 	}
 	logFile.Close()
 	os.Remove(filename)
-	logS.logInfoFile.Lock.Lock()
-	defer logS.logInfoFile.Lock.Unlock()
 	logInfoContext[label] = append(logInfoContext[label], zipFileName)
 	lenCount := len(logInfoContext[label])
 	for {
