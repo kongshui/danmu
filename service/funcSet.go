@@ -21,14 +21,14 @@ func ServiceFuncSet(suf SingleUserFunc, sts SetWinScoreFunc, ltf LotteryFunc, we
 }
 
 // 所有链接初始化
-func ConnectInit(conf *conf.Config, etcClient *dao_etcd.Etcd, mysqlClient *dao_mysql.MysqlClient, redisClient dao_redis.RedisClient, logWirte zilog.LogStruct) {
+func ConnectInit(conf *conf.Config, etcClient *dao_etcd.Etcd, mysqlClient *dao_mysql.MysqlClient, redisClient dao_redis.RedisClient, logWirte *zilog.LogStruct) {
 	config = conf
 	etcdClient = etcClient
 	battlematchv1.InitEtcd(etcClient)
 	battlematchv1.InitProjectName(config.Project)
 	mysql = mysqlClient
 	rdb = redisClient
-	ziLog = logWirte
+	ziLog = *logWirte
 }
 
 // 初始化全局变量
