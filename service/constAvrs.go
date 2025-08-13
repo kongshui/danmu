@@ -24,11 +24,11 @@ const (
 	monitor_disconnect_roomid_db  = "monitor_disconnect_roomid"  //断线房间id列表推送锁
 	version_time_layout           = "20060102"                   //版本号时间格式
 	mysql_query_time_layout       = "2006-01-02"                 // 数据库版本查询时间格式
-	version_time_interval         = 259200                       //时间间隔
-	top_100_ranking               = "top_100_ranking"            //世界排行版前100名
-	is_consume_db                 = "is_consume"                 //是否是第一次消费
-	forward_domain_key            = "/forward_domain"            //前端http节点
-	backend_domain_key            = "/backend_domain"            //后端http节点
+	// version_time_interval         = 259200                       //时间间隔
+	top_100_ranking    = "top_100_ranking" //世界排行版前100名
+	is_consume_db      = "is_consume"      //是否是第一次消费
+	forward_domain_key = "/forward_domain" //前端http节点
+	backend_domain_key = "/backend_domain" //后端http节点
 	// grpc_domain_key               = "/grpc_domain"               //grpc节点
 	forward_domain_uri           = "/ws"               //前端uri
 	match_battle_status_ready    = 1                   // 匹配准备状态
