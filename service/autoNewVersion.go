@@ -38,6 +38,12 @@ func autoNewVersion() {
 					// 等级滚动
 					scrollClearLevelInfo(currentRankVersion)
 				}
+				// 开启积分滚动
+				if is_integral_scroll {
+					// 积分滚动
+					scrollClearIntegralInfo(currentRankVersion)
+				}
+
 				// 设置排行榜生效版本
 				if !is_mock {
 					worldRankSet(currentRankVersion)

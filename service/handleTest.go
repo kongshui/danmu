@@ -116,7 +116,7 @@ func HandlestreamCount(c *gin.Context) {
 func HandleSendFakeComment(c *gin.Context) {
 	type comment struct {
 		AnchorOpenId string `json:"anchor_open_id"`
-		Comment      string `json:"Comment"`
+		Comment      string `json:"comment"`
 		UserId       string `json:"user_id"`
 		UserName     string `json:"user_name"`
 		UserAvatar   string `json:"user_avatar"`

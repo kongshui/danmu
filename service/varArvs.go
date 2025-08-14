@@ -47,6 +47,7 @@ var (
 	giftIdToName          map[string]string  //礼物id对应的礼物名称
 	nodeIdToIntegral      map[int64]int64    //节点id对应的积分
 	expireTime            time.Duration      //过期时间
+	is_integral_scroll    bool               //是否开启积分滚动
 	currentRankVersion    string             //世界排行版version
 	nowMonth              string             //当前月
 	monthVersionRankDb    string             //月排行版db名称
