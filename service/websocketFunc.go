@@ -465,8 +465,8 @@ func disconnect(msg *pmsg.MessageBody) error {
 	if err != nil {
 		return errors.New("Disconnect Unmarshal err: " + err.Error())
 	}
-	ziLog.Info(fmt.Sprintf("disconnect enter roomId:%v, userId: %v", data.RoomId, data.UserId), debug)
-	endConnect(data.RoomId, data.UserId)
+	ziLog.Info(fmt.Sprintf("disconnect enter roomId:%v, userId: %v", data.GetRoomId(), data.GetUserId()), debug)
+	endConnect(data.GetRoomId(), data.GetUserId())
 
 	// if getGameInfo(data.RoomId, url_BindUrl) == 1 {
 	// 	startFinishGameInfo(data.RoomId, url_BindUrl, "stop", msg.GetUuid(), true)

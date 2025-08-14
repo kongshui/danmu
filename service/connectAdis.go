@@ -7,7 +7,7 @@ import (
 	battlematchv1 "github.com/kongshui/danmu/battlematch/v1"
 )
 
-func endConnect(roomId string, openId string) bool {
+func endConnect(roomId, openId string) bool {
 	// 是否存在roundId
 	if rdb.IsExistKey(roomId + "_round") {
 		// 获取roundId
@@ -89,6 +89,9 @@ func endClean(roomId, openId string) {
 		// 设置过期时间
 		if ok {
 			rdb.Expire(integral_pool_Prefix+openId, expireTime)
+		} else {
+			ziLog.Error(fmt.Sprintf("connect 积分池不存在, roomId : %v, openId: %v", roomId, openId), debug)
+
 		}
 	}
 	// 删除roomid信息

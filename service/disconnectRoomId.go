@@ -53,6 +53,7 @@ func checkDisconnectRoomIdExpire() {
 
 		for _, roomId := range roomIdList {
 			openId, _ := queryAnchorOpenIdByRoomId(roomId)
+			ziLog.Info(fmt.Sprintf("checkDisconnectRoomIdExpire 检查roomId: %v, openId: %v", roomId, openId), debug)
 			// 检查roomid是否过期，如果过期则删除
 			if rdb.IsExistKey(roomId + "_round") {
 				switch platform {
