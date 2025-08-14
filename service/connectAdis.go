@@ -41,7 +41,7 @@ func endConnect(roomId, openId string) bool {
 				if getDyGameInfo(roomId, url_check_push_url, "live_gift") == 1 &&
 					getDyGameInfo(roomId, url_check_push_url, "live_comment") == 1 &&
 					getDyGameInfo(roomId, url_check_push_url, "live_like") == 1 {
-					endClean(roomId, QueryRoomIdInterconvertAnchorOpenId(roomId))
+					endClean(roomId, openId)
 				} else {
 					disconnectRoomIdADD(roomId)
 				}
@@ -90,7 +90,7 @@ func endClean(roomId, openId string) {
 		if ok {
 			rdb.Expire(integral_pool_Prefix+openId, expireTime)
 		} else {
-			ziLog.Error(fmt.Sprintf("connect 积分池不存在, roomId : %v, openId: %v", roomId, openId), debug)
+			ziLog.Error(fmt.Sprintf("endClean 积分池不存在, roomId : %v, openId: %v", roomId, openId), debug)
 
 		}
 	}
