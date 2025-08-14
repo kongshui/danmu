@@ -20,12 +20,20 @@ func setRoomIdToAnchorOpenId(roomId string, openId string) bool {
 
 // 删除roomid和主播id
 // 设置roomid和主播id
-func DelRoomIdToAnchorOpenId(roomId string) bool {
+func delRoomIdToAnchorOpenId(roomId string) bool {
 	queryId := QueryRoomIdInterconvertAnchorOpenId(roomId)
 	if queryId == "" {
 		return true
 	}
 	return rdb.HDel(roomdid_to_anchoropenid_db, roomId) == nil
+}
+
+func queryAnchorOpenIdByRoomId(roomId string) (string, error) {
+	openId, err := rdb.HGet(roomdid_to_anchoropenid_db, roomId)
+	if err != nil {
+		return "", err
+	}
+	return openId, nil
 }
 
 // 通过roomid获取主播id

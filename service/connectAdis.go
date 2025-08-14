@@ -91,13 +91,13 @@ func endClean(roomId, openId string) {
 			rdb.Expire(integral_pool_Prefix+openId, expireTime)
 		}
 	}
+	// 删除roomid信息
+	delRoomIdToAnchorOpenId(roomId)
+
 	//删除对战信息
 	if err := liveCurrentRoundDel(roomId); err != nil {
 		ziLog.Error(fmt.Sprintf("endClean 删除对战信息, roomId : %v,err: %v", roomId, err), debug)
 	}
-	//删除房间id
-	// DelRoomIdToAnchorOpenId(roomId)
-
 	// 删除礼物对比消息
 	rdb.Del(roomId + "giftSend")
 

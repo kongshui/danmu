@@ -50,7 +50,9 @@ func checkDisconnectRoomIdExpire() {
 			ziLog.Error(fmt.Sprintf("checkDisconnectRoomIdExpire 查询断线重连列表中的roomid失败: %v", err), debug)
 			continue
 		}
+
 		for _, roomId := range roomIdList {
+			openId, _ := queryAnchorOpenIdByRoomId(roomId)
 			// 检查roomid是否过期，如果过期则删除
 			if rdb.IsExistKey(roomId + "_round") {
 				switch platform {
@@ -59,7 +61,7 @@ func checkDisconnectRoomIdExpire() {
 						// 游戏中，不做处理
 						continue
 					} else {
-						if err := battlematchv1.DisconnectMatchRegister(first_ctx, QueryRoomIdInterconvertAnchorOpenId(roomId)); err != nil {
+						if err := battlematchv1.DisconnectMatchRegister(first_ctx, openId); err != nil {
 							ziLog.Error(fmt.Sprintf("checkDisconnectRoomIdExpire 匹配组掉线注册失败, roomId : %v,err: %v", roomId, err), debug)
 						}
 					}
@@ -67,7 +69,7 @@ func checkDisconnectRoomIdExpire() {
 					roundId, ok := queryRoomIdToRoundId(roomId)
 					if ok {
 						if !ksSyncGameStatus(SyncGameStatusStruct{
-							AnchorOpenId:    QueryRoomIdInterconvertAnchorOpenId(roomId),
+							AnchorOpenId:    openId,
 							AppId:           app_id,
 							RoomId:          roomId,
 							RoundId:         roundId,
@@ -76,7 +78,7 @@ func checkDisconnectRoomIdExpire() {
 							Status:          2,
 							GroupResultList: []GroupResultList{{GroupId: "绝对中立", Result: 1}},
 						}, "stop", false) {
-							endClean(roomId, QueryRoomIdInterconvertAnchorOpenId(roomId))
+							endClean(roomId, openId)
 						}
 					}
 				case "dy":
@@ -84,12 +86,12 @@ func checkDisconnectRoomIdExpire() {
 					if getDyGameInfo(roomId, url_check_push_url, "live_gift") == 1 &&
 						getDyGameInfo(roomId, url_check_push_url, "live_comment") == 1 &&
 						getDyGameInfo(roomId, url_check_push_url, "live_like") == 1 {
-						endClean(roomId, QueryRoomIdInterconvertAnchorOpenId(roomId))
+						endClean(roomId, openId)
 					}
 				}
 			} else {
 				// 否则的话清理
-				endClean(roomId, QueryRoomIdInterconvertAnchorOpenId(roomId))
+				endClean(roomId, openId)
 			}
 		}
 	}
