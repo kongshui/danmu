@@ -256,6 +256,15 @@ func getTopWorldRankData() *pmsg.UserInfoListMessage {
 		user, _ := userInfoGet(openId)
 		coin, _ := QueryUserWinStreamCoin(openId)
 		level, _ := QueryLevelInfo(openId)
+		if user.NickName == "" || user.AvatarUrl == "" {
+			// 从数据库查询玩家信息
+			nickName, avatarUrl, err := mysql.QueryPlayerInfo(openId)
+			if err != nil {
+				ziLog.Error(fmt.Sprintf("getTopWorldRankData QueryPlayerInfo err: %v", err), debug)
+			}
+			user.NickName = nickName
+			user.AvatarUrl = avatarUrl
+		}
 
 		data.UserInfoList = append(data.UserInfoList, &pmsg.UserInfo{
 			OpenId:            openId,

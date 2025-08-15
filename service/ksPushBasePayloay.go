@@ -254,7 +254,6 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 				ziLog.Error(fmt.Sprintf("ksPushBasePayloay 推送消息失败:  %v,失败数据为： %v", err, v), debug)
 			}
 		}
-
 	}
 	if isgift {
 		if config.App.IsOnline && isSendAck {
