@@ -258,7 +258,7 @@ func getTopWorldRankData() *pmsg.UserInfoListMessage {
 		level, _ := QueryLevelInfo(openId)
 		if user.NickName == "" || user.AvatarUrl == "" {
 			// 从数据库查询玩家信息
-			nickName, avatarUrl, err := mysql.QueryPlayerInfo(openId)
+			avatarUrl, nickName, err := mysql.QueryPlayerInfo(openId)
 			if err != nil {
 				ziLog.Error(fmt.Sprintf("getTopWorldRankData QueryPlayerInfo err: %v", err), debug)
 			}
