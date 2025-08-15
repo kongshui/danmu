@@ -365,7 +365,7 @@ func HandleSendLiveLike(c *gin.Context) {
 		data = append(data, subData)
 
 		dataByte, _ := json.Marshal(data)
-		pushDyBasePayloayDirect(roomId, giftGet.AnchorOpenId, "live_gift", dataByte)
+		pushDyBasePayloayDirect(roomId, giftGet.AnchorOpenId, "live_like", dataByte)
 	}
 	c.JSON(200, "添加成功")
 }
