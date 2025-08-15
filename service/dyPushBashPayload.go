@@ -35,7 +35,7 @@ func pushDyBasePayloayDirect(roomId, anchorOpenId, msgType string, data []byte) 
 	if err != nil {
 		_, nickName, err = mysql.QueryPlayerInfo(anchorOpenId)
 		if err != nil {
-			ziLog.Error(fmt.Sprintf("ksPushBasePayloay giftSend userInfoGet err:  %v", err), debug)
+			ziLog.Error(fmt.Sprintf("pushDyBasePayloayDirect get userInfoGet err:  %v", err), debug)
 		}
 		anchorName.NickName = nickName
 		// anchorName.AvatarUrl = avatarUrl
@@ -152,12 +152,12 @@ func msgAckSend(data MsgAckStruct) error {
 func dyPayloadSendMessage(v any, msgId pmsg.MessageId, roomId, anchorOpenid string) {
 	sendUidList, _, _, _ := getUidListByOpenId(anchorOpenid)
 	if len(sendUidList) == 0 {
-		ziLog.Error(fmt.Sprintf("ksPushBasePayloay sendUidList is nil, roomId: %v, anchorOpenid: %v, data: %v", roomId, anchorOpenid, v), debug)
+		ziLog.Error(fmt.Sprintf("dyPayloadSendMessage sendUidList is nil, roomId: %v, anchorOpenid: %v, data: %v", roomId, anchorOpenid, v), debug)
 		return
 	}
 	jData, err := json.Marshal(v)
 	if err != nil {
-		ziLog.Error(fmt.Sprintf("ksPushBasePayloay jpushBasePayloayDirect json.Marshal err:  %v,失败数据为： %v", err, v), debug)
+		ziLog.Error(fmt.Sprintf("dyPayloadSendMessage jpushBasePayloayDirect json.Marshal err:  %v,失败数据为： %v", err, v), debug)
 		return
 	}
 	endSendData := platFormPool.Get().(*pmsg.PlatFormDataSend)
@@ -168,7 +168,7 @@ func dyPayloadSendMessage(v any, msgId pmsg.MessageId, roomId, anchorOpenid stri
 	endSendDatabyte, _ := proto.Marshal(endSendData)
 	// 推送消息
 	if err := sse.SseSend(msgId, sendUidList, endSendDatabyte); err != nil {
-		ziLog.Error(fmt.Sprintf("ksPushBasePayloay 推送消息失败:  %v,失败数据为： %v", err, v), debug)
+		ziLog.Error(fmt.Sprintf("dyPayloadSendMessage 推送消息失败:  %v,失败数据为： %v", err, v), debug)
 	}
 }
 
