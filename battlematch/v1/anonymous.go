@@ -11,7 +11,7 @@ import (
 
 // 设置是否匿名，匿名则为1，否则则为0
 func MatchBattleAnonymousSet(ctx context.Context, openId string) error {
-	_, err := etcdClient.Client.Put(ctx, path.Join("/", projectName, match_battle_anonymous_status, openId), openId, clientv3.WithLease(etcdClient.NewLease(ctx, 7200)))
+	_, err := etcdClient.Client.Put(ctx, path.Join("/", projectName, match_battle_anonymous_status, openId), openId, clientv3.WithLease(etcdClient.NewLease(ctx, 30)))
 	if err != nil {
 		return errors.New("MatchBattleAnonymousSet err: " + err.Error())
 	}
