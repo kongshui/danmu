@@ -44,7 +44,7 @@ func MatchBattleAnonymousGetByGroupId(ctx context.Context, groupId string) (bool
 
 // 匿名删除通过openId
 func MatchBattleAnonymousDelByOpenId(ctx context.Context, openId string) error {
-	_, err := etcdClient.Client.Delete(ctx, path.Join("/", projectName, match_battle_anonymous_status, openId), clientv3.WithCountOnly())
+	_, err := etcdClient.Client.Delete(ctx, path.Join("/", projectName, match_battle_anonymous_status, openId))
 	if err != nil {
 		return errors.New("MatchBattleAnonymousDelByOpenId err: " + err.Error())
 	}
@@ -59,11 +59,7 @@ func matchBattleAnonymousDelByGroupId(ctx context.Context, groupId string) error
 		ok, _ := MatchBattleAnonymousGet(ctx, openId)
 		if ok {
 			if mErr := MatchBattleAnonymousDelByOpenId(ctx, openId); mErr != nil {
-				if err != nil {
-					err = fmt.Errorf("%v,  %v", err, mErr)
-				} else {
-					err = fmt.Errorf("matchBattleAnonymousDelByGroupId  err: %v", mErr)
-				}
+				err = fmt.Errorf("matchBattleAnonymousDelByGroupId  err: %v", mErr)
 			}
 		}
 	}
