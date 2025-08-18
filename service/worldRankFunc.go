@@ -300,7 +300,7 @@ func scrollWorldRank(version string, count int) error {
 		return scrollWorldRank(version, count)
 	}
 	rdb.Expire("world_rank_"+version, 24*30*time.Hour)
-	rdb.Del(user_info_db)
+	// rdb.Del(user_info_db)
 	return nil
 }
 
