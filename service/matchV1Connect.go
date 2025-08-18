@@ -137,11 +137,7 @@ func matchV1HeardBeat() {
 			}
 			groupId := filepath.Base(string(v.Key))
 			// log.Println("matchV1HeardBeat groupId:", groupId)
-			// 如果匿名，则返回
-			if ok, _ := battlematchv1.MatchBattleAnonymousGetByGroupId(first_ctx, groupId); ok {
-				continue
-			}
-			//
+
 			sendUidList, _, _, _ := getUidListByGroupId(groupId)
 			if len(sendUidList) == 0 {
 				battlematchv1.UnregisterBattleV1ByGroupId(first_ctx, groupId)
@@ -169,6 +165,11 @@ func matchV1HeardBeat() {
 			default:
 				continue
 			}
+			// 如果匿名，则返回
+			// if ok, _ := battlematchv1.MatchBattleAnonymousGetByGroupId(first_ctx, groupId); ok {
+			// 	continue
+			// }
+
 			// 后面暂时不用，等以后上连线再开启
 			// for i, v := range userIdList {
 			// 	switch i {
