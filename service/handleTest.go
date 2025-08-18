@@ -120,6 +120,7 @@ func HandleSendFakeComment(c *gin.Context) {
 		UserId       string `json:"user_id"`
 		UserName     string `json:"user_name"`
 		UserAvatar   string `json:"user_avatar"`
+		TestCode     string `json:"test_code"`
 	}
 	var commentGet comment
 	if err := c.ShouldBindJSON(&commentGet); err != nil {
@@ -129,6 +130,20 @@ func HandleSendFakeComment(c *gin.Context) {
 		})
 		return
 	}
+	testCode := getTestCode()
+	if testCode == "" {
+		c.JSON(403, gin.H{
+			"err": "获取测试验证码错误",
+		})
+		return
+	}
+	if commentGet.TestCode != testCode {
+		c.JSON(403, gin.H{
+			"err": "测试验证码错误",
+		})
+		return
+	}
+
 	roomId := QueryRoomIdInterconvertAnchorOpenId(commentGet.AnchorOpenId)
 	if roomId == "" {
 		c.JSON(404, gin.H{
@@ -212,6 +227,7 @@ func HandleSendFakeGift(c *gin.Context) {
 		UserId       string `json:"user_id"`
 		UserName     string `json:"user_name"`
 		UserAvatar   string `json:"user_avatar"`
+		TestCode     string `json:"test_code"`
 	}
 	var giftGet gift
 	if err := c.ShouldBindJSON(&giftGet); err != nil {
@@ -221,12 +237,19 @@ func HandleSendFakeGift(c *gin.Context) {
 		})
 		return
 	}
-	// userinfo, err := userInfoGet(giftGet.UserId)
-	// if err != nil {
-	// 	userinfo.OpenId = giftGet.UserId
-	// 	userinfo.NickName = giftGet.UserName
-	// 	userinfo.AvatarUrl = giftGet.UserAvatar
-	// }
+	testCode := getTestCode()
+	if testCode == "" {
+		c.JSON(403, gin.H{
+			"err": "获取测试验证码错误",
+		})
+		return
+	}
+	if giftGet.TestCode != testCode {
+		c.JSON(403, gin.H{
+			"err": "测试验证码错误",
+		})
+		return
+	}
 	roomId := QueryRoomIdInterconvertAnchorOpenId(giftGet.AnchorOpenId)
 	if roomId == "" {
 		c.JSON(404, gin.H{
@@ -316,22 +339,30 @@ func HandleSendLiveLike(c *gin.Context) {
 		UserId       string `json:"user_id"`
 		UserName     string `json:"user_name"`
 		UserAvatar   string `json:"user_avatar"`
+		TestCode     string `json:"test_code"`
 	}
-	var giftGet like
-	if err := c.ShouldBindJSON(&giftGet); err != nil {
+	var likeGet like
+	if err := c.ShouldBindJSON(&likeGet); err != nil {
 		log.Println(err)
 		c.JSON(404, gin.H{
 			"err": err,
 		})
 		return
 	}
-	// userinfo, err := userInfoGet(giftGet.UserId)
-	// if err != nil {
-	// 	userinfo.OpenId = giftGet.UserId
-	// 	userinfo.NickName = giftGet.UserName
-	// 	userinfo.AvatarUrl = giftGet.UserAvatar
-	// }
-	roomId := QueryRoomIdInterconvertAnchorOpenId(giftGet.AnchorOpenId)
+	testCode := getTestCode()
+	if testCode == "" {
+		c.JSON(403, gin.H{
+			"err": "获取测试验证码错误",
+		})
+		return
+	}
+	if likeGet.TestCode != testCode {
+		c.JSON(403, gin.H{
+			"err": "测试验证码错误",
+		})
+		return
+	}
+	roomId := QueryRoomIdInterconvertAnchorOpenId(likeGet.AnchorOpenId)
 	if roomId == "" {
 		c.JSON(404, gin.H{
 			"err": "该主播未开播",
@@ -342,30 +373,30 @@ func HandleSendLiveLike(c *gin.Context) {
 	case "ks":
 		data := KsCallbackDataStruct{}
 		likeData := KsLiveLikeStruct{}
-		data.AuthorOpenId = giftGet.AnchorOpenId
+		data.AuthorOpenId = likeGet.AnchorOpenId
 		data.RoomCode = roomId
 		data.PushType = "liveLike"
 		data.UniqueMessageId = strconv.FormatInt(time.Now().UnixMilli(), 10)
-		likeData.Count = giftGet.Num
-		likeData.UserInfo.UserId = giftGet.UserId
-		likeData.UserInfo.NickName = giftGet.UserName
-		likeData.UserInfo.AvatarUrl = giftGet.UserAvatar
+		likeData.Count = likeGet.Num
+		likeData.UserInfo.UserId = likeGet.UserId
+		likeData.UserInfo.NickName = likeGet.UserName
+		likeData.UserInfo.AvatarUrl = likeGet.UserAvatar
 		data.Payload = append(data.Payload, likeData)
 		ksPushLiveLikePayloay(data)
 	case "dy":
 		data := []LiveLikePayloadStruct{}
 		subData := LiveLikePayloadStruct{
 			MsgId:     strconv.FormatInt(time.Now().UnixMilli(), 10),
-			SecOpenid: giftGet.UserId,
-			LikeNum:   giftGet.Num,
-			AvatarUrl: giftGet.UserAvatar,
-			Nickname:  giftGet.UserName,
+			SecOpenid: likeGet.UserId,
+			LikeNum:   likeGet.Num,
+			AvatarUrl: likeGet.UserAvatar,
+			Nickname:  likeGet.UserName,
 			TimeStamp: time.Now().UnixMilli(),
 		}
 		data = append(data, subData)
 
 		dataByte, _ := json.Marshal(data)
-		pushDyBasePayloayDirect(roomId, giftGet.AnchorOpenId, "live_like", dataByte)
+		pushDyBasePayloayDirect(roomId, likeGet.AnchorOpenId, "live_like", dataByte)
 	}
 	c.JSON(200, "添加成功")
 }
@@ -518,4 +549,14 @@ func ReceiveMessageHandle(c *gin.Context) {
 		"err_code": 0,
 		"err_msg":  "",
 	})
+}
+
+// 获取测试验证码
+func getTestCode() string {
+	code, err := rdb.Get("test_code")
+	if err != nil {
+		log.Println("获取测试验证码失败", err)
+		return ""
+	}
+	return code
 }
