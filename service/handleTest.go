@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -559,4 +560,31 @@ func getTestCode() string {
 		return ""
 	}
 	return code
+}
+
+// 获取所有主播
+func GetAllAnchor(c *gin.Context) {
+	req, err := etcdClient.Client.Get(context.Background(), path.Join("/"+config.Project+common.Uid_Register_OpenId_key), clientv3.WithPrefix())
+
+	if err != nil {
+		log.Println("获取所有主播失败", err)
+		c.JSON(404, gin.H{
+			"err": err,
+		})
+		return
+	}
+	if c.Query("verifycode") != getTestCode() {
+		c.JSON(404, gin.H{
+			"err": "验证码错误",
+		})
+		return
+	}
+	var anchorList []UserInfoStruct
+
+	for _, resp := range req.Kvs {
+		log.Println(string(resp.Key), string(resp.Value))
+		userinfo, _ := userInfoGet(string(resp.Value))
+		anchorList = append(anchorList, userinfo)
+	}
+	c.JSON(200, anchorList)
 }
