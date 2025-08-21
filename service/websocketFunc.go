@@ -197,6 +197,7 @@ func roundEnd(msg *pmsg.MessageBody) error {
 		Status:          2,
 		GroupResultList: groupId,
 	}
+	setRoundEndGroup(data.RoomId, data.RoundId, groupId)
 	// 分平台
 	switch platform {
 	case "ks":

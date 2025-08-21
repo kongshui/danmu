@@ -90,8 +90,10 @@ var (
 	first_ctx             = context.Background()
 	scrollDay             time.Weekday
 	scrollHour            int
-	is_level_scroll       bool    //是否开启等级滚动
-	store_level           int64   //存储等级
-	live_like_score       float64 //直播点赞积分
-	version_time_interval int64   //版本时间间隔
+	is_level_scroll       bool     //是否开启等级滚动
+	store_level           int64    //存储等级
+	live_like_score       float64  //直播点赞积分
+	version_time_interval int64    //版本时间间隔
+	groupid_list            []string //组名
+
 )

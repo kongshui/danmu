@@ -3,7 +3,6 @@ package service
 import (
 	"errors"
 	"fmt"
-	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -261,18 +260,20 @@ func queryPlayerInGroup(roomId, openId string) (string, int64, bool, error) {
 	if !ok {
 		return "", 0, false, errors.New("queryPlayerInGroup roundId 未找到")
 	}
+	name := roomId + "_" + strconv.FormatInt(roundId, 10) + "_group"
+
 	//获取玩家分组
-	ok, err := rdb.HExists(roomId+"_"+strconv.FormatInt(roundId, 10)+"_group", openId)
+	ok, err := rdb.HExists(name, openId)
 	if err != nil || !ok {
-		gOk, _ := rdb.HExists(roomId+"_"+strconv.FormatInt(roundId, 10)+"_group", strings.Split(os.Getenv("GROUP"), ",")[0])
+		gOk, _ := rdb.HExists(name, groupid_list[0])
 		return "", roundId, gOk, err
 	}
-	group, err = rdb.HGet(roomId+"_"+strconv.FormatInt(roundId, 10)+"_group", openId)
+	group, err = rdb.HGet(name, openId)
 	if err != nil {
 		return "", roundId, false, err
 	}
 	//获取游戏是否完成
-	ok, err = rdb.HExists(roomId+"_"+strconv.FormatInt(roundId, 10)+"_group", group)
+	ok, err = rdb.HExists(name, group)
 	if err != nil {
 		return "", roundId, false, err
 	}
@@ -347,20 +348,21 @@ func getUserGroup(roomId, openId string) (string, int, error) {
 	if err != nil {
 		return "", 2, err
 	}
+	name := roomId + "_" + roundId + "_group"
 	//获取玩家分组
-	ok, err := rdb.HExists(roomId+"_"+roundId+"_group", openId)
+	ok, err := rdb.HExists(name, openId)
 	if err != nil || !ok {
-		gOk, _ := rdb.HExists(roomId+"_"+roundId+"_group", strings.Split(os.Getenv("GROUP"), ",")[0])
+		gOk, _ := rdb.HExists(name, groupid_list[0])
 		if gOk {
 			endStatus = 2
 		}
 		return "", endStatus, err
 	}
-	gOk, _ := rdb.HExists(roomId+"_"+roundId+"_group", strings.Split(os.Getenv("GROUP"), ",")[0])
+	gOk, _ := rdb.HExists(name, groupid_list[0])
 	if gOk {
 		endStatus = 2
 	}
-	group, err := rdb.HGet(roomId+"_"+roundId+"_group", openId)
+	group, err := rdb.HGet(name, openId)
 	if err != nil {
 		return "", endStatus, err
 	}
