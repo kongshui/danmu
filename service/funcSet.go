@@ -31,22 +31,23 @@ func ConnectInit(conf *conf.Config, etcClient *dao_etcd.Etcd, mysqlClient *dao_m
 	ziLog = logWirte
 }
 
-// 初始化全局变量
-func InitGlobalVar(isPkMatch, levelScorll bool, storeLevel int64, liveLike float64, versionTimeInterval int64, groupIdList []string) {
+// 初始化全局变量isPkMatch: 是否开启pk匹配, levelScorll: 是否开启等级滚动, storeLevel: 存储等级, liveLike: 直播点赞积分, versionTimeInterval: 版本时间间隔, groupIdList: 组名, weekSet: 多长时间滚动
 
+func InitGlobalVar(isPkMatch, levelScorll bool, storeLevel int64, liveLike float64, versionTimeInterval int64, groupIdList []string, weekSet int) {
 	is_pk_match = isPkMatch                     // 是否开启pk匹配
 	is_level_scroll = levelScorll               // 是否开启等级滚动
 	store_level = storeLevel                    // 存储等级
 	live_like_score = liveLike                  // 直播点赞积分
 	version_time_interval = versionTimeInterval // 版本滚动时间间隔
-	groupid_list = groupIdList
+	groupid_list = groupIdList                  // 组名
+	week_set = weekSet                          // 1 是一周，2是两周 ，3是三周 4是四周 0是一个月
 }
 
 // 初始化时间
-func InitTime(d time.Weekday, h int, expireT time.Duration, isIntegralScroll bool) {
-
+func InitTime(d time.Weekday, h int, expireT time.Duration, day int, isIntegralScroll bool) {
 	scrollDay = d
 	scrollHour = h
 	expireTime = expireT
 	is_integral_scroll = isIntegralScroll
+	month_day = day
 }

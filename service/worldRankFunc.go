@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -144,12 +143,7 @@ func WorldRankNumerAdd(openId string, score float64) error {
 
 // 设置玩家对局分组名称
 func playerMatchGroupAdd() error {
-	var (
-		groups string
-	)
-
-	group := strings.SplitSeq(groups, ",")
-	for v := range group {
+	for v := range groupid_list {
 		if _, err := rdb.SAdd(group_list_db, v); err != nil {
 			return err
 		}

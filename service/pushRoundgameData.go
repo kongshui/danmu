@@ -37,8 +37,10 @@ func playerGroupAdd(roomId, uidStr string, userMap []*pmsg.SingleRoomAddGroupInf
 		}
 		// 其他前置处理
 		if playerGroupAddinFunc != nil {
-			playerGroupAddinFunc(roomId, v.GetOpenId())
+			if err := playerGroupAddinFunc(roomId, v.GetOpenId()); err != nil {
+				ziLog.Error(fmt.Sprintf("playerGroupAdd playerGroupAddinFunc失败, err: %v,openId:%v, groupId: %v, roomId:%v", err, v.GetOpenId(), v.GetGroupId(), roomId), debug)
 
+			}
 		}
 		// 是否是通过小摇杆加入
 		if isChoose {

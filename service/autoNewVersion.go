@@ -17,14 +17,14 @@ func autoNewVersion() {
 		if time.Now().Hour() == 0 {
 			monthVersionSet()
 		}
-		if time.Now().Weekday() == scrollDay && time.Now().Hour() == scrollHour {
+		if (time.Now().Weekday() == scrollDay && time.Now().Hour() == scrollHour) || (week_set == 0 && time.Now().Day() == month_day) {
 			if isFirst {
 				isFirst = false
 				nowWorldRankVersion := time.Now().Format(version_time_layout)
 				//比较版本号
 				nowVersionT, _ := time.Parse(version_time_layout, nowWorldRankVersion)
 				worldRankVersionT, _ := time.Parse(version_time_layout, currentRankVersion)
-				//时间不够7天，不轮转
+				//时间不够时间间隔，不轮转
 				if nowVersionT.Unix()-worldRankVersionT.Unix() < version_time_interval {
 					continue
 				}

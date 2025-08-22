@@ -94,6 +94,8 @@ var (
 	store_level           int64    //存储等级
 	live_like_score       float64  //直播点赞积分
 	version_time_interval int64    //版本时间间隔
-	groupid_list            []string //组名
+	groupid_list          []string //组名
+	week_set              int      // 1 是一周，2是两周 ，3是三周 4是四周 0是一个月
+	month_day             int      // 每月第几天滚动
 
 )
