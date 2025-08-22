@@ -17,7 +17,7 @@ func autoNewVersion() {
 		if time.Now().Hour() == 0 {
 			monthVersionSet()
 		}
-		if (time.Now().Weekday() == scrollDay && time.Now().Hour() == scrollHour) || (week_set == 0 && time.Now().Day() == month_day) {
+		if (week_set != 0 && time.Now().Weekday() == scrollDay && time.Now().Hour() == scrollHour) || (week_set == 0 && time.Now().Day() == month_day) {
 			if isFirst {
 				isFirst = false
 				nowWorldRankVersion := time.Now().Format(version_time_layout)
