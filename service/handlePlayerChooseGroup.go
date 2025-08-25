@@ -77,7 +77,7 @@ func PlayerChooseGroupHandle(c *gin.Context) {
 		})
 		return
 	}
-	uid := queryRoomIdToUid(pCG.OpenId)
+	uid := queryRoomIdToUid(pCG.RoomId)
 	if err := playerGroupAdd(pCG.RoomId, uid, []*pmsg.SingleRoomAddGroupInfo{
 		{
 			GroupId:   pCG.GroupId,
