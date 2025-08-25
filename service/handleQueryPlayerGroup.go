@@ -31,7 +31,7 @@ func QueryPlayerGroupHandler(c *gin.Context) {
 		"x-msg-type":  c.GetHeader("x-msg-type"),
 	}
 	// 验签
-	if c.GetHeader("x-signature") != common.DySignature(headers, string(*bodyByte), config.App.ChooseGroupSecret) {
+	if c.GetHeader("x-signature") != common.DySignature(headers, string(*bodyByte), config.App.QueryGroupSecret) {
 		ziLog.Error("QueryPlayerGroupHandler dy签名错误", debug)
 		c.JSON(200, gin.H{
 			"errcode": 11,
