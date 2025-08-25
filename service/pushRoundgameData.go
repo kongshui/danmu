@@ -51,6 +51,9 @@ func playerGroupAdd(roomId, uidStr string, userMap []*pmsg.SingleRoomAddGroupInf
 		coin, _ := QueryUserWinStreamCoin(v.GetOpenId())
 		// 查询玩家是否已经消费
 		isConsume := queryIsConsume(v.OpenId)
+		// 查询玩家等级
+		level, _ := QueryLevelInfo(v.OpenId)
+
 		if ok {
 			score, rank, _ := getPlayerWorldRankData(v.OpenId)
 			data.UserInfoList = append(data.UserInfoList, &pmsg.UserInfoStruct{
@@ -59,6 +62,7 @@ func playerGroupAdd(roomId, uidStr string, userMap []*pmsg.SingleRoomAddGroupInf
 				VersionRank:       rank,
 				WinningStreamCoin: coin,
 				IsFirstConsume:    isConsume,
+				Level:             level,
 			})
 		}
 	}

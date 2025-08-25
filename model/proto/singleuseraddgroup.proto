@@ -12,4 +12,6 @@ message SingleUserAddGroupMessage {
     int64 WorldRank = 7;    // 世界排名
     int64 WinningStreamCoin = 8; // 连胜币
     bool IsConsume = 9; // 是否是第一次消费
+    int64 Level = 10; // 等级
+
 }
