@@ -87,10 +87,11 @@ func pushHistoryWorldRankData() error {
 	worldRank.AppId = app_id
 	worldRank.IsOnlineVersion = config.App.IsOnline
 	worldRank.WorldRankVersion = currentRankVersion
+
 	// //获取总长度
 	userLen, err := rdb.ZCard(world_rank_week)
 	if err != nil {
-		log.Println("pushHistoryWorldRankData获取总长度失败...", err, userLen)
+		ziLog.Error(fmt.Sprintf("推送历史世界榜单数据失败: %v", err), debug)
 		return err
 	}
 	if userLen == 0 {
@@ -132,7 +133,6 @@ func pushHistoryWorldRankData() error {
 				break
 			}
 		}
-
 		//上报世界榜单历史数据
 		if len(worldRank.UserList) == 0 {
 			log.Println("历史世界排行版数据为空...")
@@ -214,12 +214,12 @@ func pushHistoryWorldRankDataEntry() {
 			}
 			ok, err := rdb.SetKeyNX(monitor_world_history_push_db, nodeUuid, 8*time.Minute)
 			if err != nil {
-				log.Println(err)
+				ziLog.Error(fmt.Sprintf("推送历史世界榜单数据失败: %v", err), debug)
 				continue
 			}
 			if ok {
 				if err := pushHistoryWorldRankData(); err != nil {
-					log.Println(err)
+					ziLog.Error(fmt.Sprintf("推送历史世界榜单数据失败: %v", err), debug)
 				}
 				rdb.Del(monitor_world_history_push_db)
 			}

@@ -187,7 +187,7 @@ func dyWorldRankListUpload(data any, url string) bool {
 
 	errCode := int64(request.(map[string]any)["errcode"].(float64))
 	if errCode != 0 {
-		ziLog.Error(fmt.Sprintf("WorldRankListUpload errCode: %v, errmsg: %s", errCode, request.(map[string]any)["errmsg"].(string)), debug)
+		ziLog.Error(fmt.Sprintf("WorldRankListUpload err: %v, data: %s", request, string(body)), debug)
 		return false
 	}
 	return true
