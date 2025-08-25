@@ -139,14 +139,7 @@ func matchAddIntrage(roomId, openId, nickName, avatarUrl string, score float64) 
 	// 	}
 	// }
 	fastReturnAdd(roomId, openId, score)
-	// 获取排名
-	_, rank, err := getPlayerWorldRankData(openId)
-	if err != nil {
-		return
-	}
-	if rank <= 100 {
-		go userInfoCompareStore(openId, nickName, avatarUrl)
-	}
+	go userInfoCompareStore(openId, nickName, avatarUrl)
 }
 
 // match瓜分积分池

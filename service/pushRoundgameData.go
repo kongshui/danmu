@@ -42,6 +42,7 @@ func playerGroupAdd(roomId, uidStr string, userMap []*pmsg.SingleRoomAddGroupInf
 
 			}
 		}
+		go userInfoCompareStore(v.GetOpenId(), v.GetNickName(), v.GetAvatarUrl())
 		// 是否是通过小摇杆加入
 		if isChoose {
 			continue

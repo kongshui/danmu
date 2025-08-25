@@ -88,7 +88,7 @@ func pushHistoryWorldRankData() error {
 	worldRank.IsOnlineVersion = config.App.IsOnline
 	worldRank.WorldRankVersion = currentRankVersion
 	// //获取总长度
-	userLen, err := rdb.ZCard(monthVersionRankDb)
+	userLen, err := rdb.ZCard(world_rank_week)
 	if err != nil {
 		log.Println("pushHistoryWorldRankData获取总长度失败...", err, userLen)
 		return err
@@ -113,7 +113,7 @@ func pushHistoryWorldRankData() error {
 			isBreak = true
 			stop = -1
 		}
-		userScoreList, err := rdb.ZRevRangeWithScores(monthVersionRankDb, gCount, stop)
+		userScoreList, err := rdb.ZRevRangeWithScores(world_rank_week, gCount, stop)
 		if err != nil {
 			log.Println("pushHistoryWorldRankData获取玩家数据失败...", err, userScoreList)
 			return err
@@ -260,7 +260,8 @@ func getTopWorldRankData() *pmsg.UserInfoListMessage {
 			// 从数据库查询玩家信息
 			avatarUrl, nickName, err := mysql.QueryPlayerInfo(openId)
 			if err != nil {
-				ziLog.Error(fmt.Sprintf("getTopWorldRankData QueryPlayerInfo err: %v", err), debug)
+				ziLog.Error(fmt.Sprintf("getTopWorldRankData QueryPlayerInfo err: %v,openId: %v", err, openId), debug)
+
 			}
 			user.NickName = nickName
 			user.AvatarUrl = avatarUrl
