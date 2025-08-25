@@ -44,7 +44,7 @@ func dyUploadUserGroup(roomId, openId, groupId string, roundId int64) bool {
 		ziLog.Error("上传完玩家组信息解析状态码有误: "+string(body), debug)
 		return false
 	}
-	if int64(request.(map[string]any)["err_no"].(float64)) != 0 {
+	if int64(request.(map[string]any)["errcode"].(float64)) != 0 {
 		ziLog.Error("上传完玩家组信息解析返回值有误: "+string(body), debug)
 		return true
 	}
