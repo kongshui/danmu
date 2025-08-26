@@ -25,9 +25,9 @@ func playerGroupAdd(roomId, uidStr string, roundId int64, userMap []*pmsg.Single
 	//设置查询组的名称
 	name := roomId + "_" + strconv.FormatInt(roundId, 10) + "_group"
 	for _, v := range userMap {
-		if _, err := rdb.HSetNX(name, v.GetOpenId(), v.GetGroupId()); err != nil {
-			ziLog.Error(fmt.Sprintf("playerGroupAdd 设置组失败: %v,openId:%v, groupId: %v", err, v.GetOpenId(), v.GetGroupId()), debug)
-		}
+		// if _, err := rdb.HSetNX(name, v.GetOpenId(), v.GetGroupId()); err != nil {
+		// 	ziLog.Error(fmt.Sprintf("playerGroupAdd 设置组失败: %v,openId:%v, groupId: %v", err, v.GetOpenId(), v.GetGroupId()), debug)
+		// }
 
 		// 其他前置处理
 		if playerGroupAddinFunc != nil {
@@ -37,9 +37,8 @@ func playerGroupAdd(roomId, uidStr string, roundId int64, userMap []*pmsg.Single
 			}
 		}
 		go userInfoCompareStore(v.GetOpenId(), v.GetNickName(), v.GetAvatarUrl())
-		if ok := dyUploadUserGroup(roomId, v.GetOpenId(), v.GetGroupId(), roundId); !ok {
-			ziLog.Error("PlayerChooseGroupHandle 上传玩家加入组信息 fail: ", debug)
-		}
+		//
+		go dyUploadUserGroup(roomId, v.GetOpenId(), v.GetGroupId(), roundId)
 		// 是否是通过小摇杆加入
 		if isChoose {
 			continue
