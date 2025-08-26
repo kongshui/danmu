@@ -90,14 +90,20 @@ func endClean(roomId, openId string) {
 		if isCalculateExpireTime {
 			// 计算过期时间
 			expireTime = GetNextExpireTime()
-		}
-		// 设置过期时间
-		if ok {
-			rdb.Expire(integral_pool_Prefix+openId, expireTime)
-		} else {
-			ziLog.Error(fmt.Sprintf("endClean 积分池不存在, roomId : %v, openId: %v", roomId, openId), debug)
+			if expireTime == 0 {
+				expireTime = 1
+				rdb.Del(integral_pool_Prefix + openId)
+			} else {
+				// 设置过期时间
+				if ok {
+					rdb.Expire(integral_pool_Prefix+openId, expireTime)
+				} else {
+					ziLog.Error(fmt.Sprintf("endClean 积分池不存在, roomId : %v, openId: %v", roomId, openId), debug)
 
+				}
+			}
 		}
+
 	}
 	// 删除roomid信息
 	delRoomIdToAnchorOpenId(roomId)
