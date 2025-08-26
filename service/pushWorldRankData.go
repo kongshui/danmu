@@ -261,10 +261,10 @@ func getTopWorldRankData() *pmsg.UserInfoListMessage {
 			avatarUrl, nickName, err := mysql.QueryPlayerInfo(openId)
 			if err != nil {
 				ziLog.Error(fmt.Sprintf("getTopWorldRankData QueryPlayerInfo err: %v,openId: %v", err, openId), debug)
-
+			} else {
+				user.NickName = nickName
+				user.AvatarUrl = avatarUrl
 			}
-			user.NickName = nickName
-			user.AvatarUrl = avatarUrl
 		}
 
 		data.UserInfoList = append(data.UserInfoList, &pmsg.UserInfo{

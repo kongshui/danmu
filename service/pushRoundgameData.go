@@ -43,6 +43,9 @@ func playerGroupAdd(roomId, uidStr string, userMap []*pmsg.SingleRoomAddGroupInf
 			}
 		}
 		go userInfoCompareStore(v.GetOpenId(), v.GetNickName(), v.GetAvatarUrl())
+		if ok := dyUploadUserGroup(roomId, v.GetOpenId(), v.GetGroupId(), roundId); !ok {
+			ziLog.Error("PlayerChooseGroupHandle 上传玩家加入组信息 fail: ", debug)
+		}
 		// 是否是通过小摇杆加入
 		if isChoose {
 			continue

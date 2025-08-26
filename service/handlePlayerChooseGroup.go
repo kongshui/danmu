@@ -133,9 +133,6 @@ func PlayerChooseGroupHandle(c *gin.Context) {
 	if err := sse.SseSend(pmsg.MessageId_SingleUserAddGroup, sendUidList, sDataByte); err != nil {
 		ziLog.Error(fmt.Sprintf("PlayerChooseGroupHandle 推送玩家加入组信息失败: %v, data: %v", err, pCG), debug)
 	}
-	if ok := dyUploadUserGroup(pCG.RoomId, pCG.OpenId, gId, roundId); !ok {
-		ziLog.Error("PlayerChooseGroupHandle 上传玩家加入组信息 fail: ", debug)
-	}
 	time.Sleep(200 * time.Millisecond)
 	c.JSON(200, gin.H{
 		"errcode": 0,
