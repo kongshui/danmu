@@ -45,9 +45,10 @@ func InitGlobalVar(isPkMatch, levelScorll bool, storeLevel int64, liveLike float
 }
 
 // 初始化时间
-func InitTime(d time.Weekday, h int, expireT time.Duration, day int) {
+func InitTime(d time.Weekday, h int, expireT time.Duration, day int, isCalculate bool) {
 	scrollDay = d
 	scrollHour = h
 	expireTime = expireT
 	month_day = day
+	isCalculateExpireTime = isCalculate
 }

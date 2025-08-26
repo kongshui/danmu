@@ -86,6 +86,11 @@ func endClean(roomId, openId string) {
 	}
 	if expireTime > 0 {
 		ok := rdb.IsExistKey(integral_pool_Prefix + openId)
+		// 计算过期时间
+		if isCalculateExpireTime {
+			// 计算过期时间
+			expireTime = GetNextExpireTime()
+		}
 		// 设置过期时间
 		if ok {
 			rdb.Expire(integral_pool_Prefix+openId, expireTime)

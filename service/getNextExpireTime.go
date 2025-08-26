@@ -6,7 +6,15 @@ import "time"
 func GetNextExpireTime() time.Duration {
 	switch week_set {
 	case 0:
-		return 0
+		now := time.Now()
+		if now.Day() >= month_day {
+			nextDay := now.AddDate(0, 1, 0)
+			nextMonthDay := time.Date(nextDay.Year(), nextDay.Month(), month_day, scrollHour, 0, 0, 0, time.Now().Location())
+			return time.Until(nextMonthDay)
+		} else {
+			nextMonthDay := time.Date(now.Year(), now.Month(), month_day, scrollHour, 0, 0, 0, time.Now().Location())
+			return time.Until(nextMonthDay)
+		}
 	default:
 		daysUntilNextScroll := (int(scrollDay) + 7*week_set) % 7 * week_set
 		if daysUntilNextScroll == 0 {
