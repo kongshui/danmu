@@ -77,14 +77,21 @@ func PlayerChooseGroupHandle(c *gin.Context) {
 		return
 	}
 	uid := queryRoomIdToUid(pCG.RoomId)
-	go playerGroupAdd(pCG.RoomId, uid, roundId, []*pmsg.SingleRoomAddGroupInfo{
+	if err := playerGroupAdd(pCG.RoomId, uid, roundId, []*pmsg.SingleRoomAddGroupInfo{
 		{
 			GroupId:   pCG.GroupId,
 			OpenId:    pCG.OpenId,
 			AvatarUrl: pCG.AvatarUrl,
 			NickName:  pCG.NickName,
 		},
-	}, true)
+	}, true); err != nil {
+		ziLog.Error(fmt.Sprintf("PlayerChooseGroupHandle 添加玩家失败,err: %v", err), debug)
+		c.JSON(400, gin.H{
+			"errcode": 40001,
+			"errmsg":  err.Error(),
+		})
+		return
+	}
 	go func(pcg playerChooseGroup, roundId int64) {
 
 		anchorOpenid := QueryRoomIdInterconvertAnchorOpenId(pcg.RoomId)
