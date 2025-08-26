@@ -25,9 +25,9 @@ func playerGroupAdd(roomId, uidStr string, roundId int64, userMap []*pmsg.Single
 	//设置查询组的名称
 	name := roomId + "_" + strconv.FormatInt(roundId, 10) + "_group"
 	for _, v := range userMap {
-		// if _, err := rdb.HSetNX(name, v.GetOpenId(), v.GetGroupId()); err != nil {
-		// 	ziLog.Error(fmt.Sprintf("playerGroupAdd 设置组失败: %v,openId:%v, groupId: %v", err, v.GetOpenId(), v.GetGroupId()), debug)
-		// }
+		if _, err := rdb.HSetNX(name, v.GetOpenId(), v.GetGroupId()); err != nil {
+			ziLog.Error(fmt.Sprintf("playerGroupAdd 设置组失败: %v,openId:%v, groupId: %v", err, v.GetOpenId(), v.GetGroupId()), debug)
+		}
 
 		// 其他前置处理
 		if playerGroupAddinFunc != nil {
