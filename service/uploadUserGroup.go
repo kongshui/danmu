@@ -2,6 +2,7 @@ package service
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/kongshui/danmu/common"
 )
@@ -45,7 +46,7 @@ func dyUploadUserGroup(roomId, openId, groupId string, roundId int64) bool {
 		return false
 	}
 	if int64(request.(map[string]any)["errcode"].(float64)) != 0 {
-		ziLog.Error("上传完玩家组信息解析返回值有误: "+string(body), debug)
+		ziLog.Error(fmt.Sprintf("上传完玩家组信息解析返回值有误: %v, 数据为： %v", request, body), debug)
 		return true
 	}
 	return true
