@@ -22,7 +22,7 @@ func topGift(roomId string) bool {
 	giftIds = strings.TrimRight(giftIds, ",")
 	data := map[string]any{
 		"giftList":       giftIds, //置顶礼物列表
-		"giftExtendInfo": giftExtendInfo(),
+		"giftExtendInfo": giftExtendInfoFunc(),
 	}
 	jsonData, _ := json.Marshal(data)
 	urlPath := KsUrlSet(url_TopGiftUrl)
@@ -54,7 +54,7 @@ func topGift(roomId string) bool {
 	return true
 }
 
-func giftExtendInfo() string {
+func GiftExtendInfo() string {
 	batchInfo := []map[string]any{
 		{
 			"count":            1,

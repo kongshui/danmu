@@ -21,11 +21,12 @@ import (
 )
 
 type (
-	SingleUserFunc  func(string, string) error
-	SetWinScoreFunc func(string, RoundUploadStruct) error
-	LotteryFunc     func(string, string, int64) map[string]int64
-	WebsocketFunc   func(msg *pmsg.MessageBody) error
-	InteractiveFunc func(roomId, roundId string, label int) bool //自动选边
+	SingleUserFunc     func(string, string) error
+	SetWinScoreFunc    func(string, RoundUploadStruct) error
+	LotteryFunc        func(string, string, int64) map[string]int64
+	WebsocketFunc      func(msg *pmsg.MessageBody) error
+	InteractiveFunc    func(roomId, roundId string, label int) bool //自动选边
+	GiftExtendInfoFunc func() string
 )
 
 var (
@@ -34,9 +35,12 @@ var (
 	lotteryFunc          LotteryFunc
 	otherWebsocketFunc   WebsocketFunc
 	interactive          InteractiveFunc
-	is_mock              bool
-	config               *conf.Config
-	accessToken          *AccessTokenStruct = &AccessTokenStruct{Lock: &sync.RWMutex{}} //全局token使用
+	giftExtendInfoFunc   GiftExtendInfoFunc
+
+	is_mock bool
+
+	config      *conf.Config
+	accessToken *AccessTokenStruct = &AccessTokenStruct{Lock: &sync.RWMutex{}} //全局token使用
 	// isNotMock            bool                                                           //是否不模拟
 	debug                 bool               //是否调试
 	giftToScoreMap        map[string]float64 //礼物对应的积分
@@ -47,7 +51,6 @@ var (
 	giftIdToName          map[string]string  //礼物id对应的礼物名称
 	nodeIdToIntegral      map[int64]int64    //节点id对应的积分
 	expireTime            time.Duration      //过期时间
-	is_integral_scroll    bool               //是否开启积分滚动
 	currentRankVersion    string             //世界排行版version
 	nowMonth              string             //当前月
 	monthVersionRankDb    string             //月排行版db名称

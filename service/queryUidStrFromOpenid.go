@@ -19,14 +19,3 @@ func queryUidByOpenid(openid string) string {
 	}
 	return string(res.Kvs[0].Value)
 }
-
-// 通过uid获取openId
-// func queryOpenidByUidStr(uidStr string) string {
-// 	res, err := etcdClient.Client.Get(first_ctx, common.OpenId_Register_key+uidStr)
-// 	if err != nil {
-// 		ziLog.Write(logError, fmt.Sprintf("FindOpenidFromUidStr 获取uid失败， err: %v", err), debug)
-// 		return ""
-// 	}
-// 	openid := res.Kvs[0].Value
-// 	return string(openid)
-// }

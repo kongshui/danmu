@@ -319,19 +319,12 @@ func (m *MysqlClient) IsInWinCount(openid string) (bool, error) {
 }
 
 // 更新左右胜场数， about: true 左边，false，右边
-func (m *MysqlClient) UpdateGroupWinCount(about bool) error {
+func (m *MysqlClient) UpdateGroupWinCount(groupId string) error {
 	if !m.isUse {
 		return nil
 	}
-	var (
-		context string
-	)
-	if about {
-		context = "left_count"
-	} else {
-		context = "right_count"
-	}
-	_, err := m.Client.Exec("UPDATE win_group_count SET " + context + " = " + context + "+1")
+
+	_, err := m.Client.Exec("INSERT INTO win_group_count (group_id,win_count) VALUES (?,1) ON DUPLICATE KEY UPDATE win_count = win_count+1", groupId)
 	if err != nil {
 		log.Println("mysql 更新左右胜场数失败", err)
 		return errors.New("mysql 更新左右胜场数失败: " + err.Error())

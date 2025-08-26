@@ -12,12 +12,13 @@ import (
 )
 
 // 函数初始化
-func ServiceFuncSet(suf SingleUserFunc, sts SetWinScoreFunc, ltf LotteryFunc, webSocketFunc WebsocketFunc, interFunc InteractiveFunc) {
+func ServiceFuncSet(suf SingleUserFunc, sts SetWinScoreFunc, ltf LotteryFunc, webSocketFunc WebsocketFunc, interFunc InteractiveFunc, giftExtendInfo GiftExtendInfoFunc) {
 	interactive = interFunc
 	playerGroupAddinFunc = suf
 	setWinnerScoreFunc = sts
 	lotteryFunc = ltf
 	otherWebsocketFunc = webSocketFunc
+	giftExtendInfoFunc = giftExtendInfo
 }
 
 // 所有链接初始化
@@ -44,10 +45,9 @@ func InitGlobalVar(isPkMatch, levelScorll bool, storeLevel int64, liveLike float
 }
 
 // 初始化时间
-func InitTime(d time.Weekday, h int, expireT time.Duration, day int, isIntegralScroll bool) {
+func InitTime(d time.Weekday, h int, expireT time.Duration, day int) {
 	scrollDay = d
 	scrollHour = h
 	expireTime = expireT
-	is_integral_scroll = isIntegralScroll
 	month_day = day
 }

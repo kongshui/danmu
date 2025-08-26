@@ -127,17 +127,6 @@ func MatchErrorV1(openIdList []string, msgErr, groupId string, errLabel int32) {
 func matchAddIntrage(roomId, openId, nickName, avatarUrl string, score float64) {
 	// ctx := first_ctx
 	WorldRankNumerAdd(openId, score)
-	// anchorOpenId := queryRoomIdInterconvertAnchorOpenId(roomId)
-	// if anchorOpenId != "" {
-	// 	ok, groupId := battlematchv1.IsInVs1Group(ctx, anchorOpenId)
-	// 	if ok && !battlematchv1.QueryOpenIdInMatchDisconnect(ctx, groupId, anchorOpenId) {
-	// 		if _, err := addIntegralByScore(groupId, score*0.5); err != nil {
-	// 			ziLog.Write(logError, "MatchAddIntrage err: roomid: "+roomId+", openId: "+openId+", score: "+strconv.FormatInt(int64(score), 10)+
-	// 				"groupId: "+groupId+"主播Id："+anchorOpenId+", err: "+err.Error(), debug)
-	// 		}
-	// 		return
-	// 	}
-	// }
 	fastReturnAdd(roomId, openId, score)
 	go userInfoCompareStore(openId, nickName, avatarUrl)
 }

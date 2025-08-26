@@ -148,31 +148,3 @@ func ScrollWinningStreamCoin() error {
 	}
 	return nil
 }
-
-// 通过公式删除星核
-// func deleteXinghe(loseGroup map[string][]UserUploadScoreStruct, num int64) {
-// 	// 数据库清空星核
-// 	for _, v := range loseGroup {
-// 		for _, u := range v {
-// 			coin, _ := queryUserWinStreamCoin(u.OpenId)
-// 			switch {
-// 			case float64(num)*0.5 >= float64(coin):
-// 				if _, err := addUserWinStreamCoin(u.OpenId, -coin); err != nil {
-// 					ziLog.Error( fmt.Sprintf("deleteXinghe 星核失败，玩家OpenId： %s, 删除星核数量： %v", u.OpenId, coin), debug)
-// 				}
-// 			case num > coin && float64(coin) > float64(num)*0.5:
-// 				if _, err := addUserWinStreamCoin(u.OpenId, -int64(math.Ceil(float64(num)*0.5))); err != nil {
-// 					ziLog.Error( fmt.Sprintf("deleteXinghe 星核失败，玩家OpenId： %s, 删除星核数量： %v", u.OpenId, math.Ceil(float64(num)*0.5)), debug)
-// 				}
-// 			case 2*num > coin && coin > num:
-// 				if _, err := addUserWinStreamCoin(u.OpenId, -int64(math.Ceil(float64(coin)*0.5))); err != nil {
-// 					ziLog.Error( fmt.Sprintf("deleteXinghe 星核失败，玩家OpenId： %s, 删除星核数量： %v", u.OpenId, math.Ceil(float64(coin)*0.5)), debug)
-// 				}
-// 			case coin > 2*num:
-// 				if _, err := addUserWinStreamCoin(u.OpenId, num); err != nil {
-// 					ziLog.Error( fmt.Sprintf("deleteXinghe 星核失败，玩家OpenId： %s, 删除星核数量： %v", u.OpenId, num), debug)
-// 				}
-// 			}
-// 		}
-// 	}
-// }

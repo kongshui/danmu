@@ -18,12 +18,6 @@ import (
 
 func ksPushBasePayloay(data KsCallbackStruct) {
 	pushType := data.Data.PushType
-	// 获取Uid
-	// uid := queryRoomIdToUid(data.Data.RoomCode)
-	// if uid == "" {
-	// 	ziLog.Write(logError, fmt.Sprintf("ksPushBasePayloay queryRoomIdToUid nil， roomId: %v, openId, %v, 数据为： %v", data.Data.RoomCode, data.Data.AuthorOpenId, data), debug)
-	// 	return
-	// }
 	sendUidList, _, isGroup, _ := getUidListByOpenId(data.Data.AuthorOpenId)
 	if len(sendUidList) == 0 {
 		ziLog.Error(fmt.Sprintf("ksPushBasePayloay queryRoomIdToUid nil， roomId: %v, openId, %v, 数据为： %v", data.Data.RoomCode, data.Data.AuthorOpenId, data), debug)
@@ -304,12 +298,6 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 		nickName  string
 		avatarUrl string
 	)
-	// 是否是group
-	// if isGroup {
-	// 	groupGrpc.GroupId = groupId
-	// 	groupGrpc.AnchorOpenId = data.AuthorOpenId
-	// 	groupGrpc.AnchorOpenIdList = openIdList
-	// }
 	// 添加uniqueMessageId到redis中，防止重复推送
 	giftsendSet(data.RoomCode, data.UniqueMessageId)
 	for _, v := range data.Payload {
@@ -343,12 +331,6 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 			anchorName.NickName = anchor_nick_name
 		}
 		roundId, _ := queryRoomIdToRoundId(data.RoomCode)
-		//
-		// var (
-		// 	sendData = make(map[string]any)
-		// )
-		// vByte, _ := json.Marshal(v)
-		// json.Unmarshal(vByte, &sendData)
 		if !(strings.HasPrefix(data.UniqueMessageId, "test_") || strings.HasPrefix(data.UniqueMessageId, "stress_")) {
 			// 设置用户是否已经消费
 			setIsConsume(gift.UserInfo.UserId, time.Now().UnixMilli())
@@ -403,9 +385,6 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 		}
 		//分数不为0时添加积分
 		if score != 0 {
-			// fastReturnAdd(data.RoomCode, v.UserInfo.UserId, score)
-			// // 送礼直接添加到世界排行榜
-			// go worldRankNumerAdd(v.UserInfo.UserId, score)
 			go matchAddIntrage(data.RoomCode, openId, nickName, avatarUrl, score)
 		}
 		if !isLottery {

@@ -14,8 +14,8 @@ func OpenIdWinCount(openId string, about bool) error {
 }
 
 // 组获胜统计，获胜次数。about  true 左边，false，右边
-func GroupWinCount(about bool) error {
-	if err := mysql.UpdateGroupWinCount(about); err != nil {
+func GroupWinCount(groupId string) error {
+	if err := mysql.UpdateGroupWinCount(groupId); err != nil {
 		ziLog.Error(fmt.Sprintf("GroupWinCount err: %v", err), debug)
 		return err
 	}

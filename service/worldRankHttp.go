@@ -33,7 +33,8 @@ func ksSyncGameStatus(data SyncGameStatusStruct, label string, isFirst bool) boo
 		}
 	} else if label == "stop" {
 		var (
-			group string = "绝对中立"
+			group      string = ""
+			groupIdAll string
 		)
 		for _, v := range data.GroupResultList {
 			if v.Result == 1 {
@@ -41,10 +42,16 @@ func ksSyncGameStatus(data SyncGameStatusStruct, label string, isFirst bool) boo
 				break
 			}
 		}
+		groupIdAll = "\""
+		for _, v := range groupid_list {
+			groupIdAll += v + ","
+		}
+		groupIdAll = groupIdAll[:len(groupIdAll)-1]
+		groupIdAll += "\""
 		sdata = map[string]any{
 			"roundId":    data.RoundId,
 			"roundType":  "singleGroup",
-			"roundGroup": "守序善良,中立善良,混乱善良,绝对中立,守序邪恶,中立邪恶,混乱邪恶",
+			"roundGroup": groupIdAll,
 			"result": map[string]string{
 				"singleGroupRoundResult": group,
 			},
@@ -103,7 +110,7 @@ func ksSyncGameStatus(data SyncGameStatusStruct, label string, isFirst bool) boo
 							StartTime:       time.Now().UnixMilli() - 1000,
 							EndTime:         time.Now().UnixMilli(),
 							Status:          2,
-							GroupResultList: []GroupResultList{{GroupId: "绝对中立", Result: 1}},
+							GroupResultList: []GroupResultList{{GroupId: groupid_list[0], Result: 1}},
 						}, "stop", false)
 					}
 					t := time.NewTimer(3 * time.Second)
