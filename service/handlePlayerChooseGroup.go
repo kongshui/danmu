@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
+	"time"
 
 	"github.com/kongshui/danmu/model/pmsg"
 	"github.com/kongshui/danmu/sse"
@@ -113,10 +113,7 @@ func PlayerChooseGroupHandle(c *gin.Context) {
 	}
 	gId, rStat, _ := getUserGroup(pCG.RoomId, pCG.OpenId)
 	score, rank, _ := getPlayerWorldRankData(pCG.OpenId)
-	coin, err := QueryUserWinStreamCoin(pCG.OpenId)
-	if err != nil {
-		log.Printf("获取openid为：  %s的玩家的连胜币错误，错误信息为： %s", pCG.OpenId, err)
-	}
+	coin, _ := QueryUserWinStreamCoin(pCG.OpenId)
 	isConsume := queryIsConsume(pCG.OpenId)
 	// 查询玩家等级
 	level, _ := QueryLevelInfo(pCG.OpenId)
@@ -139,6 +136,7 @@ func PlayerChooseGroupHandle(c *gin.Context) {
 	if ok := dyUploadUserGroup(pCG.RoomId, pCG.OpenId, gId, roundId); !ok {
 		ziLog.Error("PlayerChooseGroupHandle 上传玩家加入组信息 fail: ", debug)
 	}
+	time.Sleep(200 * time.Millisecond)
 	c.JSON(200, gin.H{
 		"errcode": 0,
 		"errmsg":  "success",
