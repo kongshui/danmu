@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/kongshui/danmu/model/pmsg"
 	"github.com/kongshui/danmu/sse"
@@ -93,54 +92,56 @@ func PlayerChooseGroupHandle(c *gin.Context) {
 		})
 		return
 	}
-	anchorOpenid := QueryRoomIdInterconvertAnchorOpenId(pCG.RoomId)
-	if anchorOpenid == "" {
-		ziLog.Error(fmt.Sprintf("PlayerChooseGroupHandle 获取主播openid失败, roomId: %v, openid: %v", pCG.RoomId, pCG.OpenId), debug)
-		c.JSON(400, gin.H{
-			"errcode": 40001,
-			"errmsg":  "获取主播openid失败",
-		})
-		return
-	}
-	sendUidList, _, _, _ := getUidListByOpenId(anchorOpenid)
-	if len(sendUidList) == 0 {
-		ziLog.Error(fmt.Sprintf("PlayerChooseGroupHandle sendUidList is nil, roomId: %v, anchorOpenid: %v, data: %v", pCG.RoomId, anchorOpenid, pCG), debug)
-		c.JSON(400, gin.H{
-			"errcode": 40001,
-			"errmsg":  "获取主播uid失败",
-		})
-		return
-	}
-	gId, rStat, _ := getUserGroup(pCG.RoomId, pCG.OpenId)
-	score, rank, _ := getPlayerWorldRankData(pCG.OpenId)
-	coin, _ := QueryUserWinStreamCoin(pCG.OpenId)
-	isConsume := queryIsConsume(pCG.OpenId)
-	// 查询玩家等级
-	level, _ := QueryLevelInfo(pCG.OpenId)
-	sData := &pmsg.SingleUserAddGroupMessage{
-		OpenId:            pCG.OpenId,
-		AvatarUrl:         pCG.AvatarUrl,
-		NickName:          pCG.NickName,
-		GroupId:           gId,
-		RoundId:           roundId,
-		WorldScore:        score,
-		WorldRank:         rank,
-		WinningStreamCoin: coin,
-		IsConsume:         !isConsume,
-		Level:             level,
-	}
-	sDataByte, _ := proto.Marshal(sData)
-	if err := sse.SseSend(pmsg.MessageId_SingleUserAddGroup, sendUidList, sDataByte); err != nil {
-		ziLog.Error(fmt.Sprintf("PlayerChooseGroupHandle 推送玩家加入组信息失败: %v, data: %v", err, pCG), debug)
-	}
-	time.Sleep(200 * time.Millisecond)
+	go func(pcg playerChooseGroup) {
+
+		anchorOpenid := QueryRoomIdInterconvertAnchorOpenId(pcg.RoomId)
+		if anchorOpenid == "" {
+			ziLog.Error(fmt.Sprintf("PlayerChooseGroupHandle 获取主播openid失败, roomId: %v, openid: %v", pcg.RoomId, pcg.OpenId), debug)
+			c.JSON(400, gin.H{
+				"errcode": 40001,
+				"errmsg":  "获取主播openid失败",
+			})
+			return
+		}
+		sendUidList, _, _, _ := getUidListByOpenId(anchorOpenid)
+		if len(sendUidList) == 0 {
+			ziLog.Error(fmt.Sprintf("PlayerChooseGroupHandle sendUidList is nil, roomId: %v, anchorOpenid: %v, data: %v", pcg.RoomId, anchorOpenid, pcg), debug)
+			c.JSON(400, gin.H{
+				"errcode": 40001,
+				"errmsg":  "获取主播uid失败",
+			})
+			return
+		}
+		gId, _, _ := getUserGroup(pcg.RoomId, pcg.OpenId)
+		score, rank, _ := getPlayerWorldRankData(pcg.OpenId)
+		coin, _ := QueryUserWinStreamCoin(pcg.OpenId)
+		isConsume := queryIsConsume(pcg.OpenId)
+		// 查询玩家等级
+		level, _ := QueryLevelInfo(pcg.OpenId)
+		sData := &pmsg.SingleUserAddGroupMessage{
+			OpenId:            pcg.OpenId,
+			AvatarUrl:         pcg.AvatarUrl,
+			NickName:          pcg.NickName,
+			GroupId:           gId,
+			RoundId:           roundId,
+			WorldScore:        score,
+			WorldRank:         rank,
+			WinningStreamCoin: coin,
+			IsConsume:         !isConsume,
+			Level:             level,
+		}
+		sDataByte, _ := proto.Marshal(sData)
+		if err := sse.SseSend(pmsg.MessageId_SingleUserAddGroup, sendUidList, sDataByte); err != nil {
+			ziLog.Error(fmt.Sprintf("PlayerChooseGroupHandle 推送玩家加入组信息失败: %v, data: %v", err, pcg), debug)
+		}
+	}(pCG)
 	c.JSON(200, gin.H{
 		"errcode": 0,
 		"errmsg":  "success",
 		"data": gin.H{
 			"round_id":     roundId,
-			"round_status": rStat,
-			"group_id":     gId,
+			"round_status": 1,
+			"group_id":     pCG.GroupId,
 		},
 	})
 }
