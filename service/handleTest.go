@@ -423,7 +423,8 @@ func HandleAddGroup(c *gin.Context) {
 		data = append(data, &pmsg.SingleRoomAddGroupInfo{OpenId: v.OpenId, GroupId: v.GroupId, AvatarUrl: v.AvatarUrl, NickName: v.NickName})
 	}
 	liveCurrentRoundAdd(addGroup.RoomId, addGroup.RoundId)
-	err := playerGroupAdd(addGroup.RoomId, addGroup.OpenId, data, false)
+	// 3. 加入组
+	err := playerGroupAdd(addGroup.RoomId, addGroup.OpenId, addGroup.RoundId, data, false)
 	c.JSON(200, err)
 }
 

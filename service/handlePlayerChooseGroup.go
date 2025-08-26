@@ -77,22 +77,15 @@ func PlayerChooseGroupHandle(c *gin.Context) {
 		return
 	}
 	uid := queryRoomIdToUid(pCG.RoomId)
-	if err := playerGroupAdd(pCG.RoomId, uid, []*pmsg.SingleRoomAddGroupInfo{
+	go playerGroupAdd(pCG.RoomId, uid, roundId, []*pmsg.SingleRoomAddGroupInfo{
 		{
 			GroupId:   pCG.GroupId,
 			OpenId:    pCG.OpenId,
 			AvatarUrl: pCG.AvatarUrl,
 			NickName:  pCG.NickName,
 		},
-	}, true); err != nil {
-		ziLog.Error(fmt.Sprintf("PlayerChooseGroupHandle 添加玩家失败,err: %v", err), debug)
-		c.JSON(400, gin.H{
-			"errcode": 40001,
-			"errmsg":  err.Error(),
-		})
-		return
-	}
-	go func(pcg playerChooseGroup) {
+	}, true)
+	go func(pcg playerChooseGroup, roundId int64) {
 
 		anchorOpenid := QueryRoomIdInterconvertAnchorOpenId(pcg.RoomId)
 		if anchorOpenid == "" {
@@ -134,7 +127,8 @@ func PlayerChooseGroupHandle(c *gin.Context) {
 		if err := sse.SseSend(pmsg.MessageId_SingleUserAddGroup, sendUidList, sDataByte); err != nil {
 			ziLog.Error(fmt.Sprintf("PlayerChooseGroupHandle 推送玩家加入组信息失败: %v, data: %v", err, pcg), debug)
 		}
-	}(pCG)
+	}(pCG, roundId)
+
 	c.JSON(200, gin.H{
 		"errcode": 0,
 		"errmsg":  "success",

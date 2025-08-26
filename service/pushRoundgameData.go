@@ -18,23 +18,17 @@ import (
 )
 
 // 玩家分组
-func playerGroupAdd(roomId, uidStr string, userMap []*pmsg.SingleRoomAddGroupInfo, isChoose bool) error {
-	//获取roundId
-	roundId, ok := queryRoomIdToRoundId(roomId)
-	if !ok {
-		return errors.New("playerGroupAdd roundId 未查到")
-	}
+func playerGroupAdd(roomId, uidStr string, roundId int64, userMap []*pmsg.SingleRoomAddGroupInfo, isChoose bool) error {
+
 	//初始化sdata
 	data := &pmsg.ResultUserAddGroupMessage{}
 	//设置查询组的名称
 	name := roomId + "_" + strconv.FormatInt(roundId, 10) + "_group"
-	for i, v := range userMap {
+	for _, v := range userMap {
 		if _, err := rdb.HSetNX(name, v.GetOpenId(), v.GetGroupId()); err != nil {
 			ziLog.Error(fmt.Sprintf("playerGroupAdd 设置组失败: %v,openId:%v, groupId: %v", err, v.GetOpenId(), v.GetGroupId()), debug)
 		}
-		if i == 0 {
-			rdb.Expire(name, 21600*time.Second)
-		}
+
 		// 其他前置处理
 		if playerGroupAddinFunc != nil {
 			if err := playerGroupAddinFunc(roomId, v.GetOpenId()); err != nil {
@@ -57,31 +51,31 @@ func playerGroupAdd(roomId, uidStr string, userMap []*pmsg.SingleRoomAddGroupInf
 		// 查询玩家等级
 		level, _ := QueryLevelInfo(v.OpenId)
 
-		if ok {
-			score, rank, _ := getPlayerWorldRankData(v.OpenId)
-			data.UserInfoList = append(data.UserInfoList, &pmsg.UserInfoStruct{
-				OpenId:            v.OpenId,
-				VersionScore:      score,
-				VersionRank:       rank,
-				WinningStreamCoin: coin,
-				IsFirstConsume:    isConsume,
-				Level:             level,
-			})
-		}
+		score, rank, _ := getPlayerWorldRankData(v.OpenId)
+		data.UserInfoList = append(data.UserInfoList, &pmsg.UserInfoStruct{
+			OpenId:            v.OpenId,
+			VersionScore:      score,
+			VersionRank:       rank,
+			WinningStreamCoin: coin,
+			IsFirstConsume:    isConsume,
+			Level:             level,
+		})
 	}
 	if isChoose {
 		return nil
+	}
+	ttl, _ := rdb.TTL(name)
+	if ttl <= 0 {
+		rdb.Expire(name, 21600*time.Second)
 	}
 	// fmt.Println(data)
 	dataByte, err := proto.Marshal(data)
 	if err != nil {
 		return errors.New("playerGroupAdd proto Marshal err: " + err.Error())
 	}
-	if ok {
-		if err := sse.SseSend(pmsg.MessageId_SingleRoomAddGroupAck, []string{uidStr}, dataByte); err != nil {
-			ziLog.Error(fmt.Sprintf("playerGroupAdd 玩家加入组信息 err: %v", err), debug)
-			return errors.New("玩家加入组信息 err: " + err.Error())
-		}
+	if err := sse.SseSend(pmsg.MessageId_SingleRoomAddGroupAck, []string{uidStr}, dataByte); err != nil {
+		ziLog.Error(fmt.Sprintf("playerGroupAdd 玩家加入组信息 err: %v", err), debug)
+		return errors.New("玩家加入组信息 err: " + err.Error())
 	}
 	return nil
 }

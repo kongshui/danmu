@@ -222,7 +222,12 @@ func playerAddGroudId(msg *pmsg.MessageBody) error {
 	if err != nil {
 		return errors.New("player add group Unmarshal err: " + err.Error())
 	}
-	if err := playerGroupAdd(data.GetRoomId(), msg.GetUuid(), data.GetUserList(), false); err != nil {
+	//获取roundId
+	roundId, ok := queryRoomIdToRoundId(data.GetRoomId())
+	if !ok {
+		return errors.New("playerGroupAdd roundId 未查到")
+	}
+	if err := playerGroupAdd(data.GetRoomId(), msg.GetUuid(), roundId, data.GetUserList(), false); err != nil {
 		return errors.New("玩家加入组信息 err: " + err.Error())
 	}
 	return nil
