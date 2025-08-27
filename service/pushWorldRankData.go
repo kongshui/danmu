@@ -7,8 +7,6 @@ import (
 	"log"
 	"math"
 	"time"
-
-	"github.com/kongshui/danmu/model/pmsg"
 )
 
 // 推送世界榜单数据
@@ -241,67 +239,4 @@ func GetWorldRankData(openIdList []string) []WorldInfoStruct {
 		})
 	}
 	return worldInfoList
-}
-
-// 返回世界排行榜前100名
-func getTopWorldRankData() *pmsg.UserInfoListMessage {
-	data := &pmsg.UserInfoListMessage{}
-	openIdList, err := rdb.ZRevRangeWithScores(world_rank_week, 0, 99)
-	if err != nil {
-		ziLog.Error(fmt.Sprintf("getTopWorldRankData err: %v", err), debug)
-		return data
-	}
-	for i, userInfo := range openIdList {
-		openId := userInfo.Member.(string)
-		user, _ := userInfoGet(openId)
-		coin, _ := QueryUserWinStreamCoin(openId)
-		level, _ := QueryLevelInfo(openId)
-		if user.NickName == "" || user.AvatarUrl == "" {
-			// 从数据库查询玩家信息
-			avatarUrl, nickName, err := mysql.QueryPlayerInfo(openId)
-			if err != nil {
-				ziLog.Error(fmt.Sprintf("getTopWorldRankData QueryPlayerInfo err: %v,openId: %v", err, openId), debug)
-			} else {
-				user.NickName = nickName
-				user.AvatarUrl = avatarUrl
-			}
-		}
-
-		data.UserInfoList = append(data.UserInfoList, &pmsg.UserInfo{
-			OpenId:            openId,
-			Rank:              int64(i + 1),
-			Score:             int64(userInfo.Score),
-			AvatarUrl:         user.AvatarUrl,
-			NickName:          user.NickName,
-			WinningStreamCoin: coin,
-			Level:             level,
-		})
-	}
-	return data
-}
-
-// 返回世界排行榜前100名
-func getTopMonthRankData() *pmsg.UserInfoListMessage {
-	data := &pmsg.UserInfoListMessage{}
-	openIdList, err := rdb.ZRevRangeWithScores(monthVersionRankDb, 0, 99)
-	if err != nil {
-		return data
-	}
-	for i, userInfo := range openIdList {
-		openId := userInfo.Member.(string)
-		user, _ := userInfoGet(openId)
-		coin, _ := QueryUserWinStreamCoin(openId)
-		level, _ := QueryLevelInfo(openId)
-
-		data.UserInfoList = append(data.UserInfoList, &pmsg.UserInfo{
-			OpenId:            openId,
-			Rank:              int64(i + 1),
-			Score:             int64(userInfo.Score),
-			AvatarUrl:         user.AvatarUrl,
-			NickName:          user.NickName,
-			WinningStreamCoin: coin,
-			Level:             level,
-		})
-	}
-	return data
 }

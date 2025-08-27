@@ -109,6 +109,8 @@ const (
 	MessageId_SingleUserAddGroupAck             MessageId = 103 // 单个用户加入分组返回
 	MessageId_LevelQuery                        MessageId = 104 // 等级查询
 	MessageId_LevelQueryAck                     MessageId = 105 // 等级查询返回
+	MessageId_SetSideCharacterQuery             MessageId = 106 // 设置侧边角色查询
+	MessageId_SetSideCharacterQueryAck          MessageId = 107 // 设置侧边角色查询返回
 	MessageId_LiveComment                       MessageId = 108 // 直播间弹幕消息
 	MessageId_liveGift                          MessageId = 109 // 直播间礼物消息
 	MessageId_liveLike                          MessageId = 110 // 直播间点赞消息
@@ -212,6 +214,8 @@ var (
 		103: "SingleUserAddGroupAck",
 		104: "LevelQuery",
 		105: "LevelQueryAck",
+		106: "SetSideCharacterQuery",
+		107: "SetSideCharacterQueryAck",
 		108: "LiveComment",
 		109: "liveGift",
 		110: "liveLike",
@@ -312,6 +316,8 @@ var (
 		"SingleUserAddGroupAck":             103,
 		"LevelQuery":                        104,
 		"LevelQueryAck":                     105,
+		"SetSideCharacterQuery":             106,
+		"SetSideCharacterQueryAck":          107,
 		"LiveComment":                       108,
 		"liveGift":                          109,
 		"liveLike":                          110,
@@ -363,7 +369,7 @@ var File_proto_constid_proto protoreflect.FileDescriptor
 
 const file_proto_constid_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/constid.proto\x12\x04pmsg*\xb9\x11\n" +
+	"\x13proto/constid.proto\x12\x04pmsg*\xf2\x11\n" +
 	"\tMessageId\x12\v\n" +
 	"\aUnknown\x10\x00\x12\f\n" +
 	"\bNodeInfo\x10\x01\x12\x0f\n" +
@@ -453,7 +459,9 @@ const file_proto_constid_proto_rawDesc = "" +
 	"\x15SingleUserAddGroupAck\x10g\x12\x0e\n" +
 	"\n" +
 	"LevelQuery\x10h\x12\x11\n" +
-	"\rLevelQueryAck\x10i\x12\x0f\n" +
+	"\rLevelQueryAck\x10i\x12\x19\n" +
+	"\x15SetSideCharacterQuery\x10j\x12\x1c\n" +
+	"\x18SetSideCharacterQueryAck\x10k\x12\x0f\n" +
 	"\vLiveComment\x10l\x12\f\n" +
 	"\bliveGift\x10m\x12\f\n" +
 	"\bliveLike\x10n\x12\x0e\n" +

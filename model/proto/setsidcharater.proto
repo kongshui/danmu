@@ -1,0 +1,17 @@
+syntax = "proto3";
+package pmsg;
+option go_package="./pmsg";
+
+
+message SetSideCharacterQueryMessage {
+    string open_id = 1;    // 主播openId
+}
+
+message SetSideCharacterQueryAckMessage {
+    string open_id = 1;    // 主播openId
+    message side_character {
+        string group_id = 1;
+        int32 character_id = 2;
+    }
+    repeated side_character side_character_list = 2;
+}

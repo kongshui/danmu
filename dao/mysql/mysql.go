@@ -332,6 +332,20 @@ func (m *MysqlClient) UpdateGroupWinCount(groupId string) error {
 	return nil
 }
 
+// 查询组的胜场次数
+func (m *MysqlClient) QueryGroupWinCount(groupId string) (int64, error) {
+	if !m.isUse {
+		return 0, nil
+	}
+	var count int64
+	err := m.Client.QueryRow("SELECT win_count FROM win_group_count WHERE group_id = ?", groupId).Scan(&count)
+	if err != nil {
+		log.Println("mysql 查询组的胜场次数失败", err)
+		return 0, err
+	}
+	return count, nil
+}
+
 // 查询玩家信息
 func (m *MysqlClient) QueryPlayerInfo(openid string) (string, string, error) {
 	if !m.isUse {
