@@ -27,6 +27,7 @@ type (
 	WebsocketFunc      func(msg *pmsg.MessageBody) error
 	InteractiveFunc    func(roomId, roundId string, label int) bool //自动选边
 	GiftExtendInfoFunc func() string
+	ScrollFunc         func(string)
 )
 
 var (
@@ -36,6 +37,7 @@ var (
 	otherWebsocketFunc   WebsocketFunc
 	interactive          InteractiveFunc
 	giftExtendInfoFunc   GiftExtendInfoFunc
+	scrollFunc           ScrollFunc
 
 	is_mock bool
 

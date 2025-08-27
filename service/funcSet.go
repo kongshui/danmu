@@ -12,13 +12,16 @@ import (
 )
 
 // 函数初始化
-func ServiceFuncSet(suf SingleUserFunc, sts SetWinScoreFunc, ltf LotteryFunc, webSocketFunc WebsocketFunc, interFunc InteractiveFunc, giftExtendInfo GiftExtendInfoFunc) {
+func ServiceFuncSet(suf SingleUserFunc, sts SetWinScoreFunc, ltf LotteryFunc, webSocketFunc WebsocketFunc, interFunc InteractiveFunc,
+	giftExtendInfo GiftExtendInfoFunc, scrollfunc ScrollFunc) {
+
 	interactive = interFunc
 	playerGroupAddinFunc = suf
 	setWinnerScoreFunc = sts
 	lotteryFunc = ltf
 	otherWebsocketFunc = webSocketFunc
 	giftExtendInfoFunc = giftExtendInfo
+	scrollFunc = scrollfunc
 }
 
 // 所有链接初始化

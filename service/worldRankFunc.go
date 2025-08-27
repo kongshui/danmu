@@ -192,26 +192,6 @@ func setPlayerDataToRound(roomId, openId string, score float64) error {
 	if _, err := addIntegralByScore(anchorOpenId, score); err != nil {
 		ziLog.Error("SetPlayerDataToRound err: roomid: "+roomId+", openId: "+openId+", score: "+strconv.FormatInt(int64(score), 10)+", err: "+err.Error(), debug)
 	}
-	// roundId, ok := queryRoomIdToRoundId(roomId)
-	// if !ok {
-	// 	return errors.New("setPlayerDataToRound roundId 未查找到")
-	// }
-	// roundIdStr := strconv.FormatInt(roundId, 10)
-	// group, err := rdb.HGet(roomId+"_"+roundIdStr+"_"+"group", openId)
-	// if err != nil {
-	// 	return setTempGroup(roomId, openId, score)
-	// }
-	// //对局排行存储名称
-	// name := roomId + "_" + roundIdStr + "_" + group + "_rank"
-	// _, err = rdb.ZIncrBy(name, score, openId)
-	// if err != nil {
-	// 	ziLog.Error( "SetPlayerDataToRound rdb.ZIncrBy err: roomid: "+roomId+", openId: "+openId+", score: "+strconv.FormatInt(int64(score), 10)+", err: "+err.Error(), debug)
-	// }
-	// ttl, _ := rdb.TTL(name)
-	// if ttl < 0 {
-	// 	//设置过期时间为7天
-	// 	rdb.Expire(name, time_interval*time.Second)
-	// }
 	return nil
 }
 
