@@ -60,12 +60,12 @@ func playerGroupAdd(roomId, uidStr string, roundId int64, userMap []*pmsg.Single
 			Level:             level,
 		})
 	}
-	if isChoose {
-		return nil
-	}
 	ttl, _ := rdb.TTL(name)
 	if ttl <= 0 {
 		rdb.Expire(name, 21600*time.Second)
+	}
+	if isChoose {
+		return nil
 	}
 	// fmt.Println(data)
 	dataByte, err := proto.Marshal(data)
