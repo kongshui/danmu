@@ -2,6 +2,7 @@ package service
 
 const (
 	winning_streak_coin_db        = "winning_stream_coin_store"  //存储玩家连胜币
+	winning_point_db              = "winning_point"              //连胜点
 	world_rank_version_db         = "world_rank_version"         //世界排行版版本信息
 	world_rank_version_list_db    = "world_rank_version_list"    //世界排行版版本列表
 	world_rank_historical_db      = "world_rank_historical"      //历史排行版
