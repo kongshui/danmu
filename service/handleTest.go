@@ -271,8 +271,8 @@ func HandleSendFakeGift(c *gin.Context) {
 		giftData.GiftId = giftGet.GiftId
 		giftData.GiftCount = giftGet.Num
 		giftData.GiftName = giftIdToName[giftGet.GiftId]
-		giftData.GiftUnitPrice = 1
-		giftData.GiftTotalPrice = giftGet.Num
+		giftData.GiftUnitPrice = 0
+		giftData.GiftTotalPrice = 0
 		// switch giftGet.UserId {
 		// case 0:
 		// 	giftData.UserInfo.NickName = "cccc"
