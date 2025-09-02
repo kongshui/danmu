@@ -162,9 +162,14 @@ func getWorldPlayerData(openId string, rank, score int64) (userData UserRankStru
 	if err != nil {
 		winningStreakCountInt = 0
 	}
+	winningPointInt, err := rdb.ZScore(winning_point_db, openId)
+	if err != nil {
+		winningPointInt = 0
+	}
 	userData.OpenId = openId
 	userData.Rank = rank
 	userData.WinningStreakCount = int64(winningStreakCountInt)
+	userData.WinningPoints = int64(winningPointInt)
 	userData.Score = score
 	return
 }

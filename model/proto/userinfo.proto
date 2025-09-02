@@ -12,5 +12,5 @@ message UserInfo {
     int64 WinningStreamCoin = 6;  // 用户的连胜币
     int64 SwallowCount = 7;  // 用户的吞噬次数
     int64 Level = 8;       // 用户的等级
-
+    int64 WinningPoint = 9;  // 用户的胜点
 }

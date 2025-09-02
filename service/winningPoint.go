@@ -7,6 +7,9 @@ import (
 
 // 查询玩家胜点
 func QueryUserWinningPoint(openId string) (int64, error) {
+	if !rdb.IsExistKey(winning_point_db) {
+		return 0, nil
+	}
 	point, err := rdb.ZScore(winning_point_db, openId)
 	if err != nil {
 		return 0, err

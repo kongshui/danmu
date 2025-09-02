@@ -15,4 +15,5 @@ message UserInfoStruct {
     int64 WinningStreamCoin = 4;    //连胜币
     bool IsFirstConsume  = 5;             //是否是第一次消费
     int64 Level = 6;                //玩家等级
+    int64 WinningPoints = 7;        //胜点
 }
