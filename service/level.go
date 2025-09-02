@@ -22,9 +22,15 @@ func QueryOldLevelInfo(openId, old_level_db string) (float64, error) {
 
 // 更新等级信息
 func UpdateLevelInfo(openId string, level int64) error {
-	_, err := rdb.ZIncrBy(level_db, float64(level), openId)
+	if level == 0 {
+		return nil
+	}
+	score, err := rdb.ZIncrBy(level_db, float64(level), openId)
 	if err != nil {
 		return err
+	}
+	if score <= 0 {
+		DeleteLevelInfo(openId)
 	}
 	return nil
 }

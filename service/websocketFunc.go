@@ -113,24 +113,6 @@ func roundStart(msg *pmsg.MessageBody) error {
 	return sse.SseSend(pmsg.MessageId_SyncGameStartAck, []string{msg.Uuid}, msgData)
 }
 
-// 获取token
-// func tokenFunc(msg *pmsg.MessageBody) error {
-// 	data := &pmsg.TokenMessage{}
-// 	err := proto.Unmarshal(msg.MessageData, data)
-// 	if err != nil {
-// 		return errors.New("token Unmarshal err: " + err.Error())
-// 	}
-// 	roomInfo, err := getRoomId(data.Token, msg.Uuid)
-// 	if err != nil {
-// 		return errors.New("token GetRoomId err: " + err.Error())
-// 	}
-// 	sData, err := proto.Marshal(roomInfo)
-// 	if err != nil {
-// 		return errors.New("token proto Marshal err: " + err.Error())
-// 	}
-// 	return pushDownLoadMessage(uint32(pmsg.MessageId_TokenAck), pmsg.MessageId_TokenAck.String(), msg.Uuid, sData)
-// }
-
 // testToekn
 func TestTokenFunc(msg *pmsg.MessageBody) error {
 	var result string = ""
@@ -249,7 +231,9 @@ func roundDataUpload(msg *pmsg.MessageBody) error {
 	for _, v := range data.GroupUserList {
 		roundData.GroupUserList = append(roundData.GroupUserList, UserUploadScoreStruct{OpenId: v.OpenId, GroupId: v.GroupId, Score: v.Score})
 	}
-
+	if is_mock {
+		return nil
+	}
 	return usersRoundUpload(data.RoomId, data.GetAnchorOpenId(), roundData)
 }
 
@@ -397,73 +381,6 @@ func consumeUse(msg *pmsg.MessageBody) error {
 	return nil
 }
 
-// 增加吞噬数
-// func AddSwallow(msg *pmsg.MessageBody) error {
-// 	data := &pmsg.SwallowCount{}
-// 	err := proto.Unmarshal(msg.MessageData, data)
-// 	if err != nil {
-// 		return errors.New("addConsume Unmarshal err: " + err.Error())
-// 	}
-// 	count, err := addSwallowCount(data.GetOpenId(), data.GetSwallowCount())
-// 	if err != nil {
-// 		return errors.New("addConsume err: " + err.Error())
-// 	}
-// 	data.SwallowCount = count
-// 	dataByte, err := proto.Marshal(data)
-// 	if err != nil {
-// 		return errors.New("addConsume proto Marshal err: " + err.Error())
-// 	}
-// 	// if err := pushDownLoadMessage(uint32(pmsg.MessageId_SwallowCountAddAck), pmsg.MessageId_SwallowCountAddAck.String(), []string{msg.Uuid}, dataByte); err != nil {
-// 	// 	return errors.New("玩家查询连胜币 err: " + err.Error())
-// 	// }
-// 	return nil
-// }
-
-// 查询吞噬数
-// func QuerySwallowNum(msg *pmsg.MessageBody) error {
-// 	data := &pmsg.SwallowCount{}
-// 	err := proto.Unmarshal(msg.MessageData, data)
-// 	if err != nil {
-// 		return errors.New("addConsume Unmarshal err: " + err.Error())
-// 	}
-// 	count, err := querySwallowCount(data.GetOpenId())
-// 	if err != nil {
-// 		return errors.New("addConsume err: " + err.Error())
-// 	}
-// 	data.SwallowCount = count
-// 	dataByte, err := proto.Marshal(data)
-// 	if err != nil {
-// 		return errors.New("addConsume proto Marshal err: " + err.Error())
-// 	}
-// 	if err := pushDownLoadMessage(uint32(pmsg.MessageId_QuerySwallowCountAck), pmsg.MessageId_QuerySwallowCountAck.String(), []string{msg.Uuid}, dataByte); err != nil {
-// 		return errors.New("玩家查询连胜币 err: " + err.Error())
-// 	}
-// 	return nil
-// }
-
-// 查询月吞噬数
-// func QueryMonthSwallowNum(msg *pmsg.MessageBody) error {
-// 	data := &pmsg.SwallowCount{}
-// 	err := proto.Unmarshal(msg.MessageData, data)
-// 	if err != nil {
-// 		return errors.New("queryMonthSwallowNum Unmarshal err: " + err.Error())
-// 	}
-// 	count, err := queryMonthSwallowCount(data.GetOpenId())
-// 	if err != nil {
-// 		return errors.New("queryMonthSwallowNum 查询月排行 err: " + err.Error())
-// 	}
-// 	data.SwallowCount = count
-// 	fmt.Println("queryMonthSwallowNum: ", data.SwallowCount, data)
-// 	dataByte, err := proto.Marshal(data)
-// 	if err != nil {
-// 		return errors.New("addConsume proto Marshal err: " + err.Error())
-// 	}
-// 	if err := pushDownLoadMessage(uint32(pmsg.MessageId_QueryMonthSwallowCountAck), pmsg.MessageId_QueryMonthSwallowCountAck.String(), []string{msg.Uuid}, dataByte); err != nil {
-// 		return errors.New("queryMonthSwallowNum 玩家查询月排行 err: " + err.Error())
-// 	}
-// 	return nil
-// }
-
 // 断开连接
 func disconnect(msg *pmsg.MessageBody) error {
 	data := &pmsg.Disconnect{}
@@ -473,11 +390,6 @@ func disconnect(msg *pmsg.MessageBody) error {
 	}
 	ziLog.Info(fmt.Sprintf("disconnect enter roomId:%v, userId: %v", data.GetRoomId(), data.GetUserId()), debug)
 	endConnect(data.GetRoomId(), data.GetUserId())
-
-	// if getGameInfo(data.RoomId, url_BindUrl) == 1 {
-	// 	startFinishGameInfo(data.RoomId, url_BindUrl, "stop", msg.GetUuid(), true)
-	// }
-
 	return nil
 }
 
@@ -518,13 +430,7 @@ func KsBind(msg *pmsg.MessageBody, label string) error {
 		dyStartPushTask(data.RoomId, data.OpenId, msg.Uuid, isStart)
 		return nil
 	}
-	// if label == "start" {
-	// 	testChat = append(testChat, data.GetRoomId())
-	// 	if err := twoConnect("config", data.GetRoomId(), "", "", ""); err != nil {
-	// 		return errors.New("twoConnect err: " + err.Error())
-	// 	}
-	// 	fmt.Println(testChat)
-	// }
+
 	if !ksStartFinishGameInfo(data.GetRoomId(), url_BindUrl, label, msg.GetUuid(), true) {
 		return errors.New(label + " game 游戏失败, " + data.GetRoomId())
 	}
@@ -578,7 +484,6 @@ func ksMsgAck(msg *pmsg.MessageBody) error {
 		sdata.Data = string(temp)
 		return msgAckSend(sdata)
 	}
-
 	return nil
 }
 
@@ -605,34 +510,6 @@ func dytoken(msg *pmsg.MessageBody) error {
 	}
 	return dyGetAnchorInfo(msg.Uuid, data.Token)
 }
-
-// dyMsgAck
-// func dyMsgAck(msg *pmsg.MessageBody) error {
-// 	data := &pmsg.DymsgAckMessage{}
-// 	err := proto.Unmarshal(msg.MessageData, data)
-// 	if err != nil {
-// 		ziLog.Error( "dytoken Unmarshal err: "+err.Error(), debug)
-// 		return errors.New("dytoken Unmarshal err: " + err.Error())
-// 	}
-// 	sdata := MsgAckStruct{}
-// 	sdata.AckType = 2
-// 	sdata.AppId = app_id
-// 	sdata.RoomId = data.GetRoomId()
-// 	var dataList []MsgAckInfoStruct = make([]MsgAckInfoStruct, 0)
-// 	for _, v := range data.Data {
-// 		dataList = append(dataList, MsgAckInfoStruct{
-// 			MsgId:      v.GetMsgId(),
-// 			MsgType:    v.GetMsgType(),
-// 			ClientTime: v.GetClientTime(),
-// 		})
-// 	}
-// 	temp, err := json.Marshal(dataList)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	sdata.Data = string(temp)
-// 	return msgAckSend(sdata)
-// }
 
 func levelQuery(msg *pmsg.MessageBody) error {
 	data := &pmsg.QueryLevelMessage{}

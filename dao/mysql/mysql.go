@@ -279,19 +279,9 @@ type WeihuStruct struct {
 }
 
 // 添加玩家获胜统计,about： true 左边，false，右边
-func (m *MysqlClient) UpdateOpenWinCount(openid string, about bool) error {
+func (m *MysqlClient) UpdateOpenWinCount(openid string, context string) error {
 	if !m.isUse {
 		return nil
-	}
-	// ok, err := m.isInWinCount(openid)
-	// if err != nil {
-	// 	return err
-	// }
-	var context string
-	if about {
-		context = "left_count"
-	} else {
-		context = "right_count"
 	}
 	_, err := m.Client.Exec("insert into winner_count (open_id,"+context+") values(?,?) on duplicate key update "+context+" = "+context+"+1", openid, 1)
 	if err != nil {

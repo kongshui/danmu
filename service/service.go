@@ -24,9 +24,6 @@ func ServiceInit() {
 	debug = config.Server.Debug
 	setUrl()
 	monthVersionSet()
-	//日志初始化
-	// fmt.Println(config.Logging.LogPath, config.Logging.Level, config.Logging.MaxSize, config.Logging.MaxBackups, config.Logging.MaxAge)
-	// ziLog.Init(config.Logging.LogPath, config.Logging.Level, config.Logging.MaxSize, config.Logging.MaxBackups, config.Logging.MaxAge)
 
 	//设置uuid
 	nodeUuid = uuid.New().String()
@@ -56,6 +53,11 @@ func ServiceInit() {
 		go getFailMessage()
 		// 检查断线状态
 		go checkDisconnectRoomIdExpire()
+
+		// 匹配心跳
+		if is_pk_match {
+			go matchV1HeardBeat()
+		}
 	}
 
 	// 初始化etcd
@@ -75,8 +77,9 @@ func ServiceInit() {
 	// 	go getGrpcDomain(first_ctx)
 	// 	// 匹配心跳
 	// }
-	if is_pk_match {
-		go matchV1HeardBeat()
+	// 初始化函数
+	if initFunc != nil {
+		initFunc(is_mock)
 	}
 
 	// 平台分开推送的内容

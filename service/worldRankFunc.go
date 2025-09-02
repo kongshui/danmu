@@ -132,15 +132,6 @@ func WorldRankNumerAdd(openId string, score float64) error {
 	return nil
 }
 
-// // 添加玩家数据至历史世界排行榜
-// func worldRankHistoricalAdd(openId string, score float64) error {
-// 	if _, err := rdb.ZIncrBy(world_rank_historical_db, score, openId); err != nil {
-// 		log.Println("添加玩家数据至历史世界排行榜失败...")
-// 		return err
-// 	}
-// 	return nil
-// }
-
 // 设置玩家对局分组名称
 func playerMatchGroupAdd() error {
 	for v := range groupid_list {
@@ -254,11 +245,6 @@ func queryPlayerInGroup(roomId, openId string) (string, int64, bool, error) {
 	return group, roundId, ok, nil
 }
 
-// 获取当前版本Db
-//
-//	func getCurrentVersionDb() string {
-//		return "world_rank_" + currentRankVersion
-//	}
 func scrollWorldRank(version string, count int) error {
 	if !rdb.IsExistKey(world_rank_week) {
 		return nil

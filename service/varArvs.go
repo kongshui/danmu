@@ -28,6 +28,7 @@ type (
 	InteractiveFunc    func(roomId, roundId string, label int) bool //自动选边
 	GiftExtendInfoFunc func() string
 	ScrollFunc         func(string)
+	InitFunc           func(bool)
 )
 
 var (
@@ -38,6 +39,7 @@ var (
 	interactive          InteractiveFunc
 	giftExtendInfoFunc   GiftExtendInfoFunc
 	scrollFunc           ScrollFunc
+	initFunc             InitFunc
 
 	is_mock bool
 

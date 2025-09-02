@@ -23,6 +23,9 @@ func QueryUserWinningPoint(openId string) (int64, error) {
 
 // 增加玩家胜点
 func AddUserWinningPoint(openId string, point int64) (int64, error) {
+	if point == 0 {
+		return QueryUserWinningPoint(openId)
+	}
 	newPoint, err := rdb.ZIncrBy(winning_point_db, float64(point), openId)
 	if err != nil {
 		return 0, err

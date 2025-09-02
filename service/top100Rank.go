@@ -21,6 +21,8 @@ func getTopWorldRankData() *pmsg.UserInfoListMessage {
 		user, _ := userInfoGet(openId)
 		coin, _ := QueryUserWinStreamCoin(openId)
 		level, _ := QueryLevelInfo(openId)
+		winPoint, _ := QueryUserWinningPoint(openId)
+
 		if user.NickName == "" || user.AvatarUrl == "" {
 			// 从数据库查询玩家信息
 			avatarUrl, nickName, err := mysql.QueryPlayerInfo(openId)
@@ -40,6 +42,7 @@ func getTopWorldRankData() *pmsg.UserInfoListMessage {
 			NickName:          user.NickName,
 			WinningStreamCoin: coin,
 			Level:             level,
+			WinningPoint:      winPoint,
 		})
 	}
 	return data

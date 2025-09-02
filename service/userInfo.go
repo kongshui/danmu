@@ -59,16 +59,6 @@ func userInfoCompare(openId, NickName, AvatarUrl string) bool {
 
 // 对比后存储用户信息
 func userInfoCompareStore(openId, NickName, AvatarUrl string) {
-	// 检测数据库中是否存在玩家，不存在就插入
-	// ok, err := mysql.IsPlayerExist(openId)
-	// if err != nil {
-	// 	ziLog.Error( fmt.Sprintf("UserInfoCompareStore err:: %v,openId： %v", err, openId), debug)
-	// }
-	// if !ok {
-	// 	if err := mysql.InsertPlayerBaseInfo(openId, AvatarUrl, NickName); err != nil {
-	// 		ziLog.Error( fmt.Sprintf("UserInfoCompareStore InsertPlayerBaseInfo err: %v,openId： %v", err, openId), debug)
-	// 	}
-	// }
 	// 对比后存储用户信息
 	if !userInfoCompare(openId, NickName, AvatarUrl) {
 		if err := userInfoStore(UserInfoStruct{OpenId: openId, NickName: NickName, AvatarUrl: AvatarUrl}); err != nil {

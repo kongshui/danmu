@@ -51,7 +51,7 @@ func statistic() {
 		return
 	}
 	userInfos := make([][]any, 0)
-	userInfos = append(userInfos, []any{"用户id", "昵称", "排名", "积分", "连胜币", "充值总额"})
+	userInfos = append(userInfos, []any{"用户id", "昵称", "排名", "积分", "连胜币", "胜点", "充值总额"})
 	for i, v := range top100 {
 		// 统计用户信息
 		userInfo := make([]any, 0)
@@ -60,11 +60,13 @@ func statistic() {
 		user, _ := userInfoGet(openId)
 		coin, _ := QueryUserWinStreamCoin(openId)
 		cost, _ := mysql.StatisticCost(openId, startTime, endTime)
+		winPoint, _ := QueryUserWinningPoint(openId)
 		userInfo = append(userInfo, openId)
 		userInfo = append(userInfo, user.NickName)
 		userInfo = append(userInfo, i+1)
 		userInfo = append(userInfo, v.Score)
 		userInfo = append(userInfo, coin)
+		userInfo = append(userInfo, winPoint)
 		userInfo = append(userInfo, cost)
 		userInfos = append(userInfos, userInfo)
 	}
