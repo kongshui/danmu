@@ -106,6 +106,7 @@ enum MessageId {
     FrontErrorSend = 119; // 前端发送错误信息
     AddIntegral = 120;  // 增加积分
     Lottery = 121;  // 抽奖
+    FrontSendMessageError = 122; // 前端发送消息错误
     DisConnect = 125;   // 断联协议
     Forward = 126;  // 126 为client转发消息
     ForwardAck = 127;   // 127 为node转发回应消息

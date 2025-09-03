@@ -125,6 +125,7 @@ const (
 	MessageId_FrontErrorSend                    MessageId = 119 // 前端发送错误信息
 	MessageId_AddIntegral                       MessageId = 120 // 增加积分
 	MessageId_Lottery                           MessageId = 121 // 抽奖
+	MessageId_FrontSendMessageError             MessageId = 122 // 前端发送消息错误
 	MessageId_DisConnect                        MessageId = 125 // 断联协议
 	MessageId_Forward                           MessageId = 126 // 126 为client转发消息
 	MessageId_ForwardAck                        MessageId = 127 // 127 为node转发回应消息
@@ -230,6 +231,7 @@ var (
 		119: "FrontErrorSend",
 		120: "AddIntegral",
 		121: "Lottery",
+		122: "FrontSendMessageError",
 		125: "DisConnect",
 		126: "Forward",
 		127: "ForwardAck",
@@ -332,6 +334,7 @@ var (
 		"FrontErrorSend":                    119,
 		"AddIntegral":                       120,
 		"Lottery":                           121,
+		"FrontSendMessageError":             122,
 		"DisConnect":                        125,
 		"Forward":                           126,
 		"ForwardAck":                        127,
@@ -369,7 +372,7 @@ var File_proto_constid_proto protoreflect.FileDescriptor
 
 const file_proto_constid_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/constid.proto\x12\x04pmsg*\xf2\x11\n" +
+	"\x13proto/constid.proto\x12\x04pmsg*\x8d\x12\n" +
 	"\tMessageId\x12\v\n" +
 	"\aUnknown\x10\x00\x12\f\n" +
 	"\bNodeInfo\x10\x01\x12\x0f\n" +
@@ -477,7 +480,8 @@ const file_proto_constid_proto_rawDesc = "" +
 	"\rBackErrorSend\x10v\x12\x12\n" +
 	"\x0eFrontErrorSend\x10w\x12\x0f\n" +
 	"\vAddIntegral\x10x\x12\v\n" +
-	"\aLottery\x10y\x12\x0e\n" +
+	"\aLottery\x10y\x12\x19\n" +
+	"\x15FrontSendMessageError\x10z\x12\x0e\n" +
 	"\n" +
 	"DisConnect\x10}\x12\v\n" +
 	"\aForward\x10~\x12\x0e\n" +
