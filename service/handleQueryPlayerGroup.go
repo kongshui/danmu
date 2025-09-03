@@ -61,6 +61,11 @@ func QueryPlayerGroupHandler(c *gin.Context) {
 		ziLog.Error(fmt.Sprintf("QueryPlayerGroupHandler 查询玩家所在组失败, group: %v, roundId: %v, roomId: %v, openId： %v, err: %v",
 			group, roundId, queryInfo.RoomId, queryInfo.OpenId, err), debug)
 		log.Println("QueryPlayerGroupHandler 查询玩家所在组失败", group, roundId, ok, err)
+		c.JSON(200, gin.H{
+			"errcode": 1,
+			"errmsg":  "参数不合法",
+		})
+		return
 	}
 	if ok {
 		endGame = 2
