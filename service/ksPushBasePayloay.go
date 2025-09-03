@@ -17,8 +17,22 @@ import (
 )
 
 func ksPushBasePayloay(data KsCallbackStruct) {
+	var (
+		isgift       bool = false
+		isLottery    bool = false
+		isSendAck    bool = false // 是否发送ack
+		groupGrpc         = &pb.AddGiftToGroupReq{}
+		isFirst      bool = true // 是否第一次
+		openId       string
+		nickName     string
+		avatarUrl    string
+		anchorOpenId string = data.Data.AuthorOpenId
+	)
 	pushType := data.Data.PushType
-	sendUidList, _, isGroup, _ := getUidListByOpenId(data.Data.AuthorOpenId)
+	if strings.HasPrefix(data.Data.UniqueMessageId, "stress_") || data.Event == "LIVE_INTERACTION_DATA_TEST" {
+		anchorOpenId = strings.TrimPrefix(anchorOpenId, "stress_")
+	}
+	sendUidList, _, isGroup, _ := getUidListByOpenId(anchorOpenId)
 	if len(sendUidList) == 0 {
 		ziLog.Error(fmt.Sprintf("ksPushBasePayloay queryRoomIdToUid nil， roomId: %v, openId, %v, 数据为： %v", data.Data.RoomCode, data.Data.AuthorOpenId, data), debug)
 		return
@@ -30,19 +44,10 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 		PushType:            data.Data.PushType,
 		CpServerReceiveTime: time.Now().UnixMilli(),
 	}
-	var (
-		isgift    bool = false
-		isLottery bool = false
-		isSendAck bool = false // 是否发送ack
-		groupGrpc      = &pb.AddGiftToGroupReq{}
-		isFirst   bool = true // 是否第一次
-		openId    string
-		nickName  string
-		avatarUrl string
-	)
+
 	endSendData := platFormPool.Get().(*pmsg.PlatFormDataSend)
 	defer platFormPool.Put(endSendData)
-	endSendData.OpenId = data.Data.AuthorOpenId
+	endSendData.OpenId = anchorOpenId
 	endSendData.RoomId = data.Data.RoomCode
 	endSendData.PushType = data.Data.PushType
 	// 添加uniqueMessageId到redis中，防止重复推送
@@ -81,9 +86,9 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 			nickName = gift.UserInfo.NickName
 			avatarUrl = gift.UserInfo.AvatarUrl
 			// 后端记录数据库
-			anchorName, err := userInfoGet(data.Data.AuthorOpenId)
+			anchorName, err := userInfoGet(anchorOpenId)
 			if err != nil {
-				_, anchor_nick_name, err = mysql.QueryPlayerInfo(data.Data.AuthorOpenId)
+				_, anchor_nick_name, err = mysql.QueryPlayerInfo(anchorOpenId)
 				if err != nil {
 					ziLog.Error(fmt.Sprintf("ksPushBasePayloay giftSend userInfoGet err:  %v", err), debug)
 				}
@@ -92,7 +97,7 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 			roundId, _ := queryRoomIdToRoundId(data.Data.RoomCode)
 			if !(strings.HasPrefix(data.Data.UniqueMessageId, "test_") || strings.HasPrefix(data.Data.UniqueMessageId, "stress_")) {
 				// 数据到数据库中，防止数据丢失
-				go mysql.InsertGiftData(data.Data.RoomCode, data.Data.AuthorOpenId, anchorName.NickName, strconv.FormatInt(roundId, 10), gift.UserInfo.UserId,
+				go mysql.InsertGiftData(data.Data.RoomCode, anchorOpenId, anchorName.NickName, strconv.FormatInt(roundId, 10), gift.UserInfo.UserId,
 					gift.UserInfo.NickName, gift.UniqueNo, gift.GiftId, int(gift.GiftCount), int(gift.GiftTotalPrice), false)
 
 				if isFirst {
@@ -107,7 +112,7 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 			if gift.GiftId == "11584" {
 				isLottery = true
 				// 抽奖
-				giftMap := lottery(data.Data.AuthorOpenId, gift.UserInfo.UserId, gift.GiftCount)
+				giftMap := lottery(anchorOpenId, gift.UserInfo.UserId, gift.GiftCount)
 				ziLog.Gift(fmt.Sprintf("ksPushBasePayloay Lottery,火花数量：%v, giftdata： %v，用户Id： %v, 用户名称： %v", gift.GiftCount, giftMap, gift.UserInfo.UserId, gift.UserInfo.NickName), debug)
 				for giftId, giftCount := range giftMap {
 					score += giftToScoreMap[giftId] * float64(giftCount)
@@ -256,7 +261,7 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 			ziLog.Error(fmt.Sprintf("ksPushBasePayloay pushBasePayloayDirect proto.Marshal err:  %v,失败数据为： %v", err, ack), debug)
 			return
 		}
-		uid := queryUidByOpenid(data.Data.AuthorOpenId)
+		uid := queryUidByOpenid(anchorOpenId)
 		if uid == "" {
 			return
 		}
