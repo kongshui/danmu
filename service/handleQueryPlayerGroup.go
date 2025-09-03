@@ -58,13 +58,9 @@ func QueryPlayerGroupHandler(c *gin.Context) {
 	}
 	group, roundId, ok, err := queryPlayerInGroup(queryInfo.RoomId, queryInfo.OpenId)
 	if err != nil {
-		ziLog.Error(fmt.Sprintf("QueryPlayerGroupHandler 查询玩家所在组失败, group: %v, roundId: %v, err: %v", group, roundId, err), debug)
+		ziLog.Error(fmt.Sprintf("QueryPlayerGroupHandler 查询玩家所在组失败, group: %v, roundId: %v, roomId: %v, openId： %v, err: %v",
+			group, roundId, queryInfo.RoomId, queryInfo.OpenId, err), debug)
 		log.Println("QueryPlayerGroupHandler 查询玩家所在组失败", group, roundId, ok, err)
-		c.JSON(200, gin.H{
-			"errcode": 40001,
-			"errmsg":  err.Error(),
-		})
-		return
 	}
 	if ok {
 		endGame = 2
