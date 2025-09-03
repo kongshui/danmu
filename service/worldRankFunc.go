@@ -165,25 +165,13 @@ func liveCurrentRoundDel(roomId string) error {
 // 设置快速返回入口
 func fastReturnAdd(roomId, openId string, score float64) {
 	if _, ok := queryRoomIdToRoundId(roomId); ok {
-		if err := setPlayerDataToRound(roomId, openId, score); err != nil {
-			ziLog.Error(fmt.Sprintf("SetPlayer comment score to pool err: roomid: %v, openId: %v, score: %v, err: %v", roomId, openId, 0.5, err), debug)
+		if setIntegralToRound != nil {
+			if err := setIntegralToRound(roomId, openId, score); err != nil {
+				ziLog.Error(fmt.Sprintf("SetPlayer comment score to pool err: roomid: %v, openId: %v, score: %v, err: %v", roomId, openId, 0.5, err), debug)
+			}
 		}
-	}
-}
 
-// 如果在
-
-// 设置玩家数据至对局排行榜和积分池,如果玩家暂时没加入组，则计入临时组
-func setPlayerDataToRound(roomId, openId string, score float64) error {
-	//存储到积分池
-	anchorOpenId := QueryRoomIdInterconvertAnchorOpenId(roomId)
-	if anchorOpenId == "" {
-		return errors.New("setPlayerDataToRound anchorOpenId 未查找到")
 	}
-	if _, err := addIntegralByScore(anchorOpenId, score); err != nil {
-		ziLog.Error("SetPlayerDataToRound err: roomid: "+roomId+", openId: "+openId+", score: "+strconv.FormatInt(int64(score), 10)+", err: "+err.Error(), debug)
-	}
-	return nil
 }
 
 // 设置临时组

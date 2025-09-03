@@ -43,8 +43,8 @@ func autoNewVersion() {
 				if !is_mock {
 					worldRankSet(currentRankVersion)
 				}
-				if scrollFunc != nil {
-					scrollFunc(currentRankVersion)
+				if scrollAuto != nil {
+					scrollAuto(currentRankVersion)
 				}
 
 				// 版本号初始化

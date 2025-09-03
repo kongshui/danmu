@@ -24,8 +24,8 @@ func playerGroupAdd(roomId, uidStr string, roundId int64, userMap []*pmsg.Single
 		}
 
 		// 其他前置处理
-		if playerGroupAddinFunc != nil {
-			if err := playerGroupAddinFunc(roomId, v.GetOpenId()); err != nil {
+		if playerGroupAddin != nil {
+			if err := playerGroupAddin(roomId, v.GetOpenId()); err != nil {
 				ziLog.Error(fmt.Sprintf("playerGroupAdd playerGroupAddinFunc失败, err: %v,openId:%v, groupId: %v, roomId:%v", err, v.GetOpenId(), v.GetGroupId(), roomId), debug)
 
 			}

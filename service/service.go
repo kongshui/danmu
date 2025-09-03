@@ -78,14 +78,14 @@ func ServiceInit() {
 	// 	// 匹配心跳
 	// }
 	// 初始化函数
-	if initFunc != nil {
-		initFunc(is_mock)
+	if initService != nil {
+		initService(is_mock)
 	}
 
 	// 平台分开推送的内容
 	switch platform {
 	case "ks":
-		if lotteryFunc == nil {
+		if lottery == nil {
 			ziLog.Error("快手抽奖函数未设置", debug)
 			os.Exit(1)
 		}

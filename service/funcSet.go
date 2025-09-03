@@ -13,26 +13,27 @@ import (
 
 /*
 函数初始化：
-suf：玩家入组时调用的函数
-sts：对局结束后设置玩家的积分、胜点、连胜等
-ltf：抽奖函数
-wsf：websocket函数
+addGroupSetFunc：玩家入组时调用的函数
+setWinningScoreFunc：对局结束后设置玩家的积分、胜点、连胜等
+lotteryFunc：抽奖函数
+webSocketFunc：websocket函数
 interFunc：快手加边函数，其实可以包装更加深一点，暂时不动
 giftExtendInfo: 礼物置顶函数
 scrollfunc：自动滚动函数
 initFunction：初始化函数
 */
-func ServiceFuncSet(suf SingleUserFunc, sts SetWinScoreFunc, ltf LotteryFunc, webSocketFunc WebsocketFunc, interFunc InteractiveFunc,
-	giftExtendInfo GiftExtendInfoFunc, scrollfunction ScrollFunc, initFunction InitFunc) {
+func ServiceFuncSet(addGroupSetFunc SingleUserAddGroupSetFunc, setWinningScoreFunc SetWinScoreFunc, lotteryFunc LotteryFunc, webSocketFunc WebsocketFunc, interFunc InteractiveFunc,
+	giftExtendInfoFunc GiftExtendInfoFunc, scrollFunc ScrollFunc, initFunc InitFunc, setIntegralToRoundFunc SetIntegralToRoundFunc) {
 
 	interactive = interFunc
-	playerGroupAddinFunc = suf
-	setWinnerScoreFunc = sts
-	lotteryFunc = ltf
-	otherWebsocketFunc = webSocketFunc
-	giftExtendInfoFunc = giftExtendInfo
-	scrollFunc = scrollfunction
-	initFunc = initFunction
+	playerGroupAddin = addGroupSetFunc
+	setWinnerScore = setWinningScoreFunc
+	lottery = lotteryFunc
+	otherWebsocket = webSocketFunc
+	giftExtendInfos = giftExtendInfoFunc
+	scrollAuto = scrollFunc
+	initService = initFunc
+	setIntegralToRound = setIntegralToRoundFunc
 }
 
 /*

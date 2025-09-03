@@ -144,8 +144,8 @@ func websocketMessageFunc(msg *pmsg.MessageBody) error {
 	case pmsg.MessageId_LevelQuery.String(): // 等级查询
 		return levelQuery(msg)
 	default:
-		if otherWebsocketFunc != nil {
-			return otherWebsocketFunc(msg)
+		if otherWebsocket != nil {
+			return otherWebsocket(msg)
 		}
 		return errors.New("websocket消息类型不存在")
 

@@ -21,25 +21,27 @@ import (
 )
 
 type (
-	SingleUserFunc     func(string, string) error
-	SetWinScoreFunc    func(string, RoundUploadStruct) error
-	LotteryFunc        func(string, string, int64) map[string]int64
-	WebsocketFunc      func(msg *pmsg.MessageBody) error
-	InteractiveFunc    func(roomId, roundId string, label int) bool //自动选边
-	GiftExtendInfoFunc func() string
-	ScrollFunc         func(string)
-	InitFunc           func(bool)
+	SingleUserAddGroupSetFunc func(string, string) error
+	SetWinScoreFunc           func(string, RoundUploadStruct) error
+	LotteryFunc               func(string, string, int64) map[string]int64
+	WebsocketFunc             func(msg *pmsg.MessageBody) error
+	InteractiveFunc           func(roomId, roundId string, label int) bool //自动选边
+	GiftExtendInfoFunc        func() string
+	ScrollFunc                func(string)
+	InitFunc                  func(bool)
+	SetIntegralToRoundFunc    func(roomId, openId string, score float64) error
 )
 
 var (
-	playerGroupAddinFunc SingleUserFunc
-	setWinnerScoreFunc   SetWinScoreFunc
-	lotteryFunc          LotteryFunc
-	otherWebsocketFunc   WebsocketFunc
-	interactive          InteractiveFunc
-	giftExtendInfoFunc   GiftExtendInfoFunc
-	scrollFunc           ScrollFunc
-	initFunc             InitFunc
+	playerGroupAddin   SingleUserAddGroupSetFunc
+	setWinnerScore     SetWinScoreFunc
+	lottery            LotteryFunc
+	otherWebsocket     WebsocketFunc
+	interactive        InteractiveFunc
+	giftExtendInfos    GiftExtendInfoFunc
+	scrollAuto         ScrollFunc
+	initService        InitFunc
+	setIntegralToRound SetIntegralToRoundFunc
 
 	is_mock bool
 

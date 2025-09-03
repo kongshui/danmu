@@ -107,7 +107,7 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 			if gift.GiftId == "11584" {
 				isLottery = true
 				// 抽奖
-				giftMap := lotteryFunc(data.Data.AuthorOpenId, gift.UserInfo.UserId, gift.GiftCount)
+				giftMap := lottery(data.Data.AuthorOpenId, gift.UserInfo.UserId, gift.GiftCount)
 				ziLog.Gift(fmt.Sprintf("ksPushBasePayloay Lottery,火花数量：%v, giftdata： %v，用户Id： %v, 用户名称： %v", gift.GiftCount, giftMap, gift.UserInfo.UserId, gift.UserInfo.NickName), debug)
 				for giftId, giftCount := range giftMap {
 					score += giftToScoreMap[giftId] * float64(giftCount)
@@ -342,7 +342,7 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 		if gift.GiftId == "11584" {
 			isLottery = true
 			// 抽奖
-			giftMap := lotteryFunc(data.AuthorOpenId, gift.UserInfo.UserId, gift.GiftCount)
+			giftMap := lottery(data.AuthorOpenId, gift.UserInfo.UserId, gift.GiftCount)
 			ziLog.Gift(fmt.Sprintf("ksPushBasePayloay Lottery giftdata： %v，用户Id： %v, 用户名称： %v", giftMap, gift.UserInfo.UserId, gift.UserInfo.NickName), debug)
 			for giftId, giftCount := range giftMap {
 				score += giftToScoreMap[giftId] * float64(giftCount)

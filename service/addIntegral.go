@@ -18,7 +18,7 @@ func addIntegralByNode(key string, addscore int64) (float64, error) {
 }
 
 // 通过分数增加积分
-func addIntegralByScore(key string, score float64) (float64, error) {
+func AddIntegralByScore(key string, score float64) (float64, error) {
 	score, err := rdb.IncrByFloat(integral_pool_Prefix+key, score)
 	if err != nil {
 		return 0, errors.New("addIntegralByScore err: " + err.Error())
