@@ -2,7 +2,6 @@ package service
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/kongshui/danmu/model/pmsg"
@@ -70,9 +69,9 @@ func PlayerChooseGroupHandle(c *gin.Context) {
 	roundId, ok := queryRoomIdToRoundId(pCG.RoomId)
 	if !ok {
 		ziLog.Error("PlayerChooseGroupHandle 获取roundId失败", debug)
-		c.JSON(400, gin.H{
-			"errcode": 40001,
-			"errmsg":  errors.New("PlayerChooseGroupHandle 获取roundId失败"),
+		c.JSON(200, gin.H{
+			"errcode": 1,
+			"errmsg":  "参数不合法",
 		})
 		return
 	}

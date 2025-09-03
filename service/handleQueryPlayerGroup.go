@@ -62,7 +62,7 @@ func QueryPlayerGroupHandler(c *gin.Context) {
 			group, roundId, queryInfo.RoomId, queryInfo.OpenId, err), debug)
 		log.Println("QueryPlayerGroupHandler 查询玩家所在组失败", group, roundId, ok, err)
 		c.JSON(200, gin.H{
-			"errcode": 40001,
+			"errcode": 1,
 			"errmsg":  "参数不合法",
 		})
 		return
