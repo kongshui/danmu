@@ -144,9 +144,6 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 				// 	go grpcSend(groupGrpc, 0)
 				// }
 			}
-			if strings.HasPrefix(data.Data.UniqueMessageId, "test_") || strings.HasPrefix(data.Data.UniqueMessageId, "stress_") {
-				score = 0
-			}
 			msgId = pmsg.MessageId_liveGift
 		case "liveComment":
 			commentData := KsLiveCommentStruct{}
@@ -159,72 +156,68 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 			nickName = commentData.UserInfo.NickName
 			avatarUrl = commentData.UserInfo.AvatarUrl
 			// 评论
-			if !(strings.HasPrefix(data.Data.UniqueMessageId, "stress_") && data.Event != "LIVE_INTERACTION_DATA_TEST") {
-				if commentData.Content == "666" {
-					score = live_like_score
-					if isGroup {
-						groupGrpc.IsComment = true
-						groupGrpc.OpenId = commentData.UserInfo.UserId
-						groupGrpc.GiftId = "0"
-						groupGrpc.GiftNum = 1
-						// go grpcSend(groupGrpc, 0)
-					}
-				} else {
-					if isGroup {
-						value, ok := commentTogiftId[commentData.Content]
-						if ok && !strings.Contains(commentData.Content, "1") && strings.Contains(value, "1") {
-							_, err := deleteUserWinStreamCoin(commentData.UserInfo.UserId, commentToCoin[commentData.Content])
-							if err != nil {
-								return
-							}
-							groupGrpc.IsComment = true
-							groupGrpc.OpenId = commentData.UserInfo.UserId
-							groupGrpc.GiftId = value
-							groupGrpc.GiftNum = 1
-							// go grpcSend(groupGrpc, 0)
-						} else {
-							isJoin1 := strings.HasPrefix(commentData.Content, "1")
-							isJoin11 := strings.HasSuffix(commentData.Content, "1")
-							isJoin2 := strings.HasPrefix(commentData.Content, "2")
-							isJoin22 := strings.HasSuffix(commentData.Content, "2")
-							isJoin3 := strings.HasPrefix(commentData.Content, "加入")
-							if (isJoin1 && isJoin11) || (isJoin2 && isJoin22) || isJoin3 {
-								groupGrpc.OpenId = commentData.UserInfo.UserId
-								// go grpcSend(groupGrpc, 0)
-							}
-						}
-					}
-				}
-			} else {
-				fmt.Println("pushBasePayloayDirect 直播评论测试数据，跳过积分计算：", v)
-			}
-			msgId = pmsg.MessageId_LiveComment
-		case "liveLike":
-			// 点赞
-			if strings.HasPrefix(data.Data.UniqueMessageId, "stress_") || data.Event == "LIVE_INTERACTION_DATA_TEST" {
-				score = 0
-			} else {
-				liveLikeData := KsLiveLikeStruct{}
-				if err := json.NewDecoder(strings.NewReader(string(jsonByte))).Decode(&liveLikeData); err != nil {
-					ziLog.Error(fmt.Sprintf("ksPushBasePayloay json.Unmarshal err:  %v,失败数据为： %v", err, v), debug)
-					continue
-				}
-				// 获取用户信息
-				openId = liveLikeData.UserInfo.UserId
-				nickName = liveLikeData.UserInfo.NickName
-				avatarUrl = liveLikeData.UserInfo.AvatarUrl
+
+			if commentData.Content == "666" {
 				score = live_like_score
 				if isGroup {
-					groupGrpc.IsComment = false
-					groupGrpc.OpenId = liveLikeData.UserInfo.UserId
+					groupGrpc.IsComment = true
+					groupGrpc.OpenId = commentData.UserInfo.UserId
 					groupGrpc.GiftId = "0"
 					groupGrpc.GiftNum = 1
 					// go grpcSend(groupGrpc, 0)
 				}
+			} else {
+				if isGroup {
+					value, ok := commentTogiftId[commentData.Content]
+					if ok && !strings.Contains(commentData.Content, "1") && strings.Contains(value, "1") {
+						_, err := deleteUserWinStreamCoin(commentData.UserInfo.UserId, commentToCoin[commentData.Content])
+						if err != nil {
+							return
+						}
+						groupGrpc.IsComment = true
+						groupGrpc.OpenId = commentData.UserInfo.UserId
+						groupGrpc.GiftId = value
+						groupGrpc.GiftNum = 1
+						// go grpcSend(groupGrpc, 0)
+					} else {
+						isJoin1 := strings.HasPrefix(commentData.Content, "1")
+						isJoin11 := strings.HasSuffix(commentData.Content, "1")
+						isJoin2 := strings.HasPrefix(commentData.Content, "2")
+						isJoin22 := strings.HasSuffix(commentData.Content, "2")
+						isJoin3 := strings.HasPrefix(commentData.Content, "加入")
+						if (isJoin1 && isJoin11) || (isJoin2 && isJoin22) || isJoin3 {
+							groupGrpc.OpenId = commentData.UserInfo.UserId
+							// go grpcSend(groupGrpc, 0)
+						}
+					}
+				}
+			}
+			msgId = pmsg.MessageId_LiveComment
+		case "liveLike":
+			// 点赞
+			liveLikeData := KsLiveLikeStruct{}
+			if err := json.NewDecoder(strings.NewReader(string(jsonByte))).Decode(&liveLikeData); err != nil {
+				ziLog.Error(fmt.Sprintf("ksPushBasePayloay json.Unmarshal err:  %v,失败数据为： %v", err, v), debug)
+				continue
+			}
+			// 获取用户信息
+			openId = liveLikeData.UserInfo.UserId
+			nickName = liveLikeData.UserInfo.NickName
+			avatarUrl = liveLikeData.UserInfo.AvatarUrl
+			score = live_like_score
+			if isGroup {
+				groupGrpc.IsComment = false
+				groupGrpc.OpenId = liveLikeData.UserInfo.UserId
+				groupGrpc.GiftId = "0"
+				groupGrpc.GiftNum = 1
+				// go grpcSend(groupGrpc, 0)
 			}
 			msgId = pmsg.MessageId_liveLike
 		default:
 			continue
+		}
+		if strings.HasPrefix(data.Data.UniqueMessageId, "stress_") || data.Event == "LIVE_INTERACTION_DATA_TEST" {
+			score = 0
 		}
 		//分数不为0时添加积分
 		if score != 0 {
