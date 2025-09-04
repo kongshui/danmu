@@ -18,6 +18,7 @@ func playerGroupAdd(roomId, uidStr string, roundId int64, userMap []*pmsg.Single
 	data := &pmsg.ResultUserAddGroupMessage{}
 	//设置查询组的名称
 	name := roomId + "_" + strconv.FormatInt(roundId, 10) + "_group"
+	rdb.Expire(name, 21600*time.Second)
 	for _, v := range userMap {
 		if _, err := rdb.HSetNX(name, v.GetOpenId(), v.GetGroupId()); err != nil {
 			ziLog.Error(fmt.Sprintf("playerGroupAdd 设置组失败: %v,openId:%v, groupId: %v", err, v.GetOpenId(), v.GetGroupId()), debug)
@@ -56,10 +57,6 @@ func playerGroupAdd(roomId, uidStr string, roundId int64, userMap []*pmsg.Single
 			Level:             level,
 			WinningPoints:     winningPoint,
 		})
-	}
-	ttl, _ := rdb.TTL(name)
-	if ttl <= 0 {
-		rdb.Expire(name, 21600*time.Second)
 	}
 	if isChoose {
 		return nil

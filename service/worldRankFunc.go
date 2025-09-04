@@ -148,7 +148,7 @@ func playerMatchGroupAdd() error {
 设置玩家分组信息，分组名称为：roomid + "_" + roundid + "_" + group，内容：openid ： group，最后设置wingroup
 */
 func liveCurrentRoundAdd(roomId string, roundId int64) error {
-	if err := rdb.Set(roomId+"_round", roundId, 0); err != nil {
+	if err := rdb.Set(roomId+"_round", roundId, 4*time.Hour); err != nil {
 		return err
 	}
 	return nil
