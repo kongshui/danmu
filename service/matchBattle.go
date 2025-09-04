@@ -128,7 +128,7 @@ func matchAddIntrage(roomId, openId, nickName, avatarUrl string, score float64) 
 	// ctx := first_ctx
 	WorldRankNumerAdd(openId, score)
 	fastReturnAdd(roomId, openId, score)
-	go userInfoCompareStore(openId, nickName, avatarUrl)
+	go userInfoCompareStore(openId, nickName, avatarUrl, false)
 }
 
 // match瓜分积分池

@@ -55,7 +55,7 @@ func HandleAddUser(c *gin.Context) {
 		})
 		return
 	}
-	if err := userInfoStore(user); err != nil {
+	if err := userInfoStore(user, false); err != nil {
 		log.Println(err)
 		c.JSON(404, gin.H{
 			"err": err,

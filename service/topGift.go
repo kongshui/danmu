@@ -20,8 +20,9 @@ func topGift(roomId string) bool {
 		giftIds += k + ","
 	}
 	giftIds = strings.TrimRight(giftIds, ",")
+	giftBytes, _ := json.Marshal(giftIds)
 	data := map[string]any{
-		"giftList":       giftIds, //置顶礼物列表
+		"giftList":       string(giftBytes), //置顶礼物列表
 		"giftExtendInfo": giftExtendInfos(),
 	}
 	jsonData, _ := json.Marshal(data)

@@ -30,7 +30,7 @@ func playerGroupAdd(roomId, uidStr string, roundId int64, userMap []*pmsg.Single
 
 			}
 		}
-		go userInfoCompareStore(v.GetOpenId(), v.GetNickName(), v.GetAvatarUrl())
+		go userInfoCompareStore(v.GetOpenId(), v.GetNickName(), v.GetAvatarUrl(), false)
 		//
 		go dyUploadUserGroup(roomId, v.GetOpenId(), v.GetGroupId(), roundId)
 		// 是否是通过小摇杆加入

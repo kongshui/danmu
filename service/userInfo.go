@@ -7,7 +7,8 @@ import (
 )
 
 // 存储用户信息
-func userInfoStore(user UserInfoStruct) error {
+func userInfoStore(user UserInfoStruct, isAnchor bool) error {
+	var dbName string
 	data, err := json.Marshal(user)
 	if err != nil {
 		return errors.New("UserInfoStore err: " + err.Error())
@@ -25,7 +26,12 @@ func userInfoStore(user UserInfoStruct) error {
 			ziLog.Error(fmt.Sprintf("userInfoStore UpdatePlayerBaseInfo err: %v,openId： %v", err, user.OpenId), debug)
 		}
 	}
-	return rdb.HSet(user_info_db, user.OpenId, data)
+	if isAnchor {
+		dbName = anchor_info_db
+	} else {
+		dbName = user_info_db
+	}
+	return rdb.HSet(dbName, user.OpenId, data)
 }
 
 // 获取用户信息
@@ -58,10 +64,10 @@ func userInfoCompare(openId, NickName, AvatarUrl string) bool {
 }
 
 // 对比后存储用户信息
-func userInfoCompareStore(openId, NickName, AvatarUrl string) {
+func userInfoCompareStore(openId, NickName, AvatarUrl string, isAnchor bool) {
 	// 对比后存储用户信息
 	if !userInfoCompare(openId, NickName, AvatarUrl) {
-		if err := userInfoStore(UserInfoStruct{OpenId: openId, NickName: NickName, AvatarUrl: AvatarUrl}); err != nil {
+		if err := userInfoStore(UserInfoStruct{OpenId: openId, NickName: NickName, AvatarUrl: AvatarUrl}, isAnchor); err != nil {
 			ziLog.Error(fmt.Sprintf("UserInfoCompareStore InsertPlayerBaseInfo err: %v,openId： %v", err, openId), debug)
 		}
 	}

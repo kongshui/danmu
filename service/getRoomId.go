@@ -75,7 +75,7 @@ func dyGetAnchorInfo(uid, token string) error {
 	if roomReponse.Errcode != 0 {
 		return fmt.Errorf("DyGetAnchorInfo Errcode err, code: %v, errmsg: %v", roomReponse.Errcode, roomReponse.Errmsg)
 	}
-	go userInfoCompareStore(roomReponse.Data.Info.AnchorOpenId, roomReponse.Data.Info.NickName, roomReponse.Data.Info.AvatarUrl)
+	go userInfoCompareStore(roomReponse.Data.Info.AnchorOpenId, roomReponse.Data.Info.NickName, roomReponse.Data.Info.AvatarUrl, true)
 	data := &pmsg.AnchorInfoMessage{}
 	data.AnchorOpenId = roomReponse.Data.Info.AnchorOpenId
 	data.AvatarUrl = roomReponse.Data.Info.AvatarUrl

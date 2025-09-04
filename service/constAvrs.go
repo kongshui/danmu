@@ -13,6 +13,7 @@ const (
 	level_db                      = "level"                      //等级
 	room_id_list_db               = "roomid_list"                //房间列表
 	user_info_db                  = "user_info"                  //用户信息
+	anchor_info_db                = "anchor_info"                //主播信息
 	access_token_db               = "access_token"               //全局token
 	monitor_world_push_db         = "monitor_world_push"         //世界排行版推送锁
 	monitor_world_history_push_db = "monitor_world_history_push" //历史世界榜单推送锁
