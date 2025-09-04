@@ -20,24 +20,29 @@ func KSSignature(signContext map[string]any, secret, appId string) string {
 		keyList = append(keyList, key)
 	}
 	slices.Sort(keyList)
-	var buf strings.Builder
+	var (
+		buf     strings.Builder
+		kString string
+	)
 	for i, k := range keyList {
 		if reflect.ValueOf(signContext[k]).Kind() == reflect.String {
-			if i == len(keyList)-1 {
-				buf.WriteString(fmt.Sprintf("%s=%s", k, signContext[k]))
-				break
-			}
-			buf.WriteString(fmt.Sprintf("%s=%s&", k, signContext[k]))
+			// if i == len(keyList)-1 {
+			// 	buf.WriteString(fmt.Sprintf("%s=%s", k, signContext[k]))
+			// 	break
+			// }
+			// buf.WriteString(fmt.Sprintf("%s=%s&", k, signContext[k]))
+			kString = signContext[k].(string)
 		} else {
 			dByte, _ := json.Marshal(signContext[k])
-			if i == len(keyList)-1 {
-				buf.WriteString(fmt.Sprintf("%s=%s", k, string(dByte)))
-				break
-			}
-			buf.WriteString(fmt.Sprintf("%s=%s&", k, string(dByte)))
+			kString = string(dByte)
 		}
 		// reflect.ValueOf()
 		// buf.WriteString(fmt.Sprintf("%s=%s&", k, signContext[k]))
+		if i == len(keyList)-1 {
+			buf.WriteString(fmt.Sprintf("%s=%s", k, kString))
+			break
+		}
+		buf.WriteString(fmt.Sprintf("%s=%s&", k, kString))
 	}
 	rawStr := buf.String()
 	rawData := strings.TrimRight(rawStr, "&") + secret

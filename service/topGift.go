@@ -20,9 +20,8 @@ func topGift(roomId string) bool {
 		giftIds += k + ","
 	}
 	giftIds = strings.TrimRight(giftIds, ",")
-	giftBytes, _ := json.Marshal(giftIds)
 	data := map[string]any{
-		"giftList":       string(giftBytes), //置顶礼物列表
+		"giftList":       giftIds, //置顶礼物列表
 		"giftExtendInfo": giftExtendInfos(),
 	}
 	jsonData, _ := json.Marshal(data)
@@ -83,102 +82,6 @@ func GiftExtendInfo() string {
 			"objectBeingActed": " ",
 		},
 	}
-	batchNaiInfo := []map[string]any{
-		{
-			"count":            1,
-			"action":           " ",
-			"objectBeingActed": " ",
-		},
-		{
-			"count":            5,
-			"action":           " ",
-			"objectBeingActed": " ",
-		},
-		{
-			"count":            10,
-			"action":           " ",
-			"objectBeingActed": " ",
-		},
-		{
-			"count":            30,
-			"action":           " ",
-			"objectBeingActed": " ",
-		},
-		{
-			"count":            50,
-			"action":           " ",
-			"objectBeingActed": " ",
-		},
-		{
-			"count":            100,
-			"action":           " ",
-			"objectBeingActed": " ",
-		},
-	}
-	batchjiInfo := []map[string]any{
-		{
-			"count":            1,
-			"action":           " ",
-			"objectBeingActed": " ",
-		},
-		{
-			"count":            7,
-			"action":           " ",
-			"objectBeingActed": " ",
-		},
-		{
-			"count":            10,
-			"action":           " ",
-			"objectBeingActed": " ",
-		},
-		{
-			"count":            30,
-			"action":           " ",
-			"objectBeingActed": " ",
-		},
-		{
-			"count":            50,
-			"action":           " ",
-			"objectBeingActed": " ",
-		},
-		{
-			"count":            100,
-			"action":           " ",
-			"objectBeingActed": " ",
-		},
-	}
-	batchjiaInfo := []map[string]any{
-		{
-			"count":            1,
-			"action":           " ",
-			"objectBeingActed": " ",
-		},
-		{
-			"count":            4,
-			"action":           " ",
-			"objectBeingActed": " ",
-		},
-		{
-			"count":            10,
-			"action":           " ",
-			"objectBeingActed": " ",
-		},
-		{
-			"count":            30,
-			"action":           " ",
-			"objectBeingActed": " ",
-		},
-		{
-			"count":            50,
-			"action":           " ",
-			"objectBeingActed": " ",
-		},
-		{
-			"count":            100,
-			"action":           " ",
-			"objectBeingActed": " ",
-		},
-	}
 	giftExtend := []map[string]any{
 		{
 			"id":             11582,    // 礼物id
@@ -213,7 +116,7 @@ func GiftExtendInfo() string {
 			"effectDesc":     "奶茶",   // effectDesc为礼物面板左上角说明
 			"batchBar": map[string]any{
 				"subTitle":   "奶茶", //用于表示该礼物效果类型，选填字段，最多4个字
-				"batchInfos": batchNaiInfo,
+				"batchInfos": batchInfo,
 			},
 		},
 		{
@@ -222,7 +125,7 @@ func GiftExtendInfo() string {
 			"effectDesc":     "召唤机械臂", // effectDesc为礼物面板左上角说明
 			"batchBar": map[string]any{
 				"subTitle":   "机械臂", //用于表示该礼物效果类型，选填字段，最多4个字
-				"batchInfos": batchjiInfo,
+				"batchInfos": batchInfo,
 			},
 		},
 		{
@@ -249,7 +152,7 @@ func GiftExtendInfo() string {
 			"effectDesc":     "召唤机甲", // effectDesc为礼物面板左上角说明
 			"batchBar": map[string]any{
 				"subTitle":   "机甲", //用于表示该礼物效果类型，选填字段，最多4个字
-				"batchInfos": batchjiaInfo,
+				"batchInfos": batchInfo,
 			},
 		},
 	}
