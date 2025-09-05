@@ -33,6 +33,8 @@ const (
 	MessageId_UidGet     MessageId = 4  // 分配uid
 	MessageId_TestMsg    MessageId = 5  // 发送测试消息
 	MessageId_TestMsgAck MessageId = 6  // 测试消息返回
+	MessageId_Ping       MessageId = 7  // 心跳消息
+	MessageId_Pong       MessageId = 8  // 心跳返回消息
 	MessageId_Login      MessageId = 10 // 登录消息
 	MessageId_LoginAck   MessageId = 11 // 登录返回消息
 	MessageId_ReLogin    MessageId = 12 // 重新登录
@@ -141,6 +143,8 @@ var (
 		4:   "UidGet",
 		5:   "TestMsg",
 		6:   "TestMsgAck",
+		7:   "Ping",
+		8:   "Pong",
 		10:  "Login",
 		11:  "LoginAck",
 		12:  "ReLogin",
@@ -244,6 +248,8 @@ var (
 		"UidGet":                            4,
 		"TestMsg":                           5,
 		"TestMsgAck":                        6,
+		"Ping":                              7,
+		"Pong":                              8,
 		"Login":                             10,
 		"LoginAck":                          11,
 		"ReLogin":                           12,
@@ -372,7 +378,7 @@ var File_proto_constid_proto protoreflect.FileDescriptor
 
 const file_proto_constid_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/constid.proto\x12\x04pmsg*\x8d\x12\n" +
+	"\x13proto/constid.proto\x12\x04pmsg*\xa1\x12\n" +
 	"\tMessageId\x12\v\n" +
 	"\aUnknown\x10\x00\x12\f\n" +
 	"\bNodeInfo\x10\x01\x12\x0f\n" +
@@ -382,7 +388,9 @@ const file_proto_constid_proto_rawDesc = "" +
 	"\x06UidGet\x10\x04\x12\v\n" +
 	"\aTestMsg\x10\x05\x12\x0e\n" +
 	"\n" +
-	"TestMsgAck\x10\x06\x12\t\n" +
+	"TestMsgAck\x10\x06\x12\b\n" +
+	"\x04Ping\x10\a\x12\b\n" +
+	"\x04Pong\x10\b\x12\t\n" +
 	"\x05Login\x10\n" +
 	"\x12\f\n" +
 	"\bLoginAck\x10\v\x12\v\n" +
