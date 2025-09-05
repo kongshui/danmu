@@ -67,8 +67,7 @@ func pushWorldRankData() error {
 	}
 	//上报世界榜单数据
 	if !dyWorldRankListUpload(worldRank, url_user_world_rank_upload_url) {
-		ziLog.Error(fmt.Sprintf("推送世界榜单数据失败...%v", worldRank), debug)
-		return errors.New("推送世界榜单数据失败")
+		return fmt.Errorf("推送世界榜单数据失败...%v", worldRank)
 	}
 	return nil
 }
@@ -89,8 +88,7 @@ func pushHistoryWorldRankData() error {
 	// //获取总长度
 	userLen, err := rdb.ZCard(world_rank_week)
 	if err != nil {
-		ziLog.Error(fmt.Sprintf("推送历史世界榜单数据失败: %v", err), debug)
-		return err
+		return fmt.Errorf("推送历史世界榜单数据失败: %v", err)
 	}
 	if userLen == 0 {
 		return nil
@@ -114,8 +112,7 @@ func pushHistoryWorldRankData() error {
 		}
 		userScoreList, err := rdb.ZRevRangeWithScores(world_rank_week, gCount, stop)
 		if err != nil {
-			log.Println("pushHistoryWorldRankData获取玩家数据失败...", err, userScoreList)
-			return err
+			return fmt.Errorf("pushHistoryWorldRankData获取玩家数据失败: %v", err)
 		}
 		//添加用户到列表
 		for _, v := range userScoreList {

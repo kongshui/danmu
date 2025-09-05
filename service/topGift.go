@@ -2,13 +2,14 @@ package service
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strings"
 
 	"github.com/kongshui/danmu/common"
 )
 
-func topGift(roomId string) bool {
+func topGift(roomId string) error {
 	// 初始化配置文件
 	headers := map[string]string{
 		"Content-Type": "application/json;charset=UTF-8",
@@ -27,13 +28,11 @@ func topGift(roomId string) bool {
 	jsonData, _ := json.Marshal(data)
 	urlPath := KsUrlSet(url_TopGiftUrl)
 	if urlPath == "" {
-		ziLog.Error("TopGift err, urlPath is nil ", debug)
-		return false
+		return errors.New("TopGift err, urlPath is nil")
 	}
 	response, err := common.HttpRespond("POST", urlPath, kuaiShouBindBodyToByte(roomId, "gift", "top", string(jsonData)), headers)
 	if err != nil {
-		ziLog.Error(fmt.Sprintf("TopGift response err: %v", err), debug)
-		return false
+		return fmt.Errorf("TopGift response err: %v", err)
 	}
 	defer response.Body.Close()
 	var (
@@ -41,17 +40,15 @@ func topGift(roomId string) bool {
 	)
 
 	if err := json.NewDecoder(response.Body).Decode(&request); err != nil {
-		ziLog.Error(fmt.Sprintf("TopGift json.NewDecoder err: %v", err), debug)
-		return false
+		return fmt.Errorf("TopGift json.NewDecoder err: %v", err)
 	}
 	if response.StatusCode != 200 {
-		return false
+		return fmt.Errorf("TopGift err, statusCode: %v", response.StatusCode)
 	}
 	if int64(request.(map[string]any)["result"].(float64)) != 1 {
-		ziLog.Error(fmt.Sprintf("TopGift err, data: %v", request), debug)
-		return false
+		return fmt.Errorf("TopGift err, data: %v", request)
 	}
-	return true
+	return nil
 }
 
 func GiftExtendInfo() string {

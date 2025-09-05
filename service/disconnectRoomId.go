@@ -69,7 +69,7 @@ func checkDisconnectRoomIdExpire() {
 					// 获取roundId
 					roundId, ok := queryRoomIdToRoundId(roomId)
 					if ok {
-						if !ksSyncGameStatus(SyncGameStatusStruct{
+						if err := ksSyncGameStatus(SyncGameStatusStruct{
 							AnchorOpenId:    openId,
 							AppId:           app_id,
 							RoomId:          roomId,
@@ -77,8 +77,9 @@ func checkDisconnectRoomIdExpire() {
 							StartTime:       time.Now().UnixMilli() - 1000,
 							EndTime:         time.Now().UnixMilli(),
 							Status:          2,
-							GroupResultList: []GroupResultList{{GroupId: "绝对中立", Result: 1}},
-						}, "stop", false) {
+							GroupResultList: []GroupResultList{{GroupId: groupid_list[0], Result: 1}},
+						}, "stop", false); err != nil {
+							ziLog.Error(fmt.Sprintf("checkDisconnectRoomIdExpire 同步对局状态失败, roomId : %v,err: %v", roomId, err), debug)
 							endClean(roomId, openId)
 						}
 					}

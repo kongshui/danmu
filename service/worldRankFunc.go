@@ -13,13 +13,11 @@ func worldRankInit() error {
 	// MonthVersionSet()
 	//初始化版本信息
 	if err := worldRankVersionInit(); err != nil {
-		ziLog.Error(fmt.Sprintf("初始化版本信息失败：: %v", err), debug)
-		return err
+		return fmt.Errorf("初始化版本信息失败：: %v", err)
 	}
 	//设置分组信息
 	if err := playerMatchGroupAdd(); err != nil {
-		ziLog.Error(fmt.Sprintf("设置分组信息失败: %v", err), debug)
-		return err
+		return fmt.Errorf("设置分组信息失败: %v", err)
 	}
 	return nil
 }
@@ -109,27 +107,24 @@ func setHistoryVersion() error {
 }
 
 // 添加玩家数据至世界排行榜和历史世界排行榜
-func WorldRankNumerAdd(openId string, score float64) error {
+func WorldRankNumerAdd(openId string, score float64) {
+	defer RecoverFunc()
 	if score <= 0 {
-		return nil
+		return
 	}
 	if _, err := rdb.ZIncrBy(world_rank_week, score, openId); err != nil {
-		ziLog.Error("添加玩家数据至世界排行榜失败，玩家OpenId： "+openId+",玩家获得的积分为："+strconv.FormatInt(int64(score), 10)+",err： "+err.Error(), debug)
-		return err
+		panic("添加玩家数据至世界排行榜失败，玩家OpenId： " + openId + ",玩家获得的积分为：" + strconv.FormatInt(int64(score), 10) + ",err： " + err.Error())
 	}
 	if _, err := rdb.ZIncrBy(world_rank_historical_db, score, openId); err != nil {
-		ziLog.Error("添加玩家数据至历史世界排行榜失败，玩家OpenId： "+openId+",玩家获得的积分为："+strconv.FormatInt(int64(score), 10)+",err： "+err.Error(), debug)
-		return err
+		panic("添加玩家数据至历史世界排行榜失败，玩家OpenId： " + openId + ",玩家获得的积分为：" + strconv.FormatInt(int64(score), 10) + ",err： " + err.Error())
 	}
 	// 添加月榜
 	if _, err := rdb.ZIncrBy(monthVersionRankDb, score, openId); err != nil {
-		ziLog.Error("添加玩家数据至历史世界排行榜失败，玩家OpenId： "+openId+",玩家获得的积分为："+strconv.FormatInt(int64(score), 10)+",err： "+err.Error(), debug)
-		return err
+		panic("添加玩家数据至历史世界排行榜失败，玩家OpenId： " + openId + ",玩家获得的积分为：" + strconv.FormatInt(int64(score), 10) + ",err： " + err.Error())
 	}
 	if err := mysql.UpdateRank(openId, int64(score)); err != nil {
-		ziLog.Error("更新添加玩家数据至世界排行榜失败，玩家OpenId： "+openId+",玩家获得的积分为："+strconv.FormatInt(int64(score), 10)+",err： "+err.Error(), debug)
+		panic("更新添加玩家数据至世界排行榜失败，玩家OpenId： " + openId + ",玩家获得的积分为：" + strconv.FormatInt(int64(score), 10) + ",err： " + err.Error())
 	}
-	return nil
 }
 
 // 设置玩家对局分组名称
@@ -240,10 +235,9 @@ func scrollWorldRank(version string, count int) error {
 
 	//获取世界版本列表
 	if err := rdb.Rename(world_rank_week, "world_rank_"+version); err != nil {
-		ziLog.Error(fmt.Sprintf("scrollWorldRank 滚动世界榜单失败： version: %v, count: %v", version, count), debug)
 		time.Sleep(time.Second * 1)
 		if count > 60 {
-			return err
+			return fmt.Errorf("scrollWorldRank 滚动世界榜单失败： version: %v, count: %v", version, count)
 		}
 		count++
 		return scrollWorldRank(version, count)

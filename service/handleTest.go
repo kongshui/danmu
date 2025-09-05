@@ -79,13 +79,7 @@ func HandleAddWorldRank(c *gin.Context) {
 		})
 		return
 	}
-	if err := WorldRankNumerAdd(addCoin.OpenId, float64(addCoin.Score)); err != nil {
-		log.Println(err)
-		c.JSON(404, gin.H{
-			"err": err,
-		})
-		return
-	}
+	WorldRankNumerAdd(addCoin.OpenId, float64(addCoin.Score))
 	c.JSON(200, "添加成功")
 }
 

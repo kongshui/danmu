@@ -34,8 +34,7 @@ func AddUserWinStreamCoin(openId string, coin int64) (int64, error) {
 	}
 	nCoin, err := rdb.ZIncrBy(winning_streak_coin_db, float64(coin), openId)
 	if err != nil {
-		ziLog.Error(fmt.Sprintf("添加玩家连胜币失败，玩家OpenId： %v,玩家获得的连胜币为： %v,err： %v", openId, coin, err), debug)
-		return 0, err
+		return 0, fmt.Errorf("添加玩家连胜币失败，玩家OpenId： %v,玩家获得的连胜币为： %v,err： %v", openId, coin, err)
 	}
 	if nCoin < 0 {
 		rdb.ZRem(winning_streak_coin_db, openId)

@@ -38,19 +38,17 @@ func setKsGlobalAccessToken() error {
 	}
 	pathUrl, err := common.GetUrl(url_GetAccessTokenUrl, uri)
 	if err != nil {
-		ziLog.Error( fmt.Sprintf("SetGlobalAccessToken SetAccessToken Url err: %v", err), debug)
+		ziLog.Error(fmt.Sprintf("SetGlobalAccessToken SetAccessToken Url err: %v", err), debug)
 	}
 	// fmt.Println(pathUrl, 2222222222222)
 	response, err := common.HttpRespond("GET", pathUrl, nil, header)
 	if err != nil {
-		ziLog.Error( fmt.Sprintf("SetGlobalAccessToken response err: %v, path: %v", err, pathUrl), debug)
-		return err
+		return fmt.Errorf("SetGlobalAccessToken response err: %v, path: %v", err, pathUrl)
 	}
 	// 关闭响应体以释放资源
 	defer response.Body.Close()
 	if response.StatusCode != http.StatusOK {
-		ziLog.Error( fmt.Sprintf("SetGlobalAccessToken status err: %v", response.Status), debug)
-		return err
+		return fmt.Errorf("SetGlobalAccessToken status err: %v", response.Status)
 	}
 	// 读取响应体并解析为JSON对象
 	var (
@@ -59,8 +57,7 @@ func setKsGlobalAccessToken() error {
 
 	err = json.NewDecoder(response.Body).Decode(&result)
 	if err != nil {
-		ziLog.Error( fmt.Sprintf("SetGlobalAccessToken json.NewDecoder err: %v", err), debug)
-		return err
+		return fmt.Errorf("SetGlobalAccessToken json.NewDecoder err: %v", err)
 	}
 	if result.Result != 1 {
 		return errors.New(strconv.FormatInt(result.Result, 10))
@@ -72,8 +69,7 @@ func setKsGlobalAccessToken() error {
 	accessToken.Lock.Unlock()
 	err = rdb.Set(access_token_db, result.AccessToken, time.Duration(result.ExpiresIn)*time.Second)
 	if err != nil {
-		ziLog.Error( fmt.Sprintf("SetGlobalAccessToken  rdb set err: %v", err), debug)
-		return err
+		return fmt.Errorf("SetGlobalAccessToken  rdb set err: %v", err)
 	}
 	return nil
 }
@@ -91,17 +87,14 @@ func setDyGlobalAccessToken() error {
 		"grant_type": "client_credential",
 	}
 	bodyByte, _ := json.Marshal(body)
-	// fmt.Println(pathUrl, 2222222222222)
 	response, err := common.HttpRespond("POST", url_GetAccessTokenUrl, bodyByte, header)
 	if err != nil {
-		ziLog.Error( fmt.Sprintf("SetGlobalAccessToken response err: %v", err), debug)
-		return err
+		return fmt.Errorf("SetGlobalAccessToken response err: %v", err)
 	}
 	// 关闭响应体以释放资源
 	defer response.Body.Close()
 	if response.StatusCode != http.StatusOK {
-		ziLog.Error( fmt.Sprintf("SetGlobalAccessToken status err: %v", response.Status), debug)
-		return err
+		return fmt.Errorf("SetGlobalAccessToken status err: %v", response.Status)
 	}
 	// 读取响应体并解析为JSON对象
 	var (
@@ -110,8 +103,7 @@ func setDyGlobalAccessToken() error {
 
 	err = json.NewDecoder(response.Body).Decode(&result)
 	if err != nil {
-		ziLog.Error( fmt.Sprintf("SetGlobalAccessToken json.NewDecoder err: %v", err), debug)
-		return err
+		return fmt.Errorf("SetGlobalAccessToken json.NewDecoder err: %v", err)
 	}
 	if result.ErrorNo != 0 {
 		return errors.New(strconv.FormatInt(result.ErrorNo, 10))
@@ -123,8 +115,7 @@ func setDyGlobalAccessToken() error {
 	accessToken.Lock.Unlock()
 	err = rdb.Set(access_token_db, result.Data.AccessToken, time.Duration(result.Data.ExpiresIn)*time.Second)
 	if err != nil {
-		ziLog.Error( fmt.Sprintf("SetGlobalAccessToken  rdb set err: %v", err), debug)
-		return err
+		return fmt.Errorf("SetGlobalAccessToken  rdb set err: %v", err)
 	}
 	return nil
 }
@@ -154,7 +145,7 @@ func setToken() error {
 	if isSet {
 		ok, err := rdb.SetKeyNX(monitor_access_token_db, nodeUuid, timeCheck)
 		if err != nil {
-			ziLog.Error( fmt.Sprintf("setAccessToken 设置全局Access token推送标识失败: %v", err), debug)
+			ziLog.Error(fmt.Sprintf("setAccessToken 设置全局Access token推送标识失败: %v", err), debug)
 			return err
 		}
 		if ok {
@@ -214,7 +205,7 @@ func setAccessToken() {
 		count := 0
 		ok, err := rdb.SetKeyNX(monitor_access_token_db, nodeUuid, timeCheck)
 		if err != nil {
-			ziLog.Error( fmt.Sprintf("setAccessToken 设置全局Access token推送标识失败: %v", err), debug)
+			ziLog.Error(fmt.Sprintf("setAccessToken 设置全局Access token推送标识失败: %v", err), debug)
 			continue
 		}
 		if ok {
@@ -225,7 +216,7 @@ func setAccessToken() {
 				}
 				if err := function(); err != nil {
 					time.Sleep(6 * time.Second)
-					ziLog.Error( fmt.Sprintf("setAccessToken 设置全局Access token失败: %v", err), debug)
+					ziLog.Error(fmt.Sprintf("setAccessToken 设置全局Access token失败: %v", err), debug)
 					count++
 				} else {
 					break
@@ -248,7 +239,7 @@ func getAccessToken() {
 func getToken() error {
 	token, err := rdb.Get(access_token_db)
 	if err != nil {
-		ziLog.Error( fmt.Sprintf("getToken 获取全局Access token失败: %v", err), debug)
+		ziLog.Error(fmt.Sprintf("getToken 获取全局Access token失败: %v", err), debug)
 		return fmt.Errorf("getToken 获取全局Access token失败: %v", err)
 	}
 	accessToken.Lock.Lock()

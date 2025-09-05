@@ -11,8 +11,6 @@ import (
 	"github.com/kongshui/danmu/model/pmsg"
 	"github.com/kongshui/danmu/sse"
 
-	pb "github.com/kongshui/danmu/model/battlecalv1pb"
-
 	"google.golang.org/protobuf/proto"
 )
 
@@ -21,8 +19,7 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 		isgift       bool = false
 		isLottery    bool = false
 		isSendAck    bool = false // 是否发送ack
-		groupGrpc         = &pb.AddGiftToGroupReq{}
-		isFirst      bool = true // 是否第一次
+		isFirst      bool = true  // 是否第一次
 		openId       string
 		nickName     string
 		avatarUrl    string
@@ -32,7 +29,7 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 	if strings.HasPrefix(data.Data.UniqueMessageId, "stress_") || data.Event == "LIVE_INTERACTION_DATA_TEST" {
 		anchorOpenId = strings.TrimPrefix(anchorOpenId, "stress_")
 	}
-	sendUidList, _, isGroup, _ := getUidListByOpenId(anchorOpenId)
+	sendUidList, _, _, _ := getUidListByOpenId(anchorOpenId)
 	if len(sendUidList) == 0 {
 		ziLog.Error(fmt.Sprintf("ksPushBasePayloay queryRoomIdToUid nil， roomId: %v, openId, %v, 数据为： %v", data.Data.RoomCode, data.Data.AuthorOpenId, data), debug)
 		return
@@ -52,12 +49,6 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 	endSendData.PushType = data.Data.PushType
 	// 添加uniqueMessageId到redis中，防止重复推送
 	giftsendSet(data.Data.RoomCode, data.Data.UniqueMessageId)
-	// 是否是group
-	// if isGroup {
-	// 	groupGrpc.GroupId = groupId
-	// 	groupGrpc.AnchorOpenId = data.Data.AuthorOpenId
-	// 	groupGrpc.AnchorOpenIdList = openIdList
-	// }
 
 	for _, v := range data.Data.Payload {
 		var (
@@ -116,13 +107,6 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 				ziLog.Gift(fmt.Sprintf("ksPushBasePayloay Lottery,火花数量：%v, giftdata： %v，用户Id： %v, 用户名称： %v", gift.GiftCount, giftMap, gift.UserInfo.UserId, gift.UserInfo.NickName), debug)
 				for giftId, giftCount := range giftMap {
 					score += giftToScoreMap[giftId] * float64(giftCount)
-					if isGroup {
-						groupGrpc.IsComment = false
-						groupGrpc.OpenId = gift.UserInfo.UserId
-						groupGrpc.GiftId = giftId
-						groupGrpc.GiftNum = giftCount
-						// go grpcSend(groupGrpc, 0)
-					}
 				}
 				giftMapByte, _ := json.Marshal(giftMap)
 				lotteryData := &pmsg.LotteryMsg{}
@@ -141,13 +125,6 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 				}
 			} else {
 				score = giftToScoreMap[gift.GiftId] * float64(gift.GiftCount)
-				// if isGroup {
-				// 	groupGrpc.IsComment = false
-				// 	groupGrpc.OpenId = gift.UserInfo.UserId
-				// 	groupGrpc.GiftId = gift.GiftId
-				// 	groupGrpc.GiftNum = gift.GiftCount
-				// 	go grpcSend(groupGrpc, 0)
-				// }
 			}
 			msgId = pmsg.MessageId_liveGift
 		case "liveComment":
@@ -164,38 +141,6 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 
 			if commentData.Content == "666" {
 				score = live_like_score
-				if isGroup {
-					groupGrpc.IsComment = true
-					groupGrpc.OpenId = commentData.UserInfo.UserId
-					groupGrpc.GiftId = "0"
-					groupGrpc.GiftNum = 1
-					// go grpcSend(groupGrpc, 0)
-				}
-			} else {
-				if isGroup {
-					value, ok := commentTogiftId[commentData.Content]
-					if ok && !strings.Contains(commentData.Content, "1") && strings.Contains(value, "1") {
-						_, err := deleteUserWinStreamCoin(commentData.UserInfo.UserId, commentToCoin[commentData.Content])
-						if err != nil {
-							return
-						}
-						groupGrpc.IsComment = true
-						groupGrpc.OpenId = commentData.UserInfo.UserId
-						groupGrpc.GiftId = value
-						groupGrpc.GiftNum = 1
-						// go grpcSend(groupGrpc, 0)
-					} else {
-						isJoin1 := strings.HasPrefix(commentData.Content, "1")
-						isJoin11 := strings.HasSuffix(commentData.Content, "1")
-						isJoin2 := strings.HasPrefix(commentData.Content, "2")
-						isJoin22 := strings.HasSuffix(commentData.Content, "2")
-						isJoin3 := strings.HasPrefix(commentData.Content, "加入")
-						if (isJoin1 && isJoin11) || (isJoin2 && isJoin22) || isJoin3 {
-							groupGrpc.OpenId = commentData.UserInfo.UserId
-							// go grpcSend(groupGrpc, 0)
-						}
-					}
-				}
 			}
 			msgId = pmsg.MessageId_LiveComment
 		case "liveLike":
@@ -210,13 +155,6 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 			nickName = liveLikeData.UserInfo.NickName
 			avatarUrl = liveLikeData.UserInfo.AvatarUrl
 			score = live_like_score
-			if isGroup {
-				groupGrpc.IsComment = false
-				groupGrpc.OpenId = liveLikeData.UserInfo.UserId
-				groupGrpc.GiftId = "0"
-				groupGrpc.GiftNum = 1
-				// go grpcSend(groupGrpc, 0)
-			}
 			msgId = pmsg.MessageId_liveLike
 		default:
 			continue
@@ -285,13 +223,12 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 	}
 	ziLog.Gift(fmt.Sprintf("ksPushGiftSendPayloay giftdata： %v", data), debug)
 	// 获取房间信息
-	sendUidList, _, isGroup, _ := getUidListByOpenId(data.AuthorOpenId)
+	sendUidList, _, _, _ := getUidListByOpenId(data.AuthorOpenId)
 	if len(sendUidList) == 0 {
 		ziLog.Error(fmt.Sprintf("ksPushBasePayloay queryRoomIdToUid nil， roomId: %v, openId, %v, 数据为： %v", data.RoomCode, data.AuthorOpenId, data), debug)
 		return
 	}
 	var (
-		groupGrpc = &pb.AddGiftToGroupReq{}
 		openId    string
 		nickName  string
 		avatarUrl string
@@ -344,13 +281,6 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 			ziLog.Gift(fmt.Sprintf("ksPushBasePayloay Lottery giftdata： %v，用户Id： %v, 用户名称： %v", giftMap, gift.UserInfo.UserId, gift.UserInfo.NickName), debug)
 			for giftId, giftCount := range giftMap {
 				score += giftToScoreMap[giftId] * float64(giftCount)
-				if isGroup {
-					groupGrpc.IsComment = false
-					groupGrpc.OpenId = gift.UserInfo.UserId
-					groupGrpc.GiftId = giftId
-					groupGrpc.GiftNum = giftCount
-					// go grpcSend(groupGrpc, 0)
-				}
 			}
 			giftMapByte, _ := json.Marshal(giftMap)
 			lotteryData := &pmsg.LotteryMsg{}
@@ -370,13 +300,6 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 
 		} else {
 			score = giftToScoreMap[gift.GiftId] * float64(gift.GiftCount)
-			if isGroup {
-				groupGrpc.IsComment = false
-				groupGrpc.OpenId = gift.UserInfo.UserId
-				groupGrpc.GiftId = gift.GiftId
-				groupGrpc.GiftNum = gift.GiftCount
-				// go grpcSend(groupGrpc, 0)
-			}
 		}
 		if strings.HasPrefix(data.UniqueMessageId, "test_") {
 			score = 0

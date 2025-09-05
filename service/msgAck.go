@@ -2,14 +2,14 @@ package service
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"time"
 
 	"github.com/kongshui/danmu/common"
 )
 
-func ksMsgAckSend(roomid, ackType string, data KsMsgAckReceiveStruct) error {
+func ksMsgAckSend(roomid, ackType string, data KsMsgAckReceiveStruct) {
+	defer RecoverFunc()
 	var (
 		url string = url_CpShowAckUrl
 	)
@@ -28,41 +28,33 @@ func ksMsgAckSend(roomid, ackType string, data KsMsgAckReceiveStruct) error {
 	)
 	sdataByte, _ := json.Marshal(sdata)
 	if err := json.Unmarshal(sdataByte, &request); err != nil {
-		ziLog.Error(fmt.Sprintf("KsMsgAckSend json.Unmarshal err: %v,ackType: %v", err, ackType), debug)
-		return err
+		panic(fmt.Sprintf("KsMsgAckSend json.Unmarshal err: %v,ackType: %v", err, ackType))
 	}
 	sdata.Sign = common.KSSignature(request, app_secret, app_id)
 	requestBody, err := json.Marshal(sdata)
 	if err != nil {
-		ziLog.Error(fmt.Sprintf("KsMsgAckSend json.Marshal err: %v,ackType: %v", err, ackType), debug)
-		return err
+		panic(fmt.Sprintf("KsMsgAckSend json.Marshal err: %v,ackType: %v", err, ackType))
 	}
 	header := map[string]string{
 		"Content-Type": "application/json;charset=UTF-8",
 	}
 	urlPath := KsUrlSet(url)
 	if urlPath == "" {
-		ziLog.Error("KsMsgAckSend urlSet err: urlPath is nil", debug)
-		return errors.New("KsMsgAckSend urlSet err: urlPath is nil")
+		panic("KsMsgAckSend urlSet err: urlPath is nil")
 	}
 	response, err := common.HttpRespond("POST", urlPath, requestBody, header)
 	if err != nil {
-		ziLog.Error(fmt.Sprintf("KsMsgAckSend HttpRespond err: %v,ackType: %v", err, ackType), debug)
-		return err
+		panic(fmt.Sprintf("KsMsgAckSend HttpRespond err: %v,ackType: %v", err, ackType))
 	}
 	defer response.Body.Close()
 	if response.StatusCode != 200 {
-		ziLog.Error(fmt.Sprintf("KsMsgAckSend HttpStatus err: %v,ackType: %v", response.StatusCode, ackType), debug)
-		return errors.New("KsMsgAckSend HttpRespond err: " + response.Status + ",ackType: " + ackType)
+		panic(fmt.Sprintf("KsMsgAckSend HttpStatus err: %v,ackType: %v", response.StatusCode, ackType))
 	}
 	request = map[string]any{}
 	if err := json.NewDecoder(response.Body).Decode(&request); err != nil {
-		ziLog.Error(fmt.Sprintf("KsMsgAckSend json.NewDecoder err: %v,ackType: %v", err, ackType), debug)
-		return err
+		panic(fmt.Sprintf("KsMsgAckSend json.NewDecoder err: %v,ackType: %v", err, ackType))
 	}
 	if int64(request["result"].(float64)) != 1 && int64(request["result"].(float64)) != 220372 {
-		ziLog.Error(fmt.Sprintf("KsMsgAckSend result err，ackType: %v, sendData: %v", ackType, request), debug)
-		return errors.New("KsMsgAckSend err: " + request["errorMsg"].(string))
+		panic(fmt.Sprintf("KsMsgAckSend result err，ackType: %v, sendData: %v", ackType, request))
 	}
-	return nil
 }

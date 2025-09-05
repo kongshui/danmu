@@ -3,7 +3,6 @@ package service
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"math/rand/v2"
 	"strconv"
 	"time"
@@ -62,7 +61,7 @@ func CreateRoomId(uid, roomId string) {
 		roomInfo.AvatarUrl = "http://tupian.geimian.com/pic/2016/11/2016-11-05_213153.jpg"
 		dataByte, _ := json.Marshal(roomInfo)
 		if err := sse.SseSend(pmsg.MessageId_StartBindAck, []string{uid}, dataByte); err != nil {
-			log.Println("pushDownLoadMessage err: ", err)
+			ziLog.Error(fmt.Sprintf("KsCreateRoomId pushDownLoadMessage err: %v", err), debug)
 		}
 	default:
 	}

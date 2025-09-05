@@ -13,6 +13,7 @@ import (
 
 // 快手消息回调
 func ksMessageQuery(roomId string) {
+	defer RecoverFunc()
 	request := map[string]any{
 		"roomCode":  roomId,
 		"timestamp": time.Now().UnixMilli(),
@@ -22,52 +23,45 @@ func ksMessageQuery(roomId string) {
 	request["sign"] = common.KSSignature(request, app_secret, app_id)
 	requestBody, err := json.Marshal(request)
 	if err != nil {
-		ziLog.Error(fmt.Sprintf("KsMessageQuery json marshal err:  %v", err), debug)
-		return
+		panic(fmt.Sprintf("KsMessageQuery json marshal err:  %v", err))
 	}
 	header := map[string]string{
 		"Content-Type": "application/json;charset=UTF-8",
 	}
 	urlPath := KsUrlSet(url_MessageQueryUrl)
 	if urlPath == "" {
-		ziLog.Error("KsMessageQuery err: urlPath is nil,ackType: ", debug)
-		return
+		panic("KsMessageQuery err: urlPath is nil,ackType: ")
 	}
 	response, err := common.HttpRespond("POST", urlPath, requestBody, header)
 	if err != nil {
-		ziLog.Error(fmt.Sprintf("KsMessageQuery HttpRespond err:  %v", err), debug)
-		return
+		panic(fmt.Sprintf("KsMessageQuery HttpRespond err:  %v", err))
 	}
 	defer response.Body.Close()
 	if response.StatusCode != 200 {
-		ziLog.Error(fmt.Sprintf("KsMessageQuery HttpRespond code err:  %v", response.StatusCode), debug)
-		return
+		panic(fmt.Sprintf("KsMessageQuery HttpRespond code err:  %v", response.StatusCode))
 	}
 	request = map[string]any{}
 	if err := json.NewDecoder(response.Body).Decode(&request); err != nil {
-		ziLog.Error(fmt.Sprintf("KsMessageQuery json.NewDecoder err:  %v", err), debug)
-		return
+		panic(fmt.Sprintf("KsMessageQuery json.NewDecoder err:  %v", err))
 	}
 	if int64(request["result"].(float64)) != 1 {
-		ziLog.Error(fmt.Sprintf("KsMessageQuery err:  %v， data： %v", err, request), debug)
-		return
+		panic(fmt.Sprintf("KsMessageQuery err:  %v， data： %v", err, request))
 	}
 	go checkQuery(request["data"].(string))
 }
 
 // 查询快手礼物消息
 func checkQuery(dataList string) {
+	defer RecoverFunc()
 	var (
 		data []KsCallbackQueryStruct
 	)
 	dateListByte, err := json.Marshal(dataList)
 	if err != nil {
-		ziLog.Error(fmt.Sprintf("CheckQuery json marshal err:  %v", err), debug)
-		return
+		panic(fmt.Sprintf("CheckQuery json marshal err:  %v", err))
 	}
 	if err := json.Unmarshal(dateListByte, &data); err != nil {
-		ziLog.Error(fmt.Sprintf("CheckQuery json Unmarshal err:  %v", err), debug)
-		return
+		panic(fmt.Sprintf("CheckQuery json Unmarshal err:  %v", err))
 	}
 	for _, v := range data {
 		code, err := rdb.SAdd(v.RoomCode+"giftSend", v.UniqueMessageId)

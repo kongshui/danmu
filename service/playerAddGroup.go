@@ -67,8 +67,7 @@ func playerGroupAdd(roomId, uidStr string, roundId int64, userMap []*pmsg.Single
 		return errors.New("playerGroupAdd proto Marshal err: " + err.Error())
 	}
 	if err := sse.SseSend(pmsg.MessageId_SingleRoomAddGroupAck, []string{uidStr}, dataByte); err != nil {
-		ziLog.Error(fmt.Sprintf("playerGroupAdd 玩家加入组信息 err: %v", err), debug)
-		return errors.New("玩家加入组信息 err: " + err.Error())
+		return fmt.Errorf("playerGroupAdd 玩家加入组信息 err: %v", err)
 	}
 	return nil
 }

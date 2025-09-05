@@ -49,7 +49,8 @@ func dyWorldRankListUpload(data any, url string) bool {
 }
 
 // 世界排行榜设置
-func worldRankSet(worldRankVersion string) bool {
+func worldRankSet(worldRankVersion string) {
+	defer RecoverFunc()
 	headers := map[string]string{
 		"Content-Type": "application/json",
 		"X-Token":      accessToken.Token,
@@ -60,37 +61,33 @@ func worldRankSet(worldRankVersion string) bool {
 		"world_rank_version": worldRankVersion,
 	})
 	if err != nil {
-		ziLog.Error(fmt.Sprintf("WorldRankSet1 err: %v", err), debug)
-		return false
+		panic(fmt.Sprintf("WorldRankSet1 err: %v", err))
 	}
 	response, err := common.HttpRespond("POST", url_set_world_rank_version_url, body, headers)
 	if err != nil {
-		ziLog.Error(fmt.Sprintf("WorldRankSet2 err: %v", err), debug)
-		return false
+		panic(fmt.Sprintf("WorldRankSet2 err: %v", err))
 	}
 	defer response.Body.Close()
 	if response.StatusCode != 200 {
-		ziLog.Error(fmt.Sprintf("WorldRankSet status err: %v", response.Status), debug)
-		return false
+		panic(fmt.Sprintf("WorldRankSet status err: %v", response.Status))
 	}
 	var (
 		request any
 	)
 	if err := json.NewDecoder(response.Body).Decode(&request); err != nil {
-		ziLog.Error(fmt.Sprintf("WorldRankSet3 err: %v", err), debug)
-		return false
+		panic(fmt.Sprintf("WorldRankSet3 err: %v", err))
 	}
 
 	errCode := int64(request.(map[string]any)["errcode"].(float64))
 	if errCode != 0 {
-		ziLog.Error(fmt.Sprintf("WorldRankSet errCode: %v, errmsg: %s", errCode, request.(map[string]any)["errmsg"].(string)), debug)
+		panic(fmt.Sprintf("WorldRankSet errCode: %v, errmsg: %s", errCode, request.(map[string]any)["errmsg"].(string)))
 	}
-	return errCode == 0
 }
 
 // 完成用户世界榜单的累计战绩上报
 // 当到达截榜时间且有线上生效的世界榜单版本时，在完成用户世界榜单的累计战绩上报后，调用本接口，标记本次截榜时间内的世界榜单累计战绩完成了上报。
-func worldRankCompleteUpload() bool {
+func worldRankCompleteUpload() {
+	defer RecoverFunc()
 	headers := map[string]string{
 		"Content-Type": "application/json",
 		"X-Token":      accessToken.Token,
@@ -102,27 +99,26 @@ func worldRankCompleteUpload() bool {
 		"complete_time":      time.Now().Unix(),
 	})
 	if err != nil {
-		ziLog.Error(fmt.Sprintf("WorldRankCompleteUpload1 err: %v", err), debug)
-		return false
+		panic(fmt.Sprintf("WorldRankCompleteUpload1 err: %v", err))
 	}
 	response, err := common.HttpRespond("POST", url_complete_upload_url, body, headers)
 	if err != nil {
-		ziLog.Error(fmt.Sprintf("WorldRankCompleteUpload2 err: %v", err), debug)
-		return false
+		panic(fmt.Sprintf("WorldRankCompleteUpload2 err: %v", err))
 	}
 	defer response.Body.Close()
 	if response.StatusCode != 200 {
-		return false
+		panic(fmt.Sprintf("WorldRankCompleteUpload status err: %v", response.Status))
 	}
 	var (
 		request any
 	)
 	if err := json.NewDecoder(response.Body).Decode(&request); err != nil {
-		ziLog.Error(fmt.Sprintf("WorldRankCompleteUpload3 err: %v", err), debug)
-		return false
+		panic(fmt.Sprintf("WorldRankCompleteUpload3 err: %v", err))
 	}
 	if debug {
 		ziLog.Info(fmt.Sprintf("世界排行榜完成上传完成 worldRankCompleteUpload: %v", request), debug)
 	}
-	return int64(request.(map[string]any)["errcode"].(float64)) == 0
+	if int64(request.(map[string]any)["errcode"].(float64)) != 0 {
+		panic(fmt.Sprintf("WorldRankCompleteUpload errCode: %v, errmsg: %s", int64(request.(map[string]any)["errcode"].(float64)), request.(map[string]any)["errmsg"].(string)))
+	}
 }

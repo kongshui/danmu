@@ -55,9 +55,8 @@ func roundStart(msg *pmsg.MessageBody) error {
 	//同步开始对局状态
 	switch platform {
 	case "ks":
-		if !ksSyncGameStatus(data, "start", true) {
-			ziLog.Error("roundStart 同步开始对局状态失败: "+data.RoomId+" "+strconv.FormatInt(data.RoundId, 10), debug)
-			return errors.New("roundStart 同步开始对局状态失败: " + data.RoomId + " " + strconv.FormatInt(data.RoundId, 10))
+		if err := ksSyncGameStatus(data, "start", true); err != nil {
+			return fmt.Errorf("roundStart 同步开始对局状态失败,roomId: %v, roundId: %v, err: %v", data.RoomId, data.RoundId, err)
 		}
 	case "dy":
 		if is_mock {
@@ -66,8 +65,8 @@ func roundStart(msg *pmsg.MessageBody) error {
 			}
 			break
 		}
-		if !dySyncGameStatus(data) {
-			return errors.New("roundStart 同步开始对局状态失败: " + data.RoomId + " " + strconv.FormatInt(data.RoundId, 10))
+		if err := dySyncGameStatus(data); err != nil {
+			return fmt.Errorf("roundStart 同步开始对局状态失败,roomId: %v, roundId: %v, err: %v", data.RoomId, data.RoundId, err)
 		} else {
 			if err := liveCurrentRoundAdd(syncGameStatusData.RoomId, syncGameStatusData.RoundId); err != nil {
 				return errors.New("uplink liveCurrentRoundAdd err: " + err.Error())
@@ -183,15 +182,15 @@ func roundEnd(msg *pmsg.MessageBody) error {
 	// 分平台
 	switch platform {
 	case "ks":
-		if !ksSyncGameStatus(useData, "stop", true) {
-			return errors.New("roundEnd 同步结束对局状态失败: " + data.RoomId + " " + strconv.FormatInt(data.RoundId, 10))
+		if err := ksSyncGameStatus(useData, "stop", true); err != nil {
+			return fmt.Errorf("roundEnd 同步结束对局状态失败,roomId: %v, roundId: %v, err: %v", data.RoomId, data.RoundId, err)
 		}
 	case "dy":
 		if is_mock {
 			return nil
 		}
-		if !dySyncGameStatus(useData) {
-			return errors.New("roundEnd 同步开始对局状态失败: " + data.RoomId + " " + strconv.FormatInt(data.RoundId, 10))
+		if err := dySyncGameStatus(useData); err != nil {
+			return fmt.Errorf("roundEnd 同步开始对局状态失败,roomId: %v, roundId: %v, err: %v", data.RoomId, data.RoundId, err)
 		}
 	}
 	return nil
@@ -222,6 +221,7 @@ func roundDataUpload(msg *pmsg.MessageBody) error {
 	if err != nil {
 		return errors.New("roundDataUpload Unmarshal err: " + err.Error())
 	}
+	ziLog.Info(fmt.Sprintf("roundDataUpload roomid: %v, 主播openid: %v, roundId: %v, 组信息： %v, 玩家信息： %v", data.RoomId, data.GetAnchorOpenId(), data.RoundId, data.GroupResultList, data.GroupUserList), debug)
 	//数据上报 =====================================================
 	roundData := RoundUploadStruct{}
 	roundData.RoundId = data.RoundId
@@ -283,12 +283,6 @@ func useUserWinningStreamCoin(msg *pmsg.MessageBody) error {
 		if ok {
 			ziLog.Gift(fmt.Sprintf("useUserWinningStreamCoin giftId: %v, useNum: %v, openId: %v, roomId: %v, roundId: %v, timestamp: %v", data.GetGiftId(),
 				data.GetUseNum(), data.GetOpenId(), data.GetRoomId(), data.GetRoundId(), data.GetTimeStamp()), debug)
-			// if comment != "" {
-			// 	score := queryCommentToScore(comment)
-			// 	fastReturnAdd(data.GetRoomId(), data.GetOpenId(), score)
-			// 	// 送礼直接添加到世界排行榜
-			// 	go worldRankNumerAdd(data.GetOpenId(), score)
-			// }
 		}
 	}
 	sDataByte, err := proto.Marshal(sData)
@@ -419,6 +413,7 @@ func KsBind(msg *pmsg.MessageBody, label string) error {
 	if err != nil {
 		return errors.New("KsBind Unmarshal err: " + err.Error())
 	}
+	ziLog.Info(fmt.Sprintf("KsBind label: %v, roomId: %v, openId: %v", label, data.GetRoomId(), data.GetOpenId()), debug)
 	if data.GetRoomId() == "" {
 		return errors.New("roomId is nil")
 	}
@@ -431,11 +426,11 @@ func KsBind(msg *pmsg.MessageBody, label string) error {
 		return nil
 	}
 
-	if !ksStartFinishGameInfo(data.GetRoomId(), url_BindUrl, label, msg.GetUuid(), true) {
+	if err := ksStartFinishGameInfo(data.GetRoomId(), url_BindUrl, label, msg.GetUuid(), true); err != nil {
 		return errors.New(label + " game 游戏失败, " + data.GetRoomId())
 	}
 	if label == "start" {
-		if !topGift(data.RoomId) {
+		if err := topGift(data.RoomId); err != nil {
 			return errors.New("TopGift 置顶失败, " + data.RoomId)
 		}
 	}
@@ -504,8 +499,8 @@ func addIntegral(msg *pmsg.MessageBody) error {
 func dytoken(msg *pmsg.MessageBody) error {
 	data := &pmsg.TokenMessage{}
 	err := proto.Unmarshal(msg.MessageData, data)
+	ziLog.Info(fmt.Sprintf("dytoken token: %v", data.Token), debug)
 	if err != nil {
-		ziLog.Error("dytoken Unmarshal err: "+err.Error(), debug)
 		return errors.New("dytoken Unmarshal err: " + err.Error())
 	}
 	return dyGetAnchorInfo(msg.Uuid, data.Token)

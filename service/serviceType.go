@@ -4,21 +4,21 @@ import "sync"
 
 type (
 	//token消息结构体
-	LoginTokenStruct struct {
-		Token     string `json:"token"`      // token,客户端传过来的token
-		TimeStamp int64  `json:"time_stamp"` // 时间戳
-	}
+	// LoginTokenStruct struct {
+	// 	Token     string `json:"token"`      // token,客户端传过来的token
+	// 	TimeStamp int64  `json:"time_stamp"` // 时间戳
+	// }
 
 	//断开消息结构体
-	DisconnectStruct struct {
-		Roomid    string `json:"room_id"`    // roomid
-		TimeStamp int64  `json:"time_stamp"` // 时间戳
-	}
+	// DisconnectStruct struct {
+	// 	Roomid    string `json:"room_id"`    // roomid
+	// 	TimeStamp int64  `json:"time_stamp"` // 时间戳
+	// }
 
 	//错误信息结构体
-	ErrorStruct struct {
-		ErrorMsg string `json:"err_msg"` // 错误信息
-	}
+	// ErrorStruct struct {
+	// 	ErrorMsg string `json:"err_msg"` // 错误信息
+	// }
 
 	//用户加入分组消息结构体
 	JoinGroupStruct struct {
@@ -29,34 +29,34 @@ type (
 	}
 
 	//所有用户信息
-	AllUserStruct struct {
-		UserList []JoinGroupStruct `json:"user_list" required:"true"` // 用户open_id列表
-	}
+	// AllUserStruct struct {
+	// 	UserList []JoinGroupStruct `json:"user_list" required:"true"` // 用户open_id列表
+	// }
 
 	//roundReady消息结构体
-	RoundReadyStruct struct {
-		RoundId   int64 `json:"round_id"`   // roomid
-		TimeStamp int64 `json:"time_stamp"` // 时间戳
-	}
+	// RoundReadyStruct struct {
+	// 	RoundId   int64 `json:"round_id"`   // roomid
+	// 	TimeStamp int64 `json:"time_stamp"` // 时间戳
+	// }
 
 	// 自定义消息结构体
-	MessageGeneralStruct struct {
-		MsgId        string `json:"msg_id"`         // 消息ID
-		MsgType      string `json:"msg_type"`       // 消息类型
-		RoomId       string `json:"room_id"`        // 房间id
-		AnchorOpenId string `json:"anchor_open_id"` // 主播open_id
-		Data         any    `json:"data"`           // 消息数据
-		ExtraData    any    `json:"extra_data"`     // 额外数据
-	}
+	// MessageGeneralStruct struct {
+	// 	MsgId        string `json:"msg_id"`         // 消息ID
+	// 	MsgType      string `json:"msg_type"`       // 消息类型
+	// 	RoomId       string `json:"room_id"`        // 房间id
+	// 	AnchorOpenId string `json:"anchor_open_id"` // 主播open_id
+	// 	Data         any    `json:"data"`           // 消息数据
+	// 	ExtraData    any    `json:"extra_data"`     // 额外数据
+	// }
 
 	//logToRedisStruct
-	LogToRedisStruct struct {
-		RoomId          string                  `json:"room_id"`           // 房间id
-		AnchorOpenId    string                  `json:"anchor_open_id"`    // 主播open_id
-		RoundId         int64                   `json:"round_id"`          // 对局id,同一个直播间room_id下，round_id需要是递增的，建议使用开始对局时的时间戳
-		GroupResultList []GroupResultList       `json:"group_result_list"` //对局结果列表
-		GroupUserList   []UserUploadScoreStruct `json:"group_user_list"`   //玩家信息列表
-	}
+	// LogToRedisStruct struct {
+	// 	RoomId          string                  `json:"room_id"`           // 房间id
+	// 	AnchorOpenId    string                  `json:"anchor_open_id"`    // 主播open_id
+	// 	RoundId         int64                   `json:"round_id"`          // 对局id,同一个直播间room_id下，round_id需要是递增的，建议使用开始对局时的时间戳
+	// 	GroupResultList []GroupResultList       `json:"group_result_list"` //对局结果列表
+	// 	GroupUserList   []UserUploadScoreStruct `json:"group_user_list"`   //玩家信息列表
+	// }
 
 	//round_upload消息结构体
 	RoundUploadStruct struct {
@@ -184,44 +184,44 @@ type (
 	}
 
 	// 请求抖音接口地址结构体
-	UrlStruct struct {
-		GetAccessTokenUrl          string `json:"get_access_token"`       //获取全局token的url
-		GetLiveInfoUrl             string `json:"get_liveinfo"`           //获取直播间信息的url
-		StartGameUrl               string `json:"start_game"`             //开始游戏url
-		FinishGameUrl              string `json:"finish_game"`            //结束游戏url
-		GetGameInfoUrl             string `json:"get_gameinfo"`           //获取游戏任务是否开启url
-		PushLivePayLoadUrl         string `json:"push_live_payload"`      //推送直播消息的url
-		DownLineMessageUrl         string `json:"down_line_message"`      //下线消息推送url
-		WorldRankVersionUrl        string `json:"world_rank"`             //世界榜url
-		WorldRankUploadUrl         string `json:"world_rank_list_upload"` //世界榜上传url
-		WorldRankCompleteUploadUrl string `json:"complete_world_rank"`    //完成用户世界榜单的累计战绩上报url
-		WorldRankUserTotalUrl      string `json:"world_rank_user_total"`  //世界榜用户累计战绩url
-		SyncGameStatusUrl          string `json:"sync_game_status"`       //同步对局状态url
-		UploadUserGameUrl          string `json:"upload_user_game"`       //上传用户对局数据url
-		UploadUserGameRankUrl      string `json:"upload_user_game_rank"`  //上传用户对局数据url
-		UploadUserCompeleteUrl     string `json:"upload_user_complete"`   //上传用户对局数据url
-		GetLiveFailUrl             string `json:"get_live_fail"`          //获取直播失败请求url
-		GetConnIdUrl               string `json:"get_conn_id"`            //获取直播失败请求url
-		UploadUserGroupUrl         string `json:"upload_user_group"`      //上传用户分组数据url
-	}
+	// UrlStruct struct {
+	// 	GetAccessTokenUrl          string `json:"get_access_token"`       //获取全局token的url
+	// 	GetLiveInfoUrl             string `json:"get_liveinfo"`           //获取直播间信息的url
+	// 	StartGameUrl               string `json:"start_game"`             //开始游戏url
+	// 	FinishGameUrl              string `json:"finish_game"`            //结束游戏url
+	// 	GetGameInfoUrl             string `json:"get_gameinfo"`           //获取游戏任务是否开启url
+	// 	PushLivePayLoadUrl         string `json:"push_live_payload"`      //推送直播消息的url
+	// 	DownLineMessageUrl         string `json:"down_line_message"`      //下线消息推送url
+	// 	WorldRankVersionUrl        string `json:"world_rank"`             //世界榜url
+	// 	WorldRankUploadUrl         string `json:"world_rank_list_upload"` //世界榜上传url
+	// 	WorldRankCompleteUploadUrl string `json:"complete_world_rank"`    //完成用户世界榜单的累计战绩上报url
+	// 	WorldRankUserTotalUrl      string `json:"world_rank_user_total"`  //世界榜用户累计战绩url
+	// 	SyncGameStatusUrl          string `json:"sync_game_status"`       //同步对局状态url
+	// 	UploadUserGameUrl          string `json:"upload_user_game"`       //上传用户对局数据url
+	// 	UploadUserGameRankUrl      string `json:"upload_user_game_rank"`  //上传用户对局数据url
+	// 	UploadUserCompeleteUrl     string `json:"upload_user_complete"`   //上传用户对局数据url
+	// 	GetLiveFailUrl             string `json:"get_live_fail"`          //获取直播失败请求url
+	// 	GetConnIdUrl               string `json:"get_conn_id"`            //获取直播失败请求url
+	// 	UploadUserGroupUrl         string `json:"upload_user_group"`      //上传用户分组数据url
+	// }
 
 	//抖音直播间结构体
-	RoomInfoStruct struct {
-		RoomId       string `json:"room_id"`        // 房间id
-		NickName     string `json:"nick_name"`      // 昵称
-		AvatarUrl    string `json:"avatar_url"`     // 头像url
-		AnchorOpenId string `json:"anchor_open_id"` // 主播open_id
-	}
+	// RoomInfoStruct struct {
+	// 	RoomId       string `json:"room_id"`        // 房间id
+	// 	NickName     string `json:"nick_name"`      // 昵称
+	// 	AvatarUrl    string `json:"avatar_url"`     // 头像url
+	// 	AnchorOpenId string `json:"anchor_open_id"` // 主播open_id
+	// }
 
 	//抖音小游戏结构体
-	AppInfoStruct struct {
-		// Appid              string `json:"appid"`                // appid
-		// AppSecret          string `json:"secret"`               // app_secret
-		LiveCommentSecret  string `json:"live_comment_secret"`  // 直播评论加密密钥
-		LiveGiftSecret     string `json:"live_gift_secret"`     // 直播送礼加密密钥
-		LiveLikeSecret     string `json:"live_like_secret"`     // 直播点赞加密密钥
-		LiveFansclubSecret string `json:"live_fansclub_secret"` // 直播粉丝团加密密钥
-	}
+	// AppInfoStruct struct {
+	// 	// Appid              string `json:"appid"`                // appid
+	// 	// AppSecret          string `json:"secret"`               // app_secret
+	// 	LiveCommentSecret  string `json:"live_comment_secret"`  // 直播评论加密密钥
+	// 	LiveGiftSecret     string `json:"live_gift_secret"`     // 直播送礼加密密钥
+	// 	LiveLikeSecret     string `json:"live_like_secret"`     // 直播点赞加密密钥
+	// 	LiveFansclubSecret string `json:"live_fansclub_secret"` // 直播粉丝团加密密钥
+	// }
 
 	// 用户世界榜单结构体
 	UserRankStruct struct {
@@ -321,58 +321,58 @@ type (
 	}
 
 	// user_join_group 用户世界榜单信息 Message
-	UserChooseGroupStruct struct {
-		OpenId            string `json:"open_id"`             // 用户open_id
-		AvatarUrl         string `json:"avatar_url"`          // 评论用户头像地址
-		NickName          string `json:"nick_name"`           // 评论用户昵称
-		GroupId           string `json:"group_id"`            // 组信息
-		RoundId           int64  `json:"round_id"`            // 对局id
-		WorldScore        int64  `json:"world_score"`         // 世界排行榜分数
-		WorldRank         int64  `json:"world_rank"`          // 世界排行榜排名
-		WinningStreamCoin int64  `json:"winning_stream_coin"` // 连胜币多少
-		Isconsume         bool   `json:"is_consume"`          // 是否是第一次消费，ture为是，false为不是
-	}
+	// UserChooseGroupStruct struct {
+	// 	OpenId            string `json:"open_id"`             // 用户open_id
+	// 	AvatarUrl         string `json:"avatar_url"`          // 评论用户头像地址
+	// 	NickName          string `json:"nick_name"`           // 评论用户昵称
+	// 	GroupId           string `json:"group_id"`            // 组信息
+	// 	RoundId           int64  `json:"round_id"`            // 对局id
+	// 	WorldScore        int64  `json:"world_score"`         // 世界排行榜分数
+	// 	WorldRank         int64  `json:"world_rank"`          // 世界排行榜排名
+	// 	WinningStreamCoin int64  `json:"winning_stream_coin"` // 连胜币多少
+	// 	Isconsume         bool   `json:"is_consume"`          // 是否是第一次消费，ture为是，false为不是
+	// }
 
 	//result_group_user_worldinfo 返回玩家世界榜单信息 Message
-	ResultGroupUserWorldInfoStruct struct {
-		OpenId            string `json:"open_id"`             // 用户open_id
-		WorldScore        int64  `json:"world_score"`         // 世界排行榜分数
-		WorldRank         int64  `json:"world_rank"`          // 世界排行榜排名
-		WinningStreamCoin int64  `json:"winning_stream_coin"` // 连胜币多少
-		Isconsume         bool   `json:"is_consume"`          // 是否是第一次消费，ture为是，false为不是
-	}
+	// ResultGroupUserWorldInfoStruct struct {
+	// 	OpenId            string `json:"open_id"`             // 用户open_id
+	// 	WorldScore        int64  `json:"world_score"`         // 世界排行榜分数
+	// 	WorldRank         int64  `json:"world_rank"`          // 世界排行榜排名
+	// 	WinningStreamCoin int64  `json:"winning_stream_coin"` // 连胜币多少
+	// 	Isconsume         bool   `json:"is_consume"`          // 是否是第一次消费，ture为是，false为不是
+	// }
 
 	// use_winning_stream_coin 使用连胜币请求，Message
-	UseWinningStreamCoinStruct struct {
-		OpenId    string `json:"open_id"`    // 用户open_id
-		UseNum    int64  `json:"use_num"`    // 使用连胜币多少
-		RoundId   int64  `json:"round_id"`   // 对局id
-		GiftId    int    `json:"gift_id"`    // 礼物id
-		TimeStamp int64  `json:"time_stamp"` // 毫秒级时间戳
-	}
+	// UseWinningStreamCoinStruct struct {
+	// 	OpenId    string `json:"open_id"`    // 用户open_id
+	// 	UseNum    int64  `json:"use_num"`    // 使用连胜币多少
+	// 	RoundId   int64  `json:"round_id"`   // 对局id
+	// 	GiftId    int    `json:"gift_id"`    // 礼物id
+	// 	TimeStamp int64  `json:"time_stamp"` // 毫秒级时间戳
+	// }
 
 	// result_use_winning_stream_coin 返回使用连胜币请求，Message
-	ResultUseWinningStreamCoinStruct struct {
-		OpenId            string `json:"open_id"`             // 用户open_id
-		WinningStreamCoin int64  `json:"winning_stream_coin"` // 连胜币多少
-		CanUse            bool   `json:"can_use"`             // 是否能够使用
-		RoundId           int64  `json:"round_id"`            // 对局id
-		GiftId            int    `json:"gift_id"`             // 礼物id
-		TimeStamp         int64  `json:"time_stamp"`          // 毫秒级时间戳
-	}
+	// ResultUseWinningStreamCoinStruct struct {
+	// 	OpenId            string `json:"open_id"`             // 用户open_id
+	// 	WinningStreamCoin int64  `json:"winning_stream_coin"` // 连胜币多少
+	// 	CanUse            bool   `json:"can_use"`             // 是否能够使用
+	// 	RoundId           int64  `json:"round_id"`            // 对局id
+	// 	GiftId            int    `json:"gift_id"`             // 礼物id
+	// 	TimeStamp         int64  `json:"time_stamp"`          // 毫秒级时间戳
+	// }
 
 	// get_winning_stream_coin 获得连胜币请求，Message
-	GetWinningStreamCoinStruct struct {
-		OpenId string `json:"open_id"` // 用户open_id
-		GetNum int64  `json:"get_num"` // 获得连胜币多少
-	}
+	// GetWinningStreamCoinStruct struct {
+	// 	OpenId string `json:"open_id"` // 用户open_id
+	// 	GetNum int64  `json:"get_num"` // 获得连胜币多少
+	// }
 
 	// result_get_winning_stream_coin 返回获得连胜币请求，Message
-	ResultGetWinningStreamCoinStruct struct {
-		OpenId            string `json:"open_id"`             // 用户open_id
-		WinningStreamCoin int64  `json:"winning_stream_coin"` // 连胜币多少
-		TimeStamp         int64  `json:"time_stamp"`          // 毫秒级时间戳
-	}
+	// ResultGetWinningStreamCoinStruct struct {
+	// 	OpenId            string `json:"open_id"`             // 用户open_id
+	// 	WinningStreamCoin int64  `json:"winning_stream_coin"` // 连胜币多少
+	// 	TimeStamp         int64  `json:"time_stamp"`          // 毫秒级时间戳
+	// }
 
 	// 维护信息
 	WeihuStruct struct {
@@ -389,15 +389,15 @@ type (
 	}
 
 	// get_winning_stream_coin 返回获得连胜币请求，Message
-	IsGetWinningStreamCoinStruct struct {
-		IsEnd    bool                         `json:"is_end"`    // 是否结束
-		UserList []GetWinningStreamCoinStruct `json:"user_list"` //需要获取连胜币的用户
-	}
+	// IsGetWinningStreamCoinStruct struct {
+	// 	IsEnd    bool                         `json:"is_end"`    // 是否结束
+	// 	UserList []GetWinningStreamCoinStruct `json:"user_list"` //需要获取连胜币的用户
+	// }
 	// open_id,time_stamp
-	OpenIdTimeStruct struct {
-		OpenId    string `json:"open_id"`    // 用户open_id
-		TimeStamp int64  `json:"time_stamp"` // 毫秒级时间戳
-	}
+	// OpenIdTimeStruct struct {
+	// 	OpenId    string `json:"open_id"`    // 用户open_id
+	// 	TimeStamp int64  `json:"time_stamp"` // 毫秒级时间戳
+	// }
 
 	// 快手直播间结构体
 	KsRoomInfoStruct struct {

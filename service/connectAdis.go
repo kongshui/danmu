@@ -24,7 +24,7 @@ func endConnect(roomId, openId string) bool {
 						ziLog.Error(fmt.Sprintf("endConnect 匹配组掉线注册失败, roomId : %v,err: %v", roomId, err), debug)
 					}
 				}
-				if !ksSyncGameStatus(SyncGameStatusStruct{
+				if err := ksSyncGameStatus(SyncGameStatusStruct{
 					AnchorOpenId:    openId,
 					AppId:           app_id,
 					RoomId:          roomId,
@@ -32,8 +32,10 @@ func endConnect(roomId, openId string) bool {
 					StartTime:       time.Now().UnixMilli() - 1000,
 					EndTime:         time.Now().UnixMilli(),
 					Status:          2,
-					GroupResultList: []GroupResultList{{GroupId: "绝对中立", Result: 1}},
-				}, "stop", false) {
+					GroupResultList: []GroupResultList{{GroupId: groupid_list[0], Result: 1}},
+				}, "stop", false); err != nil {
+					ziLog.Error(fmt.Sprintf("endConnect 同步对局状态失败, roomId : %v,err: %v", roomId, err), debug)
+				} else {
 					endClean(roomId, openId)
 				}
 			default:
