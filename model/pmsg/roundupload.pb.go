@@ -28,6 +28,7 @@ type RoundUploadMessage struct {
 	RoundId         int64                  `protobuf:"varint,3,opt,name=RoundId,proto3" json:"RoundId,omitempty"`                //对局id
 	GroupResultList []*GroupResult         `protobuf:"bytes,4,rep,name=GroupResultList,proto3" json:"GroupResultList,omitempty"` //对局结果列表
 	GroupUserList   []*GroupUser           `protobuf:"bytes,5,rep,name=GroupUserList,proto3" json:"GroupUserList,omitempty"`     //玩家列表
+	GameType        int64                  `protobuf:"varint,6,opt,name=GameType,proto3" json:"GameType,omitempty"`              //游戏类型
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -97,17 +98,25 @@ func (x *RoundUploadMessage) GetGroupUserList() []*GroupUser {
 	return nil
 }
 
+func (x *RoundUploadMessage) GetGameType() int64 {
+	if x != nil {
+		return x.GameType
+	}
+	return 0
+}
+
 var File_proto_roundupload_proto protoreflect.FileDescriptor
 
 const file_proto_roundupload_proto_rawDesc = "" +
 	"\n" +
-	"\x17proto/roundupload.proto\x12\x04pmsg\x1a\x17proto/groupresult.proto\x1a\x15proto/groupuser.proto\"\xde\x01\n" +
+	"\x17proto/roundupload.proto\x12\x04pmsg\x1a\x17proto/groupresult.proto\x1a\x15proto/groupuser.proto\"\xfa\x01\n" +
 	"\x12RoundUploadMessage\x12\x16\n" +
 	"\x06RoomId\x18\x01 \x01(\tR\x06RoomId\x12\"\n" +
 	"\fAnchorOpenId\x18\x02 \x01(\tR\fAnchorOpenId\x12\x18\n" +
 	"\aRoundId\x18\x03 \x01(\x03R\aRoundId\x12;\n" +
 	"\x0fGroupResultList\x18\x04 \x03(\v2\x11.pmsg.GroupResultR\x0fGroupResultList\x125\n" +
-	"\rGroupUserList\x18\x05 \x03(\v2\x0f.pmsg.GroupUserR\rGroupUserListB\bZ\x06./pmsgb\x06proto3"
+	"\rGroupUserList\x18\x05 \x03(\v2\x0f.pmsg.GroupUserR\rGroupUserList\x12\x1a\n" +
+	"\bGameType\x18\x06 \x01(\x03R\bGameTypeB\bZ\x06./pmsgb\x06proto3"
 
 var (
 	file_proto_roundupload_proto_rawDescOnce sync.Once

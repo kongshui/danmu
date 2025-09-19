@@ -234,7 +234,7 @@ func roundDataUpload(msg *pmsg.MessageBody) error {
 	if is_mock {
 		return nil
 	}
-	return usersRoundUpload(data.RoomId, data.GetAnchorOpenId(), roundData)
+	return usersRoundUpload(data.RoomId, data.GetAnchorOpenId(), roundData, data.GameType)
 }
 
 // get_user_worldinfo,获取玩家世界列表

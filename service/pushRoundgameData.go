@@ -12,10 +12,10 @@ import (
 )
 
 // 用户对局数据上传
-func usersRoundUpload(roomid, anchorOpenId string, result RoundUploadStruct) error {
+func usersRoundUpload(roomid, anchorOpenId string, result RoundUploadStruct, gameType int64) error {
 	var err error
 	if setWinnerScore != nil {
-		if err = setWinnerScore(anchorOpenId, result); err != nil {
+		if err = setWinnerScore(anchorOpenId, result, gameType); err != nil {
 			ziLog.Error(fmt.Sprintf("usersRoundUpload setWinnerScore err: %v", err), debug)
 		}
 	}

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
 )
 
 // 存储用户信息
@@ -65,6 +66,10 @@ func userInfoCompare(openId, NickName, AvatarUrl string) bool {
 
 // 对比后存储用户信息
 func userInfoCompareStore(openId, NickName, AvatarUrl string, isAnchor bool) {
+	if ok, _ := rdb.SetKeyNX(openId+"_info_monitor", "1", 10*time.Second); !ok {
+		return
+	}
+
 	// 对比后存储用户信息
 	if !userInfoCompare(openId, NickName, AvatarUrl) {
 		if err := userInfoStore(UserInfoStruct{OpenId: openId, NickName: NickName, AvatarUrl: AvatarUrl}, isAnchor); err != nil {

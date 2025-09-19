@@ -22,7 +22,7 @@ import (
 
 type (
 	SingleUserAddGroupSetFunc func(string, string) error
-	SetWinScoreFunc           func(string, RoundUploadStruct) error
+	SetWinScoreFunc           func(string, RoundUploadStruct, int64) error
 	LotteryFunc               func(string, string, int64) map[string]int64
 	WebsocketFunc             func(msg *pmsg.MessageBody) error
 	InteractiveFunc           func(roomId, roundId string, label int) bool //自动选边
