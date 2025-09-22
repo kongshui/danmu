@@ -12,5 +12,5 @@ message RoundUploadMessage {
     int64 RoundId = 3;          //对局id
     repeated GroupResult GroupResultList = 4;   //对局结果列表
     repeated GroupUser GroupUserList = 5;       //玩家列表
-    int64 GameType = 6;         //游戏类型  // 0: 普通模式 1： 单人模式，单人胜利
+    int64 GameType = 6;         //游戏类型  // 0: 普通模式 1： 1vN模式，且单人胜利
 }

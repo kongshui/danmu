@@ -39,7 +39,7 @@ func statistic() {
 	if length == 1 {
 		// 只有一个版本号，直接统计
 	} else {
-		endTimeStamp, _ := rdb.LIndex(world_rank_version_db, length-2)
+		endTimeStamp, _ := rdb.LIndex(world_rank_version_list_db, length-2)
 		endTimeParse, _ := time.Parse(version_time_layout, endTimeStamp)
 		endTime = endTimeParse.Format(mysql_query_time_layout)
 	}
