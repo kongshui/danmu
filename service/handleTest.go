@@ -578,7 +578,7 @@ func GetAllAnchor(c *gin.Context) {
 
 	for _, resp := range req.Kvs {
 		log.Println(string(resp.Key), string(resp.Value))
-		userinfo, _ := userInfoGet(string(resp.Value))
+		userinfo, _ := anchorInfoGet(string(resp.Value))
 		anchorList = append(anchorList, userinfo)
 	}
 	c.JSON(200, anchorList)

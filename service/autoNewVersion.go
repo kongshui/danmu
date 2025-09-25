@@ -33,7 +33,7 @@ func autoNewVersion() {
 
 				// 设置版本号
 				currentRankVersion = nowWorldRankVersion
-				// 设置是否是第一次进行
+				// 设置level
 				if is_level_scroll {
 					// 等级滚动
 					scrollClearLevelInfo(currentRankVersion)

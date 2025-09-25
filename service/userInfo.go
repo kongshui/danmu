@@ -78,3 +78,19 @@ func userInfoCompareStore(openId, NickName, AvatarUrl string, isAnchor bool) {
 	}
 
 }
+
+// 主播信息
+func anchorInfoGet(openId string) (UserInfoStruct, error) {
+	if !rdb.IsExistKey(anchor_info_db) {
+		return UserInfoStruct{}, errors.New("anchorInfoGet err: anchor_info_db not exist")
+	}
+	userStr, err := rdb.HGet(anchor_info_db, openId)
+	if err != nil {
+		return UserInfoStruct{}, errors.New("anchorInfoGet err: " + err.Error())
+	}
+	var user UserInfoStruct
+	if err := json.Unmarshal([]byte(userStr), &user); err != nil {
+		return UserInfoStruct{}, errors.New("anchorInfoGet err: " + err.Error())
+	}
+	return user, nil
+}
