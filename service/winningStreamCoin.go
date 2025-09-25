@@ -127,12 +127,16 @@ func queryWinningStreamCoin(openIdList []string) *pmsg.ResponseAddWinnerStreamCo
 
 // 滚动连胜币排行
 func ScrollWinningStreamCoin() error {
+	if !rdb.IsExistKey(winning_streak_coin_db) {
+		return nil
+	}
+
 	ziLog.Info("开始滚动连胜币", debug)
-	l, err := rdb.ZCard(winning_streak_coin_db)
+	length, err := rdb.ZCard(winning_streak_coin_db)
 	if err != nil {
 		return errors.New("连胜币排行查询失败")
 	}
-	if l == 0 {
+	if length == 0 {
 		return nil
 	}
 	// 重命名连胜币排行

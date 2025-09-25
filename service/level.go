@@ -46,6 +46,10 @@ func DeleteLevelInfo(openId string) error {
 
 // scorll清除等级信息
 func scrollClearLevelInfo(version string) error {
+	if !rdb.IsExistKey(level_db) {
+		return nil
+	}
+
 	key := level_db + version
 	err := rdb.Rename(level_db, key)
 	if err != nil {
