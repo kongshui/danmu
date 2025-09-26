@@ -28,7 +28,7 @@ type RoundUploadMessage struct {
 	RoundId         int64                  `protobuf:"varint,3,opt,name=RoundId,proto3" json:"RoundId,omitempty"`                //对局id
 	GroupResultList []*GroupResult         `protobuf:"bytes,4,rep,name=GroupResultList,proto3" json:"GroupResultList,omitempty"` //对局结果列表
 	GroupUserList   []*GroupUser           `protobuf:"bytes,5,rep,name=GroupUserList,proto3" json:"GroupUserList,omitempty"`     //玩家列表
-	GameType        int64                  `protobuf:"varint,6,opt,name=GameType,proto3" json:"GameType,omitempty"`              //游戏类型
+	GameType        int64                  `protobuf:"varint,6,opt,name=GameType,proto3" json:"GameType,omitempty"`              //游戏类型  // 0: 普通模式 1： 1vN模式，且单人胜利
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }

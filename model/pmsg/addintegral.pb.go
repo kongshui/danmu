@@ -23,9 +23,12 @@ const (
 
 type AddIntegralReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	OpenId        string                 `protobuf:"bytes,1,opt,name=OpenId,proto3" json:"OpenId,omitempty"`   // 主播id
-	NodeId        int64                  `protobuf:"varint,2,opt,name=NodeId,proto3" json:"NodeId,omitempty"`  // 节点id
-	GroupId       string                 `protobuf:"bytes,3,opt,name=GroupId,proto3" json:"GroupId,omitempty"` // 分组id
+	OpenId        string                 `protobuf:"bytes,1,opt,name=OpenId,proto3" json:"OpenId,omitempty"`             // 主播id
+	NodeId        int64                  `protobuf:"varint,2,opt,name=NodeId,proto3" json:"NodeId,omitempty"`            // 节点id
+	GroupId       string                 `protobuf:"bytes,3,opt,name=GroupId,proto3" json:"GroupId,omitempty"`           // 分组id
+	AnchorOpenId  string                 `protobuf:"bytes,4,opt,name=AnchorOpenId,proto3" json:"AnchorOpenId,omitempty"` // 用户id
+	Integral      float64                `protobuf:"fixed64,5,opt,name=Integral,proto3" json:"Integral,omitempty"`       // 积分
+	AddType       int64                  `protobuf:"varint,6,opt,name=AddType,proto3" json:"AddType,omitempty"`          // 增加类型 0:默认增加，此时查看openId和AnchoropenId，谁不为空给谁，其实这个时候openId和anchorOpenId时相同的，nodeId是节点 1:给opneId增加 2:给AnchorOpenId积分池增加 3:给GroupId增加 4： openId和AnchorOpenId积分池都增加
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -81,15 +84,39 @@ func (x *AddIntegralReq) GetGroupId() string {
 	return ""
 }
 
+func (x *AddIntegralReq) GetAnchorOpenId() string {
+	if x != nil {
+		return x.AnchorOpenId
+	}
+	return ""
+}
+
+func (x *AddIntegralReq) GetIntegral() float64 {
+	if x != nil {
+		return x.Integral
+	}
+	return 0
+}
+
+func (x *AddIntegralReq) GetAddType() int64 {
+	if x != nil {
+		return x.AddType
+	}
+	return 0
+}
+
 var File_proto_addintegral_proto protoreflect.FileDescriptor
 
 const file_proto_addintegral_proto_rawDesc = "" +
 	"\n" +
-	"\x17proto/addintegral.proto\x12\x04pmsg\"Z\n" +
+	"\x17proto/addintegral.proto\x12\x04pmsg\"\xb4\x01\n" +
 	"\x0eAddIntegralReq\x12\x16\n" +
 	"\x06OpenId\x18\x01 \x01(\tR\x06OpenId\x12\x16\n" +
 	"\x06NodeId\x18\x02 \x01(\x03R\x06NodeId\x12\x18\n" +
-	"\aGroupId\x18\x03 \x01(\tR\aGroupIdB\bZ\x06./pmsgb\x06proto3"
+	"\aGroupId\x18\x03 \x01(\tR\aGroupId\x12\"\n" +
+	"\fAnchorOpenId\x18\x04 \x01(\tR\fAnchorOpenId\x12\x1a\n" +
+	"\bIntegral\x18\x05 \x01(\x01R\bIntegral\x12\x18\n" +
+	"\aAddType\x18\x06 \x01(\x03R\aAddTypeB\bZ\x06./pmsgb\x06proto3"
 
 var (
 	file_proto_addintegral_proto_rawDescOnce sync.Once

@@ -29,6 +29,7 @@ type (
 		RaceSecret        string `toml:"race_secret"`         // 比赛密钥
 		IsOnline          bool   `toml:"is_online"`           // 是否上线
 		IsMock            bool   `toml:"is_mock"`             // 是否模拟
+		NoSend            bool   `toml:"no_send"`             // 是否不发送
 	}
 	//Etcd
 	Etcd struct {
@@ -90,7 +91,7 @@ func newConf() *Config {
 		Nats:    Nats{[]string{"nats://localhost:4222"}},
 		Redis:   Redis{"127.0.0.1:6379", 0, "", false},
 		Mysql:   Mysql{"127.0.0.1:3306", "root", "123456", "store_log", true},
-		App:     App{"ks", "", "", "", "", "", "", "", "", false, false},
+		App:     App{"ks", "", "", "", "", "", "", "", "", false, false, false},
 	}
 }
 

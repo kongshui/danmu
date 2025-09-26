@@ -115,9 +115,9 @@ func WorldRankNumerAdd(openId string, score float64) {
 	if _, err := rdb.ZIncrBy(world_rank_week, score, openId); err != nil {
 		panic("添加玩家数据至世界排行榜失败，玩家OpenId： " + openId + ",玩家获得的积分为：" + strconv.FormatInt(int64(score), 10) + ",err： " + err.Error())
 	}
-	if _, err := rdb.ZIncrBy(world_rank_historical_db, score, openId); err != nil {
-		panic("添加玩家数据至历史世界排行榜失败，玩家OpenId： " + openId + ",玩家获得的积分为：" + strconv.FormatInt(int64(score), 10) + ",err： " + err.Error())
-	}
+	// if _, err := rdb.ZIncrBy(world_rank_historical_db, score, openId); err != nil {
+	// 	panic("添加玩家数据至历史世界排行榜失败，玩家OpenId： " + openId + ",玩家获得的积分为：" + strconv.FormatInt(int64(score), 10) + ",err： " + err.Error())
+	// }
 	// 添加月榜
 	if _, err := rdb.ZIncrBy(monthVersionRankDb, score, openId); err != nil {
 		panic("添加玩家数据至历史世界排行榜失败，玩家OpenId： " + openId + ",玩家获得的积分为：" + strconv.FormatInt(int64(score), 10) + ",err： " + err.Error())

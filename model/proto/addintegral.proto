@@ -7,4 +7,7 @@ message AddIntegralReq  {
     string OpenId = 1; // 主播id
     int64 NodeId = 2; // 节点id
     string GroupId = 3; // 分组id
+    string AnchorOpenId = 4; // 用户id
+    double Integral = 5; // 积分
+    int64 AddType = 6; // 增加类型 0:默认增加，此时查看openId和AnchoropenId，谁不为空给谁，其实这个时候openId和anchorOpenId时相同的，nodeId是节点 1:给opneId增加 2:给AnchorOpenId积分池增加 3:给GroupId增加 4： openId和AnchorOpenId积分池都增加
 }

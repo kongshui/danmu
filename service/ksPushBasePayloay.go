@@ -21,8 +21,6 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 		isSendAck    bool = false // 是否发送ack
 		isFirst      bool = true  // 是否第一次
 		openId       string
-		nickName     string
-		avatarUrl    string
 		anchorOpenId string = data.Data.AuthorOpenId
 	)
 	pushType := data.Data.PushType
@@ -74,8 +72,6 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 			}
 			// 获取用户信息
 			openId = gift.UserInfo.UserId
-			nickName = gift.UserInfo.NickName
-			avatarUrl = gift.UserInfo.AvatarUrl
 			// 后端记录数据库
 			anchorName, err := userInfoGet(anchorOpenId)
 			if err != nil {
@@ -135,8 +131,6 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 			}
 			// 获取用户信息
 			openId = commentData.UserInfo.UserId
-			nickName = commentData.UserInfo.NickName
-			avatarUrl = commentData.UserInfo.AvatarUrl
 			// 评论
 
 			if commentData.Content == "666" {
@@ -152,8 +146,6 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 			}
 			// 获取用户信息
 			openId = liveLikeData.UserInfo.UserId
-			nickName = liveLikeData.UserInfo.NickName
-			avatarUrl = liveLikeData.UserInfo.AvatarUrl
 			score = live_like_score
 			msgId = pmsg.MessageId_liveLike
 		default:
@@ -164,7 +156,7 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 		}
 		//分数不为0时添加积分
 		if score != 0 {
-			go matchAddIntrage(data.Data.RoomCode, openId, nickName, avatarUrl, score)
+			go matchAddIntrage(data.Data.RoomCode, openId, score)
 			// 送礼直接添加到世界排行榜
 			// go worldRankNumerAdd(v.(map[string]any)["userInfo"].(map[string]any)["userId"].(string), score)
 		}
@@ -229,9 +221,7 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 		return
 	}
 	var (
-		openId    string
-		nickName  string
-		avatarUrl string
+		openId string
 	)
 	// 添加uniqueMessageId到redis中，防止重复推送
 	giftsendSet(data.RoomCode, data.UniqueMessageId)
@@ -254,8 +244,6 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 		}
 		// 获取用户信息
 		openId = gift.UserInfo.UserId
-		nickName = gift.UserInfo.NickName
-		avatarUrl = gift.UserInfo.AvatarUrl
 		// 后端记录数据库
 		anchorName, err := userInfoGet(data.AuthorOpenId)
 		if err != nil {
@@ -306,7 +294,7 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 		}
 		//分数不为0时添加积分
 		if score != 0 {
-			go matchAddIntrage(data.RoomCode, openId, nickName, avatarUrl, score)
+			go matchAddIntrage(data.RoomCode, openId, score)
 		}
 		if !isLottery {
 			// 格式化消息

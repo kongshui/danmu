@@ -489,10 +489,28 @@ func addIntegral(msg *pmsg.MessageBody) error {
 	if err != nil {
 		return errors.New("addIntegral Unmarshal err: " + err.Error())
 	}
-	if _, err := addIntegralByNode(data.GetOpenId(), nodeIdToIntegral[data.GetNodeId()]); err != nil {
-		return errors.New("addIntegral err: " + err.Error())
+	switch data.GetAddType() {
+	case 0:
+		if _, err := addIntegralByNode(data.GetOpenId(), float64(nodeIdToIntegral[data.GetNodeId()])); err != nil {
+			return errors.New("addIntegral err: " + err.Error())
+		}
+		return nil
+	case 1:
+		WorldRankNumerAdd(data.GetOpenId(), float64(data.GetIntegral()))
+		return nil
+	case 2:
+		if _, err := addIntegralByNode(data.GetOpenId(), data.GetIntegral()); err != nil {
+			return errors.New("addIntegralByNode err: " + err.Error())
+		}
+		return nil
+	case 3:
+		if err := addIntegralAndUserIntegral(data.GetAnchorOpenId(), data.GetOpenId(), data.GetIntegral()); err != nil {
+			return errors.New("addIntegralAndUserIntegral err: " + err.Error())
+		}
+		return nil
+	default:
+		return errors.New("addIntegral err: AddType not support")
 	}
-	return nil
 }
 
 // Dytoken

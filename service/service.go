@@ -95,6 +95,9 @@ func ServiceInit() {
 			break
 		}
 		worldRankSet(currentRankVersion)
+		if config.App.NoSend {
+			break
+		}
 		go pushWorldRankDataEntry()
 		go pushHistoryWorldRankDataEntry()
 	}
