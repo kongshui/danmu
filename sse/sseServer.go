@@ -39,12 +39,14 @@ func SseServer(c *gin.Context) {
 	c.Header("Cache-Control", "no-cache")
 	c.Header("Connection", "keep-alive")
 	c.Header("Access-Control-Allow-Origin", "*")
+	go sseSendKeepAlive(ch)
 	for {
 		select {
 		case message := <-ch.Ch:
 			// 发送数据到客户端
 			_, err := c.Writer.Write([]byte(message))
 			if err != nil {
+				ch.Status = false
 				return // 如果有错误，停止发送数据
 			}
 			c.Writer.Flush()
@@ -141,5 +143,33 @@ func SseSend(msgId pmsg.MessageId, uidStrList []string, data []byte) error {
 			ChanPool.Put(ch)
 		}
 		return nil
+	}
+}
+
+// 发送心跳包
+func sseSendKeepAlive(ch *ChanSet) {
+	t := time.NewTicker(5 * time.Second)
+	defer t.Stop()
+	dataBody := &pmsg.MessageBody{
+		MessageId:   uint32(pmsg.MessageId_Ping),
+		MessageType: pmsg.MessageId_Ping.String(),
+		MessageData: nil,
+		Timestamp:   time.Now().UnixMilli(),
+	}
+	requestBody, _ := proto.Marshal(dataBody)
+	sData := &pmsg.SseMessage{
+		UidList: []string{},
+		Data:    requestBody,
+	}
+	for {
+		select {
+		case <-t.C:
+			if !ch.Status {
+				return
+			}
+			ch.Ch <- sData.String() + "\n"
+		case <-ch.Ch:
+			return
+		}
 	}
 }
