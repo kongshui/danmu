@@ -34,7 +34,9 @@ func SseServer(c *gin.Context) {
 		Ch:     make(chan string),
 		Status: true,
 	}
-	ChanPool.Put(ch)
+	if !ChanPool.Put(ch) {
+		return
+	}
 	c.Header("Content-Type", "text/event-stream")
 	c.Header("Cache-Control", "no-cache")
 	c.Header("Connection", "keep-alive")
@@ -101,12 +103,14 @@ func (p *ChannelPool) Get() (*ChanSet, bool) {
 }
 
 // Put 将一个chan放回池中
-func (p *ChannelPool) Put(ch *ChanSet) {
+func (p *ChannelPool) Put(ch *ChanSet) bool {
 	// p.lock.Lock()
 	// defer p.lock.Unlock()
 	if len(p.pool) < p.maxSize {
 		p.pool <- ch // 添加到池中
-	}
+		return true
+	} // 否则丢弃
+	return false
 }
 
 // sse Send
