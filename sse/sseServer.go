@@ -39,7 +39,7 @@ func SseServer(c *gin.Context) {
 	c.Header("Cache-Control", "no-cache")
 	c.Header("Connection", "keep-alive")
 	c.Header("Access-Control-Allow-Origin", "*")
-	go sseSendKeepAlive(ch)
+	go sseSendKeepAlive(ch, c)
 	for {
 		select {
 		case message := <-ch.Ch:
@@ -147,7 +147,7 @@ func SseSend(msgId pmsg.MessageId, uidStrList []string, data []byte) error {
 }
 
 // 发送心跳包
-func sseSendKeepAlive(ch *ChanSet) {
+func sseSendKeepAlive(ch *ChanSet, c *gin.Context) {
 	t := time.NewTicker(5 * time.Second)
 	defer t.Stop()
 	dataBody := &pmsg.MessageBody{
@@ -168,7 +168,7 @@ func sseSendKeepAlive(ch *ChanSet) {
 				return
 			}
 			ch.Ch <- sData.String() + "\n"
-		case <-ch.Ch:
+		case <-c.Done():
 			return
 		}
 	}
