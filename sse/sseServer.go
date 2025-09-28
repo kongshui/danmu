@@ -39,18 +39,26 @@ func SseServer(c *gin.Context) {
 	c.Header("Cache-Control", "no-cache")
 	c.Header("Connection", "keep-alive")
 	c.Header("Access-Control-Allow-Origin", "*")
-	go sseSendKeepAlive(ch, c)
+	endCh := make(chan struct{})
+	defer close(endCh)
+	defer close(ch.Ch)
+	go sseSendKeepAlive(ch, endCh)
 	for {
 		select {
 		case message := <-ch.Ch:
+			if message == "" {
+				return
+			}
 			// 发送数据到客户端
 			_, err := c.Writer.Write([]byte(message))
 			if err != nil {
+				endCh <- struct{}{}
 				ch.Status = false
 				return // 如果有错误，停止发送数据
 			}
 			c.Writer.Flush()
 		case <-c.Request.Context().Done():
+			endCh <- struct{}{}
 			ch.Status = false
 			return
 		}
@@ -98,9 +106,6 @@ func (p *ChannelPool) Put(ch *ChanSet) {
 	// defer p.lock.Unlock()
 	if len(p.pool) < p.maxSize {
 		p.pool <- ch // 添加到池中
-
-	} else {
-		close(ch.Ch) // 如果池已满，关闭并丢弃chan（可选）
 	}
 }
 
@@ -136,7 +141,8 @@ func SseSend(msgId pmsg.MessageId, uidStrList []string, data []byte) error {
 		if ch.Status {
 			ch.Ch <- sData.String() + "\n"
 		} else {
-			close(ch.Ch)
+			ch.Status = false
+			ch.Ch <- ""
 			continue
 		}
 		if ch.Status {
@@ -147,19 +153,13 @@ func SseSend(msgId pmsg.MessageId, uidStrList []string, data []byte) error {
 }
 
 // 发送心跳包
-func sseSendKeepAlive(ch *ChanSet, c *gin.Context) {
+func sseSendKeepAlive(ch *ChanSet, c chan struct{}) {
 	t := time.NewTicker(5 * time.Second)
 	defer t.Stop()
-	dataBody := &pmsg.MessageBody{
-		MessageId:   uint32(pmsg.MessageId_Ping),
-		MessageType: pmsg.MessageId_Ping.String(),
-		MessageData: nil,
-		Timestamp:   time.Now().UnixMilli(),
-	}
-	requestBody, _ := proto.Marshal(dataBody)
 	sData := &pmsg.SseMessage{
-		UidList: []string{},
-		Data:    requestBody,
+		UidList:   []string{},
+		MessageId: pmsg.MessageId_Ping,
+		Data:      nil,
 	}
 	for {
 		select {
@@ -168,7 +168,7 @@ func sseSendKeepAlive(ch *ChanSet, c *gin.Context) {
 				return
 			}
 			ch.Ch <- sData.String() + "\n"
-		case <-c.Done():
+		case <-c:
 			return
 		}
 	}
