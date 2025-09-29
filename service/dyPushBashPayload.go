@@ -31,7 +31,7 @@ func pushDyBasePayloayDirect(roomId, anchorOpenId, msgType string, data []byte) 
 		// avatarUrl string
 		nickName string
 	)
-	anchorName, err := userInfoGet(anchorOpenId)
+	anchorName, err := userInfoGet(anchorOpenId, true)
 	if err != nil {
 		_, nickName, err = mysql.QueryPlayerInfo(anchorOpenId)
 		if err != nil {

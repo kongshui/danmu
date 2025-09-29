@@ -18,7 +18,7 @@ func getTopWorldRankData() *pmsg.UserInfoListMessage {
 	}
 	for i, userInfo := range openIdList {
 		openId := userInfo.Member.(string)
-		user, _ := userInfoGet(openId)
+		user, _ := userInfoGet(openId, false)
 		coin, _ := QueryUserWinStreamCoin(openId)
 		level, _ := QueryLevelInfo(openId)
 		winPoint, _ := QueryUserWinningPoint(openId)
@@ -57,7 +57,7 @@ func getTopMonthRankData() *pmsg.UserInfoListMessage {
 	}
 	for i, userInfo := range openIdList {
 		openId := userInfo.Member.(string)
-		user, _ := userInfoGet(openId)
+		user, _ := userInfoGet(openId, false)
 		coin, _ := QueryUserWinStreamCoin(openId)
 		level, _ := QueryLevelInfo(openId)
 

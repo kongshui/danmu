@@ -36,8 +36,14 @@ func userInfoStore(user UserInfoStruct, isAnchor bool) error {
 }
 
 // 获取用户信息
-func userInfoGet(openId string) (UserInfoStruct, error) {
-	userStr, err := rdb.HGet(user_info_db, openId)
+func userInfoGet(openId string, isAnchor bool) (UserInfoStruct, error) {
+	var dbName string
+	if isAnchor {
+		dbName = anchor_info_db
+	} else {
+		dbName = user_info_db
+	}
+	userStr, err := rdb.HGet(dbName, openId)
 	if err != nil {
 		return UserInfoStruct{}, errors.New("UserInfoGet err: " + err.Error())
 	}
@@ -49,12 +55,18 @@ func userInfoGet(openId string) (UserInfoStruct, error) {
 }
 
 // 对比用户信息
-func userInfoCompare(openId, NickName, AvatarUrl string) bool {
-	ok, err := rdb.HExists(user_info_db, openId)
+func userInfoCompare(openId, NickName, AvatarUrl string, isAnchor bool) bool {
+	var dbName string
+	if isAnchor {
+		dbName = anchor_info_db
+	} else {
+		dbName = user_info_db
+	}
+	ok, err := rdb.HExists(dbName, openId)
 	if err != nil || !ok {
 		return false
 	}
-	user, err := userInfoGet(openId)
+	user, err := userInfoGet(openId, isAnchor)
 	if err != nil {
 		return false
 	}
@@ -71,7 +83,7 @@ func userInfoCompareStore(openId, NickName, AvatarUrl string, isAnchor bool) {
 	}
 
 	// 对比后存储用户信息
-	if !userInfoCompare(openId, NickName, AvatarUrl) {
+	if !userInfoCompare(openId, NickName, AvatarUrl, isAnchor) {
 		if err := userInfoStore(UserInfoStruct{OpenId: openId, NickName: NickName, AvatarUrl: AvatarUrl}, isAnchor); err != nil {
 			ziLog.Error(fmt.Sprintf("UserInfoCompareStore InsertPlayerBaseInfo err: %v,openId： %v", err, openId), debug)
 		}

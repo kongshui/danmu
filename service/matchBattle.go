@@ -48,7 +48,7 @@ func MatchBattleV1(openId, matchNum string) {
 	}
 	// 匹配成功
 	for _, openIdStr := range data.GetOpenIdList() {
-		user, err := userInfoGet(openIdStr)
+		user, err := userInfoGet(openIdStr, false)
 		if err != nil {
 			ziLog.Error(fmt.Sprintf("MatchBattleV1 查询用户信息失败, err: %v, group: %v", err, groupId), debug)
 		}
