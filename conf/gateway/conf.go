@@ -12,12 +12,13 @@ import (
 type (
 	//Server
 	Server struct {
-		Addr       string `toml:"addr"`        //节点地址
-		Port       string `toml:"port"`        //节点端口
-		Name       string `toml:"name"`        //节点名称
-		GroupId    string `toml:"group_id"`    //分组id
-		NodeType   int8   `toml:"node_type"`   //节点类型
-		ListenMode string `toml:"listen_mode"` //监听模式
+		Addr          string `toml:"addr"`           //节点地址
+		Port          string `toml:"port"`           //节点端口
+		Name          string `toml:"name"`           //节点名称
+		GroupId       string `toml:"group_id"`       //分组id
+		NodeType      int8   `toml:"node_type"`      //节点类型
+		ListenMode    string `toml:"listen_mode"`    //监听模式
+		HeartbeatOpen bool   `toml:"heartbeat_open"` //心跳时间
 	}
 	//Etcd
 	Etcd struct {
@@ -51,7 +52,7 @@ type (
 // conf new
 func newConf() *Config {
 	return &Config{
-		Server:  Server{"127.0.0.1", "6666", "gateway1", "0", 1, "websocket"},
+		Server:  Server{"127.0.0.1", "6666", "gateway1", "0", 1, "websocket", false},
 		Logging: Logging{"", "", 0, 0, 0},
 		Etcd:    Etcd{[]string{"127.0.0.1:2379"}, "root", "123456"},
 		Gateway: Gateway{"hash", ""},
