@@ -30,6 +30,10 @@ func roundStart(msg *pmsg.MessageBody) error {
 	if err != nil {
 		return errors.New("roundStart Unmarshal err: " + err.Error())
 	}
+	isMember := blackAnchorListIsMember(syncGameStatusData.GetAnchorOpenId())
+	if isMember {
+		return fmt.Errorf("anchor is black")
+	}
 	getRoundId, _ := queryRoomIdToRoundId(syncGameStatusData.GetRoomId())
 	if syncGameStatusData.GetRoundId() == getRoundId {
 		return nil

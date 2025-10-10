@@ -61,6 +61,10 @@ func ksStartFinishGameInfo(roomId, url, label, uid string, isSend bool) error {
 		roomInfo.AnchorOpenId = roomInfoJson.UserId
 		roomInfo.AvatarUrl = roomInfoJson.AvatarUrl
 		roomInfo.NickName = roomInfoJson.NickName
+		isMember := blackAnchorListIsMember(roomInfoJson.UserId)
+		if isMember {
+			return fmt.Errorf("anchor is black")
+		}
 		if !config.App.IsOnline {
 			log.Println("startFinishGameInfo roomInfo: ", roomInfo.RoomId, roomInfo.AnchorOpenId, roomInfo.NickName)
 		}

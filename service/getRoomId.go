@@ -75,6 +75,10 @@ func dyGetAnchorInfo(uid, token string) error {
 	if roomReponse.Errcode != 0 {
 		return fmt.Errorf("DyGetAnchorInfo Errcode err, code: %v, errmsg: %v", roomReponse.Errcode, roomReponse.Errmsg)
 	}
+	isMember := blackAnchorListIsMember(roomReponse.Data.Info.AnchorOpenId)
+	if isMember {
+		return fmt.Errorf("anchor is black")
+	}
 	go userInfoCompareStore(roomReponse.Data.Info.AnchorOpenId, roomReponse.Data.Info.NickName, roomReponse.Data.Info.AvatarUrl, true)
 	data := &pmsg.AnchorInfoMessage{}
 	data.AnchorOpenId = roomReponse.Data.Info.AnchorOpenId
