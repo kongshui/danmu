@@ -1,0 +1,8 @@
+syntax = "proto3";
+package pmsg;
+option go_package="./pmsg";
+
+message BlackAnchorMessage {
+    string anchor_open_id = 1; // 主播ID
+    string msg = 2; // 拉黑原因
+}

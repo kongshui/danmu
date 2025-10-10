@@ -5,6 +5,7 @@ const (
 	winning_point_db           = "winning_point"             //连胜点
 	world_rank_version_db      = "world_rank_version"        //世界排行版版本信息
 	world_rank_version_list_db = "world_rank_version_list"   //世界排行版版本列表
+	black_anchor_list_db       = "black_anchor_list"         //黑名单主播列表
 	// world_rank_historical_db      = "world_rank_historical"      //历史排行版
 	winning_streak_count_db       = "winning_streak_count"       //连胜统计
 	world_rank_week               = "world_rank_week"            //周排行版

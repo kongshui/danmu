@@ -1,0 +1,153 @@
+package service
+
+import (
+	"encoding/json"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+// 获取指定用户排名
+func GetPlayerTopHandle(c *gin.Context) {
+	type playerTop struct {
+		StartIndex int64 `json:"start_index"`
+		EndIndex   int64 `json:"end_index"`
+	}
+	var (
+		pt playerTop
+	)
+	bodyByte := bytePool.Get().(*[]byte)
+	defer bytePool.Put(bodyByte)
+	*bodyByte, _ = c.GetRawData()
+	if err := json.Unmarshal(*bodyByte, &pt); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errcode": 1,
+			"errmsg":  "json unmarshal failed",
+		})
+		return
+	}
+	// 校验参数
+	if pt.StartIndex <= 0 || pt.EndIndex <= 0 || pt.StartIndex > pt.EndIndex {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errcode": 2,
+			"errmsg":  "start_index or end_index is invalid",
+		})
+		return
+	}
+	// 获取排行榜数据和总长度
+	data := getTopWorldRankData(pt.StartIndex, pt.EndIndex)
+	total, _ := getTop100RankLen()
+	allLenth := 0
+	switch {
+	case pt.StartIndex < int64(total) && pt.EndIndex < int64(total):
+		allLenth = int(pt.EndIndex - pt.StartIndex + 1)
+	case pt.StartIndex < int64(total) && pt.EndIndex >= int64(total):
+		allLenth = int(int64(total) - pt.StartIndex + 1)
+	case pt.StartIndex >= int64(total):
+		allLenth = 0
+	}
+	userInfos := make([]map[string]any, allLenth)
+	// 重组userinfo list
+	if allLenth > 0 {
+		for _, v := range data.GetUserInfoList() {
+			userInfos = append(userInfos, map[string]any{
+				"OpenId":    v.OpenId,
+				"Rank":      v.Rank,
+				"Score":     v.Score,
+				"AvatarUrl": v.AvatarUrl,
+				"NickName":  v.NickName,
+			})
+		}
+	}
+
+	c.JSON(200, gin.H{
+		"errcode": 0,
+		"errmsg":  "success",
+		"data":    userInfos,
+		"total":   total,
+	})
+}
+
+// 更改玩家积分
+func ChangePlayerTopHandle(c *gin.Context) {
+	type changePlayerTop struct {
+		OpenId string `json:"open_id"`
+		Score  int64  `json:"score"`
+	}
+	var (
+		ct changePlayerTop
+	)
+	bodyByte := bytePool.Get().(*[]byte)
+	defer bytePool.Put(bodyByte)
+	*bodyByte, _ = c.GetRawData()
+	if err := json.Unmarshal(*bodyByte, &ct); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errcode": 1,
+			"errmsg":  "json unmarshal failed",
+		})
+		return
+	}
+	// 校验参数
+	if ct.OpenId == "" || ct.Score <= 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errcode": 2,
+			"errmsg":  "open_id or score is invalid",
+		})
+		return
+	}
+	_, err := rdb.ZIncrBy(world_rank_week, float64(ct.Score), ct.OpenId)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"errcode": 3,
+			"errmsg":  "zincrby failed",
+		})
+		return
+	}
+	c.JSON(200, gin.H{
+		"errcode": 0,
+		"errmsg":  "success",
+	})
+}
+
+// 通过openId获取玩家信息
+func GetPlayerInfoByOpenIdHandle(c *gin.Context) {
+	type playerInfoByOpenId struct {
+		OpenId string `json:"open_id"`
+	}
+	var (
+		pio playerInfoByOpenId
+	)
+	bodyByte := bytePool.Get().(*[]byte)
+	defer bytePool.Put(bodyByte)
+	*bodyByte, _ = c.GetRawData()
+	if err := json.Unmarshal(*bodyByte, &pio); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errcode": 1,
+			"errmsg":  "json unmarshal failed",
+		})
+		return
+	}
+	// 校验参数
+	if pio.OpenId == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errcode": 2,
+			"errmsg":  "open_id is empty",
+		})
+		return
+	}
+	// 获取玩家信息
+	score, rank, _ := getPlayerWorldRankData(pio.OpenId)
+	userInfo, _ := userInfoGet(pio.OpenId, false)
+	userInfos := map[string]any{
+		"OpenId":    pio.OpenId,
+		"Rank":      rank,
+		"Score":     score,
+		"AvatarUrl": userInfo.AvatarUrl,
+		"NickName":  userInfo.NickName,
+	}
+	c.JSON(200, gin.H{
+		"errcode": 0,
+		"errmsg":  "success",
+		"data":    userInfos,
+	})
+}

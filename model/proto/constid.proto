@@ -10,7 +10,7 @@ enum MessageId {
     NodeInfo = 1;// 网关信息发送，发送给node节点
     NodeInfoAck = 2; // node收到网关信息返回，也可能不需要
     NodeLoad = 3;   // node传输load信息给gateway
-    //  50之后为正常消息
+    //
     UidGet = 4;    // 分配uid
     TestMsg = 5;   // 发送测试消息
     TestMsgAck = 6;    // 测试消息返回
@@ -22,6 +22,7 @@ enum MessageId {
     ReLoginAck = 13;    // 重新登录返回
     Logout = 14;    // 退出登录
     LogoutAck = 15; // 退出登录返回
+    BlackAnchorLogOff = 16; // 黑名单主播退出登录
     //pk---------------------------------------------------
     PkDataSend = 20; // pk数据发送
     PkDataRecv = 21; // pk数据接收

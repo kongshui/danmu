@@ -29,18 +29,18 @@ const (
 	MessageId_NodeInfo    MessageId = 1 // 网关信息发送，发送给node节点
 	MessageId_NodeInfoAck MessageId = 2 // node收到网关信息返回，也可能不需要
 	MessageId_NodeLoad    MessageId = 3 // node传输load信息给gateway
-	// 50之后为正常消息
-	MessageId_UidGet     MessageId = 4  // 分配uid
-	MessageId_TestMsg    MessageId = 5  // 发送测试消息
-	MessageId_TestMsgAck MessageId = 6  // 测试消息返回
-	MessageId_Ping       MessageId = 7  // 心跳消息
-	MessageId_Pong       MessageId = 8  // 心跳返回消息
-	MessageId_Login      MessageId = 10 // 登录消息
-	MessageId_LoginAck   MessageId = 11 // 登录返回消息
-	MessageId_ReLogin    MessageId = 12 // 重新登录
-	MessageId_ReLoginAck MessageId = 13 // 重新登录返回
-	MessageId_Logout     MessageId = 14 // 退出登录
-	MessageId_LogoutAck  MessageId = 15 // 退出登录返回
+	MessageId_UidGet            MessageId = 4  // 分配uid
+	MessageId_TestMsg           MessageId = 5  // 发送测试消息
+	MessageId_TestMsgAck        MessageId = 6  // 测试消息返回
+	MessageId_Ping              MessageId = 7  // 心跳消息
+	MessageId_Pong              MessageId = 8  // 心跳返回消息
+	MessageId_Login             MessageId = 10 // 登录消息
+	MessageId_LoginAck          MessageId = 11 // 登录返回消息
+	MessageId_ReLogin           MessageId = 12 // 重新登录
+	MessageId_ReLoginAck        MessageId = 13 // 重新登录返回
+	MessageId_Logout            MessageId = 14 // 退出登录
+	MessageId_LogoutAck         MessageId = 15 // 退出登录返回
+	MessageId_BlackAnchorLogOff MessageId = 16 // 黑名单主播退出登录
 	// pk---------------------------------------------------
 	MessageId_PkDataSend     MessageId = 20 // pk数据发送
 	MessageId_PkDataRecv     MessageId = 21 // pk数据接收
@@ -151,6 +151,7 @@ var (
 		13:  "ReLoginAck",
 		14:  "Logout",
 		15:  "LogoutAck",
+		16:  "BlackAnchorLogOff",
 		20:  "PkDataSend",
 		21:  "PkDataRecv",
 		22:  "PkDataSendAck",
@@ -256,6 +257,7 @@ var (
 		"ReLoginAck":                        13,
 		"Logout":                            14,
 		"LogoutAck":                         15,
+		"BlackAnchorLogOff":                 16,
 		"PkDataSend":                        20,
 		"PkDataRecv":                        21,
 		"PkDataSendAck":                     22,
@@ -378,7 +380,7 @@ var File_proto_constid_proto protoreflect.FileDescriptor
 
 const file_proto_constid_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/constid.proto\x12\x04pmsg*\xa1\x12\n" +
+	"\x13proto/constid.proto\x12\x04pmsg*\xb8\x12\n" +
 	"\tMessageId\x12\v\n" +
 	"\aUnknown\x10\x00\x12\f\n" +
 	"\bNodeInfo\x10\x01\x12\x0f\n" +
@@ -399,7 +401,8 @@ const file_proto_constid_proto_rawDesc = "" +
 	"ReLoginAck\x10\r\x12\n" +
 	"\n" +
 	"\x06Logout\x10\x0e\x12\r\n" +
-	"\tLogoutAck\x10\x0f\x12\x0e\n" +
+	"\tLogoutAck\x10\x0f\x12\x15\n" +
+	"\x11BlackAnchorLogOff\x10\x10\x12\x0e\n" +
 	"\n" +
 	"PkDataSend\x10\x14\x12\x0e\n" +
 	"\n" +
