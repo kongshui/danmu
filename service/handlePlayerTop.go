@@ -10,8 +10,9 @@ import (
 // 获取指定用户排名
 func GetPlayerTopHandle(c *gin.Context) {
 	type playerTop struct {
-		StartIndex int64 `json:"start_index"`
-		EndIndex   int64 `json:"end_index"`
+		StartIndex int64  `json:"start_index"`
+		EndIndex   int64  `json:"end_index"`
+		TestCode   string `json:"test_code"`
 	}
 	var (
 		pt playerTop
@@ -23,6 +24,13 @@ func GetPlayerTopHandle(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"errcode": 1,
 			"errmsg":  "json unmarshal failed",
+		})
+		return
+	}
+	if !compareTestCode(pt.TestCode) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errcode": 4,
+			"errmsg":  "测试验证码错误",
 		})
 		return
 	}
@@ -71,8 +79,9 @@ func GetPlayerTopHandle(c *gin.Context) {
 // 更改玩家积分
 func ChangePlayerTopHandle(c *gin.Context) {
 	type changePlayerTop struct {
-		OpenId string `json:"open_id"`
-		Score  int64  `json:"score"`
+		OpenId   string `json:"open_id"`
+		Score    int64  `json:"score"`
+		TestCode string `json:"test_code"`
 	}
 	var (
 		ct changePlayerTop
@@ -84,6 +93,13 @@ func ChangePlayerTopHandle(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"errcode": 1,
 			"errmsg":  "json unmarshal failed",
+		})
+		return
+	}
+	if !compareTestCode(ct.TestCode) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errcode": 4,
+			"errmsg":  "测试验证码错误",
 		})
 		return
 	}
@@ -112,7 +128,8 @@ func ChangePlayerTopHandle(c *gin.Context) {
 // 通过openId获取玩家信息
 func GetPlayerInfoByOpenIdHandle(c *gin.Context) {
 	type playerInfoByOpenId struct {
-		OpenId string `json:"open_id"`
+		OpenId   string `json:"open_id"`
+		TestCode string `json:"test_code"`
 	}
 	var (
 		pio playerInfoByOpenId
@@ -124,6 +141,13 @@ func GetPlayerInfoByOpenIdHandle(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"errcode": 1,
 			"errmsg":  "json unmarshal failed",
+		})
+		return
+	}
+	if !compareTestCode(pio.TestCode) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errcode": 4,
+			"errmsg":  "测试验证码错误",
 		})
 		return
 	}

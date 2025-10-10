@@ -12,8 +12,9 @@ import (
 // BlackAnchorDisconnectHandle 黑名单主播断线处理
 func BlackAnchorDisconnectHandle(c *gin.Context) {
 	type blackAnchorDisconnect struct {
-		OpenId string `json:"open_id"`
-		Msg    string `json:"msg"`
+		OpenId   string `json:"open_id"`
+		Msg      string `json:"msg"`
+		TestCode string `json:"test_code"`
 	}
 	var (
 		bAD blackAnchorDisconnect
@@ -25,6 +26,13 @@ func BlackAnchorDisconnectHandle(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"errcode": 1,
 			"errmsg":  "json unmarshal failed",
+		})
+		return
+	}
+	if !compareTestCode(bAD.TestCode) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errcode": 4,
+			"errmsg":  "测试验证码错误",
 		})
 		return
 	}
@@ -54,7 +62,8 @@ func BlackAnchorDisconnectHandle(c *gin.Context) {
 // BlackAnchorReconnectHandle 黑名单主播添加至列表处理
 func BlackAnchorAddHandle(c *gin.Context) {
 	type blackAnchorAdd struct {
-		OpenId string `json:"open_id"`
+		OpenId   string `json:"open_id"`
+		TestCode string `json:"test_code"`
 	}
 	var (
 		bAA blackAnchorAdd
@@ -66,6 +75,20 @@ func BlackAnchorAddHandle(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"errcode": 1,
 			"errmsg":  "json unmarshal failed",
+		})
+		return
+	}
+	if !compareTestCode(bAA.TestCode) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errcode": 4,
+			"errmsg":  "测试验证码错误",
+		})
+		return
+	}
+	if bAA.OpenId == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errcode": 2,
+			"errmsg":  "open_id is empty",
 		})
 		return
 	}
@@ -85,7 +108,8 @@ func BlackAnchorAddHandle(c *gin.Context) {
 // BlackAnchorDelHandle 黑名单主播移除列表处理
 func BlackAnchorDelHandle(c *gin.Context) {
 	type blackAnchorDel struct {
-		OpenId string `json:"open_id"`
+		OpenId   string `json:"open_id"`
+		TestCode string `json:"test_code"`
 	}
 	var (
 		bAD blackAnchorDel
@@ -97,6 +121,20 @@ func BlackAnchorDelHandle(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"errcode": 1,
 			"errmsg":  "json unmarshal failed",
+		})
+		return
+	}
+	if !compareTestCode(bAD.TestCode) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errcode": 4,
+			"errmsg":  "测试验证码错误",
+		})
+		return
+	}
+	if bAD.OpenId == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errcode": 2,
+			"errmsg":  "open_id is empty",
 		})
 		return
 	}
@@ -115,6 +153,25 @@ func BlackAnchorDelHandle(c *gin.Context) {
 
 // BlackAnchorListMembersHandle 返回黑名单主播列表处理
 func BlackAnchorListMembersHandle(c *gin.Context) {
+	type gTestCode struct {
+		TestCode string `json:"test_code"`
+	}
+	var (
+		tC gTestCode
+	)
+	if err := c.ShouldBindJSON(&tC); err != nil {
+		c.JSON(404, gin.H{
+			"err": err,
+		})
+		return
+	}
+	if !compareTestCode(tC.TestCode) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errcode": 4,
+			"errmsg":  "测试验证码错误",
+		})
+		return
+	}
 	blackAnchorList, err := blackAnchorListMembers()
 	if err != nil || len(blackAnchorList) == 0 {
 		c.JSON(200, []string{})
@@ -132,6 +189,25 @@ func BlackAnchorListMembersHandle(c *gin.Context) {
 
 // 清空黑名单主播列表处理
 func BlackAnchorListClearHandle(c *gin.Context) {
+	type gTestCode struct {
+		TestCode string `json:"test_code"`
+	}
+	var (
+		tC gTestCode
+	)
+	if err := c.ShouldBindJSON(&tC); err != nil {
+		c.JSON(404, gin.H{
+			"err": err,
+		})
+		return
+	}
+	if !compareTestCode(tC.TestCode) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errcode": 4,
+			"errmsg":  "测试验证码错误",
+		})
+		return
+	}
 	if err := blackAnchorListClear(); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"errcode": 2,
@@ -143,4 +219,15 @@ func BlackAnchorListClearHandle(c *gin.Context) {
 		"errcode": 0,
 		"errmsg":  "success",
 	})
+}
+
+func compareTestCode(tC string) bool {
+	testCode := getTestCode()
+	if testCode == "" {
+		return false
+	}
+	if testCode == tC {
+		return true
+	}
+	return false
 }
