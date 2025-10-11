@@ -5,13 +5,22 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/go-redis/redis"
 	"github.com/kongshui/danmu/model/pmsg"
 )
 
 // 返回世界排行榜前100名
-func getTopWorldRankData(startIndex int64, endIndex int64) *pmsg.UserInfoListMessage {
+func getTopWorldRankData(startIndex int64, endIndex int64, reverse bool) *pmsg.UserInfoListMessage {
 	data := &pmsg.UserInfoListMessage{}
-	openIdList, err := rdb.ZRevRangeWithScores(world_rank_week, startIndex, endIndex)
+	var (
+		err        error
+		openIdList []redis.Z
+	)
+	if !reverse {
+		openIdList, err = rdb.ZRevRangeWithScores(world_rank_week, startIndex, endIndex)
+	} else {
+		openIdList, err = rdb.ZRangeWithScores(world_rank_week, startIndex, endIndex)
+	}
 	if err != nil {
 		ziLog.Error(fmt.Sprintf("getTopWorldRankData err: %v", err), debug)
 		return data

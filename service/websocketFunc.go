@@ -250,7 +250,7 @@ func getUserWorldInfo(msg *pmsg.MessageBody) error {
 	// 获取前一百名用户世界信息
 	switch msg.MessageType {
 	case pmsg.MessageId_GetVersionTopHundred.String():
-		data = getTopWorldRankData(0, 99)
+		data = getTopWorldRankData(0, 99, false)
 		msgId = pmsg.MessageId_GetVersionTopHundredAck
 	case pmsg.MessageId_GetMonthTopHundred.String():
 		data = getTopMonthRankData()

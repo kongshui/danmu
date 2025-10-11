@@ -41,6 +41,7 @@ type RedisClient interface {
 	ZAdd(key string, score float64, member string) error
 	ZScore(key string, member string) (float64, error)
 	ZRange(key string, start, stop int64) ([]string, error)
+	ZRangeWithScores(key string, start, stop int64) ([]redis.Z, error)
 	ZRevRange(key string, start, stop int64) ([]string, error)
 	ZRevRangeWithScores(key string, start, stop int64) ([]redis.Z, error)
 	ZIncrBy(key string, increment float64, member string) (float64, error)

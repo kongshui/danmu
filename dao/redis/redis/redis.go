@@ -292,6 +292,13 @@ func (rdb *RedisClient) ZRange(key string, start, stop int64) ([]string, error) 
 	return rdb.Client.ZRange(key, start, stop).Result()
 }
 
+// 从小到大获取有序集合withscores
+func (rdb *RedisClient) ZRangeWithScores(key string, start, stop int64) ([]redis.Z, error) {
+	rdb.Lock.RLock()
+	defer rdb.Lock.RUnlock()
+	return rdb.Client.ZRangeWithScores(key, start, stop).Result()
+}
+
 // 从大到小获取有序集合
 func (rdb *RedisClient) ZRevRange(key string, start, stop int64) ([]string, error) {
 	rdb.Lock.RLock()

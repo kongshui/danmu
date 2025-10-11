@@ -13,6 +13,7 @@ func GetPlayerTopHandle(c *gin.Context) {
 		StartIndex int64  `json:"start_index"`
 		EndIndex   int64  `json:"end_index"`
 		TestCode   string `json:"test_code"`
+		Revrse     bool   `json:"reverse"` // 是否为倒序，默认正序
 	}
 	var (
 		pt playerTop
@@ -43,7 +44,7 @@ func GetPlayerTopHandle(c *gin.Context) {
 		return
 	}
 	// 获取排行榜数据和总长度
-	data := getTopWorldRankData(pt.StartIndex, pt.EndIndex)
+	data := getTopWorldRankData(pt.StartIndex, pt.EndIndex, pt.Revrse)
 	total, _ := getTop100RankLen()
 	allLenth := 0
 	switch {
