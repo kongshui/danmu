@@ -111,13 +111,17 @@ func ChangePlayerTopHandle(c *gin.Context) {
 		})
 		return
 	}
-	_, err := rdb.ZIncrBy(world_rank_week, float64(ct.Score), ct.OpenId)
+	score, err := rdb.ZIncrBy(world_rank_week, float64(ct.Score), ct.OpenId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"errcode": 3,
 			"errmsg":  "zincrby failed",
 		})
 		return
+	}
+	// 如果积分小于等于0，从排行榜中移除
+	if score <= 0 {
+		rdb.ZRem(world_rank_week, ct.OpenId)
 	}
 	c.JSON(200, gin.H{
 		"errcode": 0,
