@@ -59,11 +59,11 @@ func GetPlayerTopHandle(c *gin.Context) {
 	if allLenth > 0 {
 		for _, v := range data.GetUserInfoList() {
 			userInfos = append(userInfos, map[string]any{
-				"OpenId":    v.OpenId,
-				"Rank":      v.Rank,
-				"Score":     v.Score,
-				"AvatarUrl": v.AvatarUrl,
-				"NickName":  v.NickName,
+				"open_id":    v.OpenId,
+				"rank":       v.Rank,
+				"score":      v.Score,
+				"avatar_url": v.AvatarUrl,
+				"nick_name":  v.NickName,
 			})
 		}
 	}
@@ -167,11 +167,11 @@ func GetPlayerInfoByOpenIdHandle(c *gin.Context) {
 	score, rank, _ := getPlayerWorldRankData(pio.OpenId)
 	userInfo, _ := userInfoGet(pio.OpenId, false)
 	userInfos := map[string]any{
-		"OpenId":    pio.OpenId,
-		"Rank":      rank,
-		"Score":     score,
-		"AvatarUrl": userInfo.AvatarUrl,
-		"NickName":  userInfo.NickName,
+		"open_id":    pio.OpenId,
+		"rank":       rank,
+		"score":      score,
+		"avatar_url": userInfo.AvatarUrl,
+		"nick_name":  userInfo.NickName,
 	}
 	c.JSON(200, gin.H{
 		"errcode": 0,
