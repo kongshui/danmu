@@ -153,19 +153,7 @@ func BlackAnchorDelHandle(c *gin.Context) {
 
 // BlackAnchorListMembersHandle 返回黑名单主播列表处理
 func BlackAnchorListMembersHandle(c *gin.Context) {
-	type gTestCode struct {
-		TestCode string `json:"test_code"`
-	}
-	var (
-		tC gTestCode
-	)
-	if err := c.ShouldBindJSON(&tC); err != nil {
-		c.JSON(404, gin.H{
-			"err": err,
-		})
-		return
-	}
-	if !compareTestCode(tC.TestCode) {
+	if !compareTestCode(c.Query("verifycode")) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"errcode": 4,
 			"errmsg":  "测试验证码错误",
@@ -189,19 +177,7 @@ func BlackAnchorListMembersHandle(c *gin.Context) {
 
 // 清空黑名单主播列表处理
 func BlackAnchorListClearHandle(c *gin.Context) {
-	type gTestCode struct {
-		TestCode string `json:"test_code"`
-	}
-	var (
-		tC gTestCode
-	)
-	if err := c.ShouldBindJSON(&tC); err != nil {
-		c.JSON(404, gin.H{
-			"err": err,
-		})
-		return
-	}
-	if !compareTestCode(tC.TestCode) {
+	if !compareTestCode(c.Query("verifycode")) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"errcode": 4,
 			"errmsg":  "测试验证码错误",
