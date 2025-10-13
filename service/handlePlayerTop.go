@@ -59,6 +59,9 @@ func GetPlayerTopHandle(c *gin.Context) {
 	// 重组userinfo list
 	if allLenth > 0 {
 		for _, v := range data.GetUserInfoList() {
+			if v.OpenId == "" {
+				continue
+			}
 			userInfos = append(userInfos, map[string]any{
 				"open_id":    v.OpenId,
 				"rank":       v.Rank,
@@ -176,7 +179,7 @@ func GetPlayerInfoByOpenIdHandle(c *gin.Context) {
 		"avatar_url": userInfo.AvatarUrl,
 		"nick_name":  userInfo.NickName,
 	}
-	setUserInfos = append(setUserInfos, userInfos)
+	setUserInfos[0] = userInfos
 	c.JSON(200, gin.H{
 		"errcode": 0,
 		"errmsg":  "success",
