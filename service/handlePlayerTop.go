@@ -46,30 +46,19 @@ func GetPlayerTopHandle(c *gin.Context) {
 	// 获取排行榜数据和总长度
 	data := getTopWorldRankData(pt.StartIndex, pt.EndIndex, pt.Revrse)
 	total, _ := getTop100RankLen()
-	allLenth := 0
-	switch {
-	case pt.StartIndex < int64(total) && pt.EndIndex < int64(total):
-		allLenth = int(pt.EndIndex - pt.StartIndex + 1)
-	case pt.StartIndex < int64(total) && pt.EndIndex >= int64(total):
-		allLenth = int(int64(total) - pt.StartIndex + 1)
-	case pt.StartIndex >= int64(total):
-		allLenth = 0
-	}
-	userInfos := make([]map[string]any, allLenth)
+	userInfos := make([]map[string]any, 0)
 	// 重组userinfo list
-	if allLenth > 0 {
-		for _, v := range data.GetUserInfoList() {
-			if v.OpenId == "" {
-				continue
-			}
-			userInfos = append(userInfos, map[string]any{
-				"open_id":    v.OpenId,
-				"rank":       v.Rank,
-				"score":      v.Score,
-				"avatar_url": v.AvatarUrl,
-				"nick_name":  v.NickName,
-			})
+	for _, v := range data.GetUserInfoList() {
+		if v.GetOpenId() == "" {
+			continue
 		}
+		userInfos = append(userInfos, map[string]any{
+			"open_id":    v.OpenId,
+			"rank":       v.Rank,
+			"score":      v.Score,
+			"avatar_url": v.AvatarUrl,
+			"nick_name":  v.NickName,
+		})
 	}
 
 	c.JSON(200, gin.H{

@@ -15,11 +15,20 @@ func getTopWorldRankData(startIndex int64, endIndex int64, reverse bool) *pmsg.U
 	var (
 		err        error
 		openIdList []redis.Z
+		end_index  int64
 	)
+	weekRankLen, _ := rdb.ZCard(world_rank_week)
+	if endIndex >= weekRankLen-1 {
+		end_index = -1
+	} else if startIndex > weekRankLen && weekRankLen != -1 {
+		return data
+	} else if startIndex < 0 {
+		return data
+	}
 	if !reverse {
-		openIdList, err = rdb.ZRevRangeWithScores(world_rank_week, startIndex, endIndex)
+		openIdList, err = rdb.ZRevRangeWithScores(world_rank_week, startIndex, end_index)
 	} else {
-		openIdList, err = rdb.ZRangeWithScores(world_rank_week, startIndex, endIndex)
+		openIdList, err = rdb.ZRangeWithScores(world_rank_week, startIndex, end_index)
 	}
 	if err != nil {
 		ziLog.Error(fmt.Sprintf("getTopWorldRankData err: %v", err), debug)
