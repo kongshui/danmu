@@ -112,18 +112,19 @@ func ChangePlayerTopHandle(c *gin.Context) {
 		})
 		return
 	}
-	score, err := rdb.ZIncrBy(world_rank_week, float64(ct.Score), ct.OpenId)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"errcode": 3,
-			"errmsg":  "zincrby failed",
-		})
-		return
+	if ct.Score <= 0 {
+		rdb.ZRem(world_rank_week, ct.OpenId)
+	} else {
+		if err := rdb.ZAdd(world_rank_week, float64(ct.Score), ct.OpenId); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"errcode": 3,
+				"errmsg":  "zincrby failed",
+			})
+			return
+		}
 	}
 	// 如果积分小于等于0，从排行榜中移除
-	if score <= 0 {
-		rdb.ZRem(world_rank_week, ct.OpenId)
-	}
+
 	c.JSON(200, gin.H{
 		"errcode": 0,
 		"errmsg":  "success",
@@ -165,6 +166,7 @@ func GetPlayerInfoByOpenIdHandle(c *gin.Context) {
 		return
 	}
 	// 获取玩家信息
+	setUserInfos := make([]map[string]any, 1)
 	score, rank, _ := getPlayerWorldRankData(pio.OpenId)
 	userInfo, _ := userInfoGet(pio.OpenId, false)
 	userInfos := map[string]any{
@@ -174,9 +176,11 @@ func GetPlayerInfoByOpenIdHandle(c *gin.Context) {
 		"avatar_url": userInfo.AvatarUrl,
 		"nick_name":  userInfo.NickName,
 	}
+	setUserInfos = append(setUserInfos, userInfos)
 	c.JSON(200, gin.H{
 		"errcode": 0,
 		"errmsg":  "success",
-		"data":    userInfos,
+		"data":    setUserInfos,
+		"total":   0,
 	})
 }
