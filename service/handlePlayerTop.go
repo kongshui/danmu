@@ -36,7 +36,7 @@ func GetPlayerTopHandle(c *gin.Context) {
 		return
 	}
 	// 校验参数
-	if pt.StartIndex <= 0 || pt.EndIndex <= 0 || pt.StartIndex > pt.EndIndex {
+	if pt.StartIndex < 0 || (pt.EndIndex != -1 && pt.EndIndex < pt.StartIndex) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"errcode": 2,
 			"errmsg":  "start_index or end_index is invalid",
