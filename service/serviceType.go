@@ -107,6 +107,7 @@ type (
 		TimeStamp         int64  `json:"timestamp"`            // 时间戳
 		Test              bool   `json:"test"`                 // 如果是抖音平台的测试数据，则会下发该字段且值为 true。测试工具下发的送礼数据属于调试模式，不会有该字段
 		AudienceSecOpenId string `json:"audience_sec_open_id"` // 被送礼的嘉宾openid，当前没有加密
+		SecMagicGiftId    string `json:"sec_magic_gift_id"`    // 被送礼的嘉宾openid，当前没有加密(备用字段)
 	}
 
 	//点赞消息 live_like
