@@ -418,7 +418,7 @@ func HandleAddGroup(c *gin.Context) {
 	}
 	liveCurrentRoundAdd(addGroup.RoomId, addGroup.RoundId)
 	// 3. 加入组
-	err := playerGroupAdd(addGroup.RoomId, addGroup.OpenId, addGroup.RoundId, data, false)
+	err := playerGroupAddin(addGroup.RoomId, addGroup.OpenId, addGroup.RoundId, data, false)
 	c.JSON(200, err)
 }
 

@@ -212,10 +212,13 @@ func playerAddGroudId(msg *pmsg.MessageBody) error {
 	if !ok {
 		return errors.New("playerGroupAdd roundId 未查到")
 	}
-	if err := playerGroupAdd(data.GetRoomId(), msg.GetUuid(), roundId, data.GetUserList(), false); err != nil {
-		return errors.New("玩家加入组信息 err: " + err.Error())
+	if playerGroupAddin != nil {
+		if err := playerGroupAddin(data.GetRoomId(), msg.GetUuid(), roundId, data.GetUserList(), false); err != nil {
+			return errors.New("玩家加入组信息 err: " + err.Error())
+		}
+		return nil
 	}
-	return nil
+	return errors.New("playerAddGroudId playerGroupAddin is nil")
 }
 
 // 数据上报信息

@@ -8,7 +8,7 @@ import (
 )
 
 // 上传完玩家组信息
-func dyUploadUserGroup(roomId, openId, groupId string, roundId int64) {
+func DyUploadUserGroup(roomId, openId, groupId string, roundId int64) {
 	defer RecoverFunc()
 	headers := map[string]string{
 		"Content-Type": "application/json",

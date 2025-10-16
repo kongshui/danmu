@@ -12,7 +12,7 @@ import (
 )
 
 // 玩家分组
-func playerGroupAdd(roomId, uidStr string, roundId int64, userMap []*pmsg.SingleRoomAddGroupInfo, isChoose bool) error {
+func PlayerGroupAdd(roomId, uidStr string, roundId int64, userMap []*pmsg.SingleRoomAddGroupInfo, isChoose bool) error {
 
 	//初始化sdata
 	data := &pmsg.ResultUserAddGroupMessage{}
@@ -23,18 +23,10 @@ func playerGroupAdd(roomId, uidStr string, roundId int64, userMap []*pmsg.Single
 		if _, err := rdb.HSetNX(name, v.GetOpenId(), v.GetGroupId()); err != nil {
 			ziLog.Error(fmt.Sprintf("playerGroupAdd 设置组失败: %v,openId:%v, groupId: %v", err, v.GetOpenId(), v.GetGroupId()), debug)
 		}
-
-		// 其他前置处理
-		if playerGroupAddin != nil {
-			if err := playerGroupAddin(roomId, v.GetOpenId()); err != nil {
-				ziLog.Error(fmt.Sprintf("playerGroupAdd playerGroupAddinFunc失败, err: %v,openId:%v, groupId: %v, roomId:%v", err, v.GetOpenId(), v.GetGroupId(), roomId), debug)
-
-			}
-		}
-		go userInfoCompareStore(v.GetOpenId(), v.GetNickName(), v.GetAvatarUrl(), false)
+		go UserInfoCompareStore(v.GetOpenId(), v.GetNickName(), v.GetAvatarUrl(), false)
 		//
 		if platform == "dy" {
-			go dyUploadUserGroup(roomId, v.GetOpenId(), v.GetGroupId(), roundId)
+			go DyUploadUserGroup(roomId, v.GetOpenId(), v.GetGroupId(), roundId)
 		}
 		// 是否是通过小摇杆加入
 		if isChoose {
@@ -43,11 +35,11 @@ func playerGroupAdd(roomId, uidStr string, roundId int64, userMap []*pmsg.Single
 		//获取玩家连胜币
 		coin, _ := QueryUserWinStreamCoin(v.GetOpenId())
 		// 查询玩家是否已经消费
-		isConsume := queryIsConsume(v.OpenId)
+		isConsume := QueryIsConsume(v.OpenId)
 		// 查询玩家等级
 		level, _ := QueryLevelInfo(v.OpenId)
 
-		score, rank, _ := getPlayerWorldRankData(v.OpenId)
+		score, rank, _ := GetPlayerWorldRankData(v.OpenId)
 
 		winningPoint, _ := QueryUserWinningPoint(v.OpenId)
 		data.UserInfoList = append(data.UserInfoList, &pmsg.UserInfoStruct{

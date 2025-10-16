@@ -159,7 +159,7 @@ func GetPlayerInfoByOpenIdHandle(c *gin.Context) {
 	}
 	// 获取玩家信息
 	setUserInfos := make([]map[string]any, 1)
-	score, rank, _ := getPlayerWorldRankData(pio.OpenId)
+	score, rank, _ := GetPlayerWorldRankData(pio.OpenId)
 	userInfo, _ := userInfoGet(pio.OpenId, false)
 	userInfos := map[string]any{
 		"open_id":    pio.OpenId,

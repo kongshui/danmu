@@ -113,4 +113,5 @@ enum MessageId {
     DisConnect = 125;   // 断联协议
     Forward = 126;  // 126 为client转发消息
     ForwardAck = 127;   // 127 为node转发回应消息
+    // 从131开始
 }

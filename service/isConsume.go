@@ -3,7 +3,7 @@ package service
 import "strconv"
 
 // 查询是否在第一次消费列表中
-func queryIsConsume(openId string) bool {
+func QueryIsConsume(openId string) bool {
 	ok, err := rdb.HExists(is_consume_db, openId)
 	if err != nil {
 		return false
@@ -13,7 +13,7 @@ func queryIsConsume(openId string) bool {
 
 //  对比第一次消费时间
 func compareIsConsume(openId string, timeStamp int64) bool {
-	if ok := queryIsConsume(openId); !ok {
+	if ok := QueryIsConsume(openId); !ok {
 		return false
 	}
 	sTimestamp, err := rdb.HGet(is_consume_db, openId)

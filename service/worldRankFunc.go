@@ -185,7 +185,7 @@ func SetTempGroup(roomId, openId string, score float64) error {
 }
 
 // 获取玩家世界排行版数据,分数，排名，错误
-func getPlayerWorldRankData(openId string) (int64, int64, error) {
+func GetPlayerWorldRankData(openId string) (int64, int64, error) {
 	score, err := rdb.ZScore(world_rank_week, openId)
 	if err != nil {
 		return 0, 0, err

@@ -231,7 +231,7 @@ func pushHistoryWorldRankDataEntry() {
 func GetWorldRankData(openIdList []string) []WorldInfoStruct {
 	var worldInfoList []WorldInfoStruct
 	for _, openId := range openIdList {
-		score, rank, _ := getPlayerWorldRankData(openId)
+		score, rank, _ := GetPlayerWorldRankData(openId)
 		coin, _ := QueryUserWinStreamCoin(openId)
 		worldInfoList = append(worldInfoList, WorldInfoStruct{
 			OpenId:            openId,

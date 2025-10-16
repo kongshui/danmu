@@ -73,7 +73,7 @@ func ksStartFinishGameInfo(roomId, url, label, uid string, isSend bool) error {
 			return fmt.Errorf("startFinishGameInfo proto.Marshal: %v", err)
 		}
 		if isSend {
-			go userInfoCompareStore(roomInfoJson.UserId, roomInfoJson.NickName, roomInfoJson.AvatarUrl, true)
+			go UserInfoCompareStore(roomInfoJson.UserId, roomInfoJson.NickName, roomInfoJson.AvatarUrl, true)
 			setRoomInfo(uid, roomInfo)
 			connect(roomId, roomInfo.AnchorOpenId)
 			if err := sse.SseSend(pmsg.MessageId_StartBindAck, []string{uid}, dataByte); err != nil {

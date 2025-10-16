@@ -77,7 +77,7 @@ func userInfoCompare(openId, NickName, AvatarUrl string, isAnchor bool) bool {
 }
 
 // 对比后存储用户信息
-func userInfoCompareStore(openId, NickName, AvatarUrl string, isAnchor bool) {
+func UserInfoCompareStore(openId, NickName, AvatarUrl string, isAnchor bool) {
 	if ok, _ := rdb.SetKeyNX(openId+"_info_monitor", "1", 10*time.Second); !ok {
 		return
 	}

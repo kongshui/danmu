@@ -76,20 +76,22 @@ func PlayerChooseGroupHandle(c *gin.Context) {
 		return
 	}
 	uid := queryRoomIdToUid(pCG.RoomId)
-	if err := playerGroupAdd(pCG.RoomId, uid, roundId, []*pmsg.SingleRoomAddGroupInfo{
-		{
-			GroupId:   pCG.GroupId,
-			OpenId:    pCG.OpenId,
-			AvatarUrl: pCG.AvatarUrl,
-			NickName:  pCG.NickName,
-		},
-	}, true); err != nil {
-		ziLog.Error(fmt.Sprintf("PlayerChooseGroupHandle 添加玩家失败,err: %v", err), debug)
-		c.JSON(400, gin.H{
-			"errcode": 40001,
-			"errmsg":  err.Error(),
-		})
-		return
+	if playerGroupAddin != nil {
+		if err := playerGroupAddin(pCG.RoomId, uid, roundId, []*pmsg.SingleRoomAddGroupInfo{
+			{
+				GroupId:   pCG.GroupId,
+				OpenId:    pCG.OpenId,
+				AvatarUrl: pCG.AvatarUrl,
+				NickName:  pCG.NickName,
+			},
+		}, true); err != nil {
+			ziLog.Error(fmt.Sprintf("PlayerChooseGroupHandle 添加玩家失败,err: %v", err), debug)
+			c.JSON(400, gin.H{
+				"errcode": 40001,
+				"errmsg":  err.Error(),
+			})
+			return
+		}
 	}
 	go func(pcg playerChooseGroup, roundId int64) {
 
@@ -112,9 +114,9 @@ func PlayerChooseGroupHandle(c *gin.Context) {
 			return
 		}
 		gId, _, _ := getUserGroup(pcg.RoomId, pcg.OpenId)
-		score, rank, _ := getPlayerWorldRankData(pcg.OpenId)
+		score, rank, _ := GetPlayerWorldRankData(pcg.OpenId)
 		coin, _ := QueryUserWinStreamCoin(pcg.OpenId)
-		isConsume := queryIsConsume(pcg.OpenId)
+		isConsume := QueryIsConsume(pcg.OpenId)
 		// 查询玩家等级
 		level, _ := QueryLevelInfo(pcg.OpenId)
 		sData := &pmsg.SingleUserAddGroupMessage{
