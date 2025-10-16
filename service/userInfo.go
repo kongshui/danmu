@@ -36,7 +36,7 @@ func userInfoStore(user UserInfoStruct, isAnchor bool) error {
 }
 
 // 获取用户信息
-func userInfoGet(openId string, isAnchor bool) (UserInfoStruct, error) {
+func UserInfoGet(openId string, isAnchor bool) (UserInfoStruct, error) {
 	var dbName string
 	if isAnchor {
 		dbName = anchor_info_db
@@ -66,7 +66,7 @@ func userInfoCompare(openId, NickName, AvatarUrl string, isAnchor bool) bool {
 	if err != nil || !ok {
 		return false
 	}
-	user, err := userInfoGet(openId, isAnchor)
+	user, err := UserInfoGet(openId, isAnchor)
 	if err != nil {
 		return false
 	}

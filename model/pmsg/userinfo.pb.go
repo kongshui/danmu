@@ -29,7 +29,7 @@ type UserInfo struct {
 	Score             int64                  `protobuf:"varint,4,opt,name=Score,proto3" json:"Score,omitempty"`                         // 用户的积分
 	Rank              int64                  `protobuf:"varint,5,opt,name=Rank,proto3" json:"Rank,omitempty"`                           // 用户的排名
 	WinningStreamCoin int64                  `protobuf:"varint,6,opt,name=WinningStreamCoin,proto3" json:"WinningStreamCoin,omitempty"` // 用户的连胜币
-	SwallowCount      int64                  `protobuf:"varint,7,opt,name=SwallowCount,proto3" json:"SwallowCount,omitempty"`           // 用户的吞噬次数
+	Swallow           int64                  `protobuf:"varint,7,opt,name=Swallow,proto3" json:"Swallow,omitempty"`                     // 用户的吞噬次数
 	Level             int64                  `protobuf:"varint,8,opt,name=Level,proto3" json:"Level,omitempty"`                         // 用户的等级
 	WinningPoint      int64                  `protobuf:"varint,9,opt,name=WinningPoint,proto3" json:"WinningPoint,omitempty"`           // 用户的胜点
 	unknownFields     protoimpl.UnknownFields
@@ -108,9 +108,9 @@ func (x *UserInfo) GetWinningStreamCoin() int64 {
 	return 0
 }
 
-func (x *UserInfo) GetSwallowCount() int64 {
+func (x *UserInfo) GetSwallow() int64 {
 	if x != nil {
-		return x.SwallowCount
+		return x.Swallow
 	}
 	return 0
 }
@@ -133,15 +133,15 @@ var File_proto_userinfo_proto protoreflect.FileDescriptor
 
 const file_proto_userinfo_proto_rawDesc = "" +
 	"\n" +
-	"\x14proto/userinfo.proto\x12\x04pmsg\"\x92\x02\n" +
+	"\x14proto/userinfo.proto\x12\x04pmsg\"\x88\x02\n" +
 	"\bUserInfo\x12\x16\n" +
 	"\x06OpenId\x18\x01 \x01(\tR\x06OpenId\x12\x1a\n" +
 	"\bNickName\x18\x02 \x01(\tR\bNickName\x12\x1c\n" +
 	"\tAvatarUrl\x18\x03 \x01(\tR\tAvatarUrl\x12\x14\n" +
 	"\x05Score\x18\x04 \x01(\x03R\x05Score\x12\x12\n" +
 	"\x04Rank\x18\x05 \x01(\x03R\x04Rank\x12,\n" +
-	"\x11WinningStreamCoin\x18\x06 \x01(\x03R\x11WinningStreamCoin\x12\"\n" +
-	"\fSwallowCount\x18\a \x01(\x03R\fSwallowCount\x12\x14\n" +
+	"\x11WinningStreamCoin\x18\x06 \x01(\x03R\x11WinningStreamCoin\x12\x18\n" +
+	"\aSwallow\x18\a \x01(\x03R\aSwallow\x12\x14\n" +
 	"\x05Level\x18\b \x01(\x03R\x05Level\x12\"\n" +
 	"\fWinningPoint\x18\t \x01(\x03R\fWinningPointB\bZ\x06./pmsgb\x06proto3"
 

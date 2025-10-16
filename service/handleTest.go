@@ -435,7 +435,7 @@ func HandleGetAllRoom(c *gin.Context) {
 	for _, kv := range uidList.Kvs {
 		roomId := string(kv.Value)
 		anchorOpenId := QueryRoomIdInterconvertAnchorOpenId(roomId)
-		userInfo, err := userInfoGet(anchorOpenId, true)
+		userInfo, err := UserInfoGet(anchorOpenId, true)
 		if err != nil {
 			log.Println("通过接口获取玩家信息失败", anchorOpenId, "err:", err)
 		}

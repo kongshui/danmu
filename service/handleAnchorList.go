@@ -169,7 +169,7 @@ func BlackAnchorListMembersHandle(c *gin.Context) {
 		userInfos []UserInfoStruct
 	)
 	for _, anchorOpenid := range blackAnchorList {
-		userInfo, _ := userInfoGet(anchorOpenid, true)
+		userInfo, _ := UserInfoGet(anchorOpenid, true)
 		userInfos = append(userInfos, userInfo)
 	}
 	c.JSON(200, userInfos)

@@ -24,8 +24,8 @@ func websocketMessageFunc(msg *pmsg.MessageBody) error {
 		return roundStart(msg)
 	case pmsg.MessageId_SyncGameEnd: // 结束游戏对局
 		return roundEnd(msg)
-	case pmsg.MessageId_GetVersionTopHundred: // 获取版本前100名
-		return getUserWorldInfo(msg)
+	// case pmsg.MessageId_GetVersionTopHundred: // 获取版本前100名
+	// 	return getTopUserInfo(msg)
 	case pmsg.MessageId_TestMsg: // 测试消息
 		return testMsg(msg)
 	case pmsg.MessageId_UseWinnerStreamCoin: // 使用用户的获胜币

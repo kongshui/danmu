@@ -73,7 +73,7 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 			// 获取用户信息
 			openId = gift.UserInfo.UserId
 			// 后端记录数据库
-			anchorName, err := userInfoGet(anchorOpenId, true)
+			anchorName, err := UserInfoGet(anchorOpenId, true)
 			if err != nil {
 				_, anchor_nick_name, err = mysql.QueryPlayerInfo(anchorOpenId)
 				if err != nil {
@@ -245,7 +245,7 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 		// 获取用户信息
 		openId = gift.UserInfo.UserId
 		// 后端记录数据库
-		anchorName, err := userInfoGet(data.AuthorOpenId, true)
+		anchorName, err := UserInfoGet(data.AuthorOpenId, true)
 		if err != nil {
 			_, anchor_nick_name, err = mysql.QueryPlayerInfo(data.AuthorOpenId)
 			if err != nil {

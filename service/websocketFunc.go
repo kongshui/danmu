@@ -245,7 +245,7 @@ func roundDataUpload(msg *pmsg.MessageBody) error {
 }
 
 // get_user_worldinfo,获取玩家世界列表
-func getUserWorldInfo(msg *pmsg.MessageBody) error {
+func GetTopUserInfoTemplate(msg *pmsg.MessageBody) error {
 	var (
 		data  *pmsg.UserInfoListMessage
 		msgId pmsg.MessageId

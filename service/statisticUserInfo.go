@@ -57,7 +57,7 @@ func statistic() {
 		userInfo := make([]any, 0)
 		fmt.Println(i, v.Member, v.Score)
 		openId := v.Member.(string)
-		user, _ := userInfoGet(openId, false)
+		user, _ := UserInfoGet(openId, false)
 		coin, _ := QueryUserWinStreamCoin(openId)
 		cost, _ := mysql.StatisticCost(openId, startTime, endTime)
 		winPoint, _ := QueryUserWinningPoint(openId)

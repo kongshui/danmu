@@ -5,38 +5,16 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/go-redis/redis"
 	"github.com/kongshui/danmu/model/pmsg"
 )
 
 // 返回世界排行榜前100名
 func getTopWorldRankData(startIndex int64, endIndex int64, reverse bool) *pmsg.UserInfoListMessage {
 	data := &pmsg.UserInfoListMessage{}
-	var (
-		err        error
-		openIdList []redis.Z
-		end_index  int64
-	)
-	weekRankLen, _ := rdb.ZCard(world_rank_week)
-	if endIndex >= weekRankLen-1 {
-		end_index = -1
-	} else if startIndex > weekRankLen && weekRankLen != -1 {
-		return data
-	} else if startIndex < 0 {
-		return data
-	}
-	if !reverse {
-		openIdList, err = rdb.ZRevRangeWithScores(world_rank_week, startIndex, end_index)
-	} else {
-		openIdList, err = rdb.ZRangeWithScores(world_rank_week, startIndex, end_index)
-	}
-	if err != nil {
-		ziLog.Error(fmt.Sprintf("getTopWorldRankData err: %v", err), debug)
-		return data
-	}
+	openIdList := GetRedisZsetData(world_rank_week, startIndex, endIndex, reverse)
 	for i, userInfo := range openIdList {
 		openId := userInfo.Member.(string)
-		user, _ := userInfoGet(openId, false)
+		user, _ := UserInfoGet(openId, false)
 		coin, _ := QueryUserWinStreamCoin(openId)
 		level, _ := QueryLevelInfo(openId)
 		winPoint, _ := QueryUserWinningPoint(openId)
@@ -75,7 +53,7 @@ func getTopMonthRankData() *pmsg.UserInfoListMessage {
 	}
 	for i, userInfo := range openIdList {
 		openId := userInfo.Member.(string)
-		user, _ := userInfoGet(openId, false)
+		user, _ := UserInfoGet(openId, false)
 		coin, _ := QueryUserWinStreamCoin(openId)
 		level, _ := QueryLevelInfo(openId)
 
