@@ -131,6 +131,11 @@ const (
 	MessageId_DisConnect                        MessageId = 125 // 断联协议
 	MessageId_Forward                           MessageId = 126 // 126 为client转发消息
 	MessageId_ForwardAck                        MessageId = 127 // 127 为node转发回应消息
+	// 从131开始
+	MessageId_AddSwallow      MessageId = 131 // 增加吞噬数
+	MessageId_AddSwallowAck   MessageId = 132 // 增加吞噬数返回
+	MessageId_QuerySwallow    MessageId = 133 // 查询吞噬数
+	MessageId_QuerySwallowAck MessageId = 134 // 查询吞噬数返回
 )
 
 // Enum value maps for MessageId.
@@ -240,6 +245,10 @@ var (
 		125: "DisConnect",
 		126: "Forward",
 		127: "ForwardAck",
+		131: "AddSwallow",
+		132: "AddSwallowAck",
+		133: "QuerySwallow",
+		134: "QuerySwallowAck",
 	}
 	MessageId_value = map[string]int32{
 		"Unknown":                           0,
@@ -346,6 +355,10 @@ var (
 		"DisConnect":                        125,
 		"Forward":                           126,
 		"ForwardAck":                        127,
+		"AddSwallow":                        131,
+		"AddSwallowAck":                     132,
+		"QuerySwallow":                      133,
+		"QuerySwallowAck":                   134,
 	}
 )
 
@@ -380,7 +393,7 @@ var File_proto_constid_proto protoreflect.FileDescriptor
 
 const file_proto_constid_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/constid.proto\x12\x04pmsg*\xb8\x12\n" +
+	"\x13proto/constid.proto\x12\x04pmsg*\x86\x13\n" +
 	"\tMessageId\x12\v\n" +
 	"\aUnknown\x10\x00\x12\f\n" +
 	"\bNodeInfo\x10\x01\x12\x0f\n" +
@@ -497,7 +510,12 @@ const file_proto_constid_proto_rawDesc = "" +
 	"DisConnect\x10}\x12\v\n" +
 	"\aForward\x10~\x12\x0e\n" +
 	"\n" +
-	"ForwardAck\x10\x7fB\bZ\x06./pmsgb\x06proto3"
+	"ForwardAck\x10\x7f\x12\x0f\n" +
+	"\n" +
+	"AddSwallow\x10\x83\x01\x12\x12\n" +
+	"\rAddSwallowAck\x10\x84\x01\x12\x11\n" +
+	"\fQuerySwallow\x10\x85\x01\x12\x14\n" +
+	"\x0fQuerySwallowAck\x10\x86\x01B\bZ\x06./pmsgb\x06proto3"
 
 var (
 	file_proto_constid_proto_rawDescOnce sync.Once

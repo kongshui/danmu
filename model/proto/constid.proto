@@ -114,4 +114,8 @@ enum MessageId {
     Forward = 126;  // 126 为client转发消息
     ForwardAck = 127;   // 127 为node转发回应消息
     // 从131开始
+    AddSwallow = 131; // 增加吞噬数
+    AddSwallowAck = 132; // 增加吞噬数返回
+    QuerySwallow = 133; // 查询吞噬数
+    QuerySwallowAck = 134; // 查询吞噬数返回
 }

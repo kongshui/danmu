@@ -1,0 +1,28 @@
+syntax = "proto3";
+package pmsg;
+option go_package="./pmsg";
+//protoc.exe   --go_out=./ .\model\proto\*.proto
+
+// 增加吞噬数请求
+message add_swallow_request {
+    string open_id = 1; // 用户id
+    int64 swallow = 2; // 吞噬数量
+}
+
+// 增加吞噬数返回
+message add_swallow_response {
+    string open_id = 1; // 用户id
+    int64 swallow = 2; // 现在总吞噬数量
+    bool success = 3; // 是否成功
+}
+
+// 查询吞噬数请求
+message query_swallow_request {
+    string open_id = 1; // 用户id
+}
+
+// 查询吞噬数返回
+message query_swallow_response {
+    string open_id = 1; // 用户id
+    int64 swallow = 2; // 现在总吞噬数量
+}
