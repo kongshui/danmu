@@ -24,8 +24,7 @@ func PushDownLoadMessage(msgId pmsg.MessageId, uidStrList []string, data []byte)
 		return errors.New("uid err: uid is nil")
 	}
 	dataBody := &pmsg.MessageBody{
-		MessageId:   uint32(msgId),
-		MessageType: msgId.String(),
+		MsgId:       msgId,
 		MessageData: data,
 		Timestamp:   time.Now().UnixMilli(),
 	}

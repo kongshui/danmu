@@ -22,13 +22,14 @@ const (
 )
 
 type MessageBody struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	MessageId     uint32                 `protobuf:"varint,1,opt,name=MessageId,proto3" json:"MessageId,omitempty"`    // 消息ID
-	MessageType   string                 `protobuf:"bytes,2,opt,name=MessageType,proto3" json:"MessageType,omitempty"` // 消息类型
-	MessageData   []byte                 `protobuf:"bytes,3,opt,name=MessageData,proto3" json:"MessageData,omitempty"` // 消息数据
-	Timestamp     int64                  `protobuf:"varint,4,opt,name=Timestamp,proto3" json:"Timestamp,omitempty"`    // 时间戳
-	Uuid          string                 `protobuf:"bytes,5,opt,name=Uuid,proto3" json:"Uuid,omitempty"`               // 用户ID
-	Extra         string                 `protobuf:"bytes,6,opt,name=Extra,proto3" json:"Extra,omitempty"`             // 其他内容，比如路径或者其他
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// uint32 MessageId = 1;           // 消息ID
+	// string MessageType = 2;         // 消息类型
+	MsgId         MessageId `protobuf:"varint,1,opt,name=MsgId,proto3,enum=pmsg.MessageId" json:"MsgId,omitempty"` // 消息ID
+	MessageData   []byte    `protobuf:"bytes,2,opt,name=MessageData,proto3" json:"MessageData,omitempty"`          // 消息数据
+	Timestamp     int64     `protobuf:"varint,3,opt,name=Timestamp,proto3" json:"Timestamp,omitempty"`             // 时间戳
+	Uuid          string    `protobuf:"bytes,4,opt,name=Uuid,proto3" json:"Uuid,omitempty"`                        // 用户ID
+	Extra         string    `protobuf:"bytes,5,opt,name=Extra,proto3" json:"Extra,omitempty"`                      // 其他内容，比如路径或者其他
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -63,18 +64,11 @@ func (*MessageBody) Descriptor() ([]byte, []int) {
 	return file_proto_messagebody_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *MessageBody) GetMessageId() uint32 {
+func (x *MessageBody) GetMsgId() MessageId {
 	if x != nil {
-		return x.MessageId
+		return x.MsgId
 	}
-	return 0
-}
-
-func (x *MessageBody) GetMessageType() string {
-	if x != nil {
-		return x.MessageType
-	}
-	return ""
+	return MessageId_Unknown
 }
 
 func (x *MessageBody) GetMessageData() []byte {
@@ -109,14 +103,13 @@ var File_proto_messagebody_proto protoreflect.FileDescriptor
 
 const file_proto_messagebody_proto_rawDesc = "" +
 	"\n" +
-	"\x17proto/messagebody.proto\x12\x04pmsg\"\xb7\x01\n" +
-	"\vMessageBody\x12\x1c\n" +
-	"\tMessageId\x18\x01 \x01(\rR\tMessageId\x12 \n" +
-	"\vMessageType\x18\x02 \x01(\tR\vMessageType\x12 \n" +
-	"\vMessageData\x18\x03 \x01(\fR\vMessageData\x12\x1c\n" +
-	"\tTimestamp\x18\x04 \x01(\x03R\tTimestamp\x12\x12\n" +
-	"\x04Uuid\x18\x05 \x01(\tR\x04Uuid\x12\x14\n" +
-	"\x05Extra\x18\x06 \x01(\tR\x05ExtraB\bZ\x06./pmsgb\x06proto3"
+	"\x17proto/messagebody.proto\x12\x04pmsg\x1a\x13proto/constid.proto\"\x9e\x01\n" +
+	"\vMessageBody\x12%\n" +
+	"\x05MsgId\x18\x01 \x01(\x0e2\x0f.pmsg.MessageIdR\x05MsgId\x12 \n" +
+	"\vMessageData\x18\x02 \x01(\fR\vMessageData\x12\x1c\n" +
+	"\tTimestamp\x18\x03 \x01(\x03R\tTimestamp\x12\x12\n" +
+	"\x04Uuid\x18\x04 \x01(\tR\x04Uuid\x12\x14\n" +
+	"\x05Extra\x18\x05 \x01(\tR\x05ExtraB\bZ\x06./pmsgb\x06proto3"
 
 var (
 	file_proto_messagebody_proto_rawDescOnce sync.Once
@@ -133,13 +126,15 @@ func file_proto_messagebody_proto_rawDescGZIP() []byte {
 var file_proto_messagebody_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_proto_messagebody_proto_goTypes = []any{
 	(*MessageBody)(nil), // 0: pmsg.MessageBody
+	(MessageId)(0),      // 1: pmsg.MessageId
 }
 var file_proto_messagebody_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	1, // 0: pmsg.MessageBody.MsgId:type_name -> pmsg.MessageId
+	1, // [1:1] is the sub-list for method output_type
+	1, // [1:1] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_proto_messagebody_proto_init() }
@@ -147,6 +142,7 @@ func file_proto_messagebody_proto_init() {
 	if File_proto_messagebody_proto != nil {
 		return
 	}
+	file_proto_constid_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

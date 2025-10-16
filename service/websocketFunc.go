@@ -251,15 +251,15 @@ func getUserWorldInfo(msg *pmsg.MessageBody) error {
 		msgId pmsg.MessageId
 	)
 	// 获取前一百名用户世界信息
-	switch msg.MessageType {
-	case pmsg.MessageId_GetVersionTopHundred.String():
+	switch msg.MsgId {
+	case pmsg.MessageId_GetVersionTopHundred:
 		data = getTopWorldRankData(0, 99, false)
 		msgId = pmsg.MessageId_GetVersionTopHundredAck
-	case pmsg.MessageId_GetMonthTopHundred.String():
+	case pmsg.MessageId_GetMonthTopHundred:
 		data = getTopMonthRankData()
 		msgId = pmsg.MessageId_GetMonthTopHundredAck
 	default:
-		return errors.New("get user world info Unmarshal err: " + msg.MessageType)
+		return errors.New("get user world info Unmarshal err: " + msg.MsgId.String())
 	}
 	// sdatabyte
 	data.Timestamp = time.Now().Unix()
@@ -352,7 +352,7 @@ func getFrontEndErrorInfo(msg *pmsg.MessageBody) error {
 }
 
 // 获取上期前100名
-func getLastTop100Rank(msg *pmsg.MessageBody) error {
+func GetLastTop100Rank(msg *pmsg.MessageBody) error {
 	_, err := getTop100Rank()
 	if err != nil {
 		return errors.New("获取上期前100名 err: " + err.Error())
