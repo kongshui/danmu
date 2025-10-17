@@ -17,6 +17,7 @@ import (
 )
 
 func setRoomInfo(uid string, roomInfo *pmsg.AnchorInfoMessage) (*pmsg.AnchorInfoMessage, error) {
+	go UserInfoCompareStore(roomInfo.AnchorOpenId, roomInfo.NickName, roomInfo.AvatarUrl, true)
 	//存储用户信息
 	setRoomIdToAnchorOpenId(roomInfo.RoomId, roomInfo.AnchorOpenId)
 	if debug {
@@ -79,7 +80,7 @@ func dyGetAnchorInfo(uid, token string) error {
 	if isMember {
 		return fmt.Errorf("anchor is black")
 	}
-	go UserInfoCompareStore(roomReponse.Data.Info.AnchorOpenId, roomReponse.Data.Info.NickName, roomReponse.Data.Info.AvatarUrl, true)
+
 	data := &pmsg.AnchorInfoMessage{}
 	data.AnchorOpenId = roomReponse.Data.Info.AnchorOpenId
 	data.AvatarUrl = roomReponse.Data.Info.AvatarUrl
