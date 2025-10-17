@@ -1,67 +1,67 @@
 package service
 
-import (
-	"errors"
-	"fmt"
-	"strconv"
-	"time"
+// import (
+// 	"errors"
+// 	"fmt"
+// 	"strconv"
+// 	"time"
 
-	"github.com/kongshui/danmu/model/pmsg"
-	"github.com/kongshui/danmu/sse"
-	"google.golang.org/protobuf/proto"
-)
+// 	"github.com/kongshui/danmu/model/pmsg"
+// 	"github.com/kongshui/danmu/sse"
+// 	"google.golang.org/protobuf/proto"
+// )
 
-// 玩家分组
-func PlayerGroupAdd(roomId, uidStr string, roundId int64, userMap []*pmsg.SingleRoomAddGroupInfo, isChoose bool) error {
+// // 玩家分组
+// func PlayerGroupAdd(roomId, uidStr string, roundId int64, userMap []*pmsg.SingleRoomAddGroupInfo, isChoose bool) error {
 
-	//初始化sdata
-	data := &pmsg.ResultUserAddGroupMessage{}
-	//设置查询组的名称
-	name := roomId + "_" + strconv.FormatInt(roundId, 10) + "_group"
-	rdb.Expire(name, 21600*time.Second)
-	for _, v := range userMap {
-		if _, err := rdb.HSetNX(name, v.GetOpenId(), v.GetGroupId()); err != nil {
-			ziLog.Error(fmt.Sprintf("playerGroupAdd 设置组失败: %v,openId:%v, groupId: %v", err, v.GetOpenId(), v.GetGroupId()), debug)
-		}
-		go UserInfoCompareStore(v.GetOpenId(), v.GetNickName(), v.GetAvatarUrl(), false)
-		//
-		if platform == "dy" {
-			go DyUploadUserGroup(roomId, v.GetOpenId(), v.GetGroupId(), roundId)
-		}
-		// 是否是通过小摇杆加入
-		if isChoose {
-			continue
-		}
-		//获取玩家连胜币
-		coin, _ := QueryUserWinStreamCoin(v.GetOpenId())
-		// 查询玩家是否已经消费
-		isConsume := QueryIsConsume(v.OpenId)
-		// 查询玩家等级
-		level, _ := QueryLevelInfo(v.OpenId)
+// 	//初始化sdata
+// 	data := &pmsg.ResultUserAddGroupMessage{}
+// 	//设置查询组的名称
+// 	name := roomId + "_" + strconv.FormatInt(roundId, 10) + "_group"
+// 	rdb.Expire(name, 21600*time.Second)
+// 	for _, v := range userMap {
+// 		if _, err := rdb.HSetNX(name, v.GetOpenId(), v.GetGroupId()); err != nil {
+// 			ziLog.Error(fmt.Sprintf("playerGroupAdd 设置组失败: %v,openId:%v, groupId: %v", err, v.GetOpenId(), v.GetGroupId()), debug)
+// 		}
+// 		go UserInfoCompareStore(v.GetOpenId(), v.GetNickName(), v.GetAvatarUrl(), false)
+// 		//
+// 		if platform == "dy" {
+// 			go DyUploadUserGroup(roomId, v.GetOpenId(), v.GetGroupId(), roundId)
+// 		}
+// 		// 是否是通过小摇杆加入
+// 		if isChoose {
+// 			continue
+// 		}
+// 		//获取玩家连胜币
+// 		coin, _ := QueryUserWinStreamCoin(v.GetOpenId())
+// 		// 查询玩家是否已经消费
+// 		isConsume := QueryIsConsume(v.OpenId)
+// 		// 查询玩家等级
+// 		level, _ := QueryLevelInfo(v.OpenId)
 
-		score, rank, _ := GetPlayerWorldRankData(v.OpenId)
+// 		score, rank, _ := GetPlayerWorldRankData(v.OpenId)
 
-		winningPoint, _ := QueryUserWinningPoint(v.OpenId)
-		data.UserInfoList = append(data.UserInfoList, &pmsg.UserInfoStruct{
-			OpenId:            v.OpenId,
-			VersionScore:      score,
-			VersionRank:       rank,
-			WinningStreamCoin: coin,
-			IsFirstConsume:    isConsume,
-			Level:             level,
-			WinningPoints:     winningPoint,
-		})
-	}
-	if isChoose {
-		return nil
-	}
-	// fmt.Println(data)
-	dataByte, err := proto.Marshal(data)
-	if err != nil {
-		return errors.New("playerGroupAdd proto Marshal err: " + err.Error())
-	}
-	if err := sse.SseSend(pmsg.MessageId_SingleRoomAddGroupAck, []string{uidStr}, dataByte); err != nil {
-		return fmt.Errorf("playerGroupAdd 玩家加入组信息 err: %v", err)
-	}
-	return nil
-}
+// 		winningPoint, _ := QueryUserWinningPoint(v.OpenId)
+// 		data.UserInfoList = append(data.UserInfoList, &pmsg.UserInfoStruct{
+// 			OpenId:            v.OpenId,
+// 			VersionScore:      score,
+// 			VersionRank:       rank,
+// 			WinningStreamCoin: coin,
+// 			IsFirstConsume:    isConsume,
+// 			Level:             level,
+// 			WinningPoints:     winningPoint,
+// 		})
+// 	}
+// 	if isChoose {
+// 		return nil
+// 	}
+// 	// fmt.Println(data)
+// 	dataByte, err := proto.Marshal(data)
+// 	if err != nil {
+// 		return errors.New("playerGroupAdd proto Marshal err: " + err.Error())
+// 	}
+// 	if err := sse.SseSend(pmsg.MessageId_SingleRoomAddGroupAck, []string{uidStr}, dataByte); err != nil {
+// 		return fmt.Errorf("playerGroupAdd 玩家加入组信息 err: %v", err)
+// 	}
+// 	return nil
+// }
