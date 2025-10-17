@@ -76,7 +76,7 @@ d: 星期几
 h: 几点
 expireT：过期时间，如果isCalculate为true，那么这个时间不能为0，但不参与运算
 day: 是每月几号
-isCalculate 是是否计算过期时间
+isCalculate 即直至本期结束后才会过期，即为本期内不过期
 weekSet: 多长时间滚动
 versionTimeInterval: 滚动版本最小时间间隔
 */

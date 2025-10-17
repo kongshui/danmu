@@ -152,6 +152,7 @@ func setToken() error {
 			count := 0
 			for {
 				if count >= 5 {
+					rdb.Del(monitor_access_token_db)
 					return errors.New("setAccessToken 失败")
 				}
 				if err := function(); err != nil {

@@ -20,6 +20,8 @@ func GetRedisZsetData(key string, startIndex int64, endIndex int64, reverse bool
 		return openIdList
 	} else if startIndex < 0 {
 		return openIdList
+	} else {
+		end_index = endIndex
 	}
 	if !reverse {
 		openIdList, err = rdb.ZRevRangeWithScores(key, startIndex, end_index)
