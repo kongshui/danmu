@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"time"
+	"unicode/utf8"
 
 	"github.com/kongshui/danmu/model/pmsg"
 )
@@ -29,13 +30,16 @@ func getTopWorldRankData(startIndex int64, endIndex int64, reverse bool) *pmsg.U
 				user.AvatarUrl = avatarUrl
 			}
 		}
-
+		nickName := user.NickName
+		if config.App.IsAnonymous {
+			nickName = stringToAnonymouse(nickName)
+		}
 		data.UserInfoList = append(data.UserInfoList, &pmsg.UserInfo{
 			OpenId:            openId,
 			Rank:              int64(i + 1),
 			Score:             int64(userInfo.Score),
 			AvatarUrl:         user.AvatarUrl,
-			NickName:          user.NickName,
+			NickName:          nickName,
 			WinningStreamCoin: coin,
 			Level:             level,
 			WinningPoint:      winPoint,
@@ -120,4 +124,38 @@ func getTop100Rank() ([]ResultGroupUserRankInfoStruct, error) {
 // 获取百强榜长度
 func getTop100RankLen() (int64, error) {
 	return rdb.ZCard(world_rank_week)
+}
+
+// 修复utf8编码
+func FixInvalidUTF8(s string) string {
+	var result []rune
+	for i := 0; i < len(s); {
+		r, size := utf8.DecodeRuneInString(s[i:])
+		if r == utf8.RuneError && size == 1 {
+			// 忽略单个无效字节
+			i++
+			continue
+		} else if size == 0 {
+			// 处理剩余的不完整序列（如果有的话）
+			break
+		} else {
+			result = append(result, r)
+			i += size
+		}
+	}
+	return string(result)
+}
+
+// 转换匿名
+func stringToAnonymouse(s string) string {
+	sByte := []rune(s)
+	var newS string
+	for i, v := range sByte {
+		if i == 0 {
+			newS = string(v)
+		} else {
+			newS += "*"
+		}
+	}
+	return newS
 }

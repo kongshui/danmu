@@ -118,7 +118,7 @@ func pushHistoryWorldRankData() error {
 		for _, v := range userScoreList {
 			gCount++
 			getUserData := getWorldPlayerData(v.Member.(string), gCount, int64(v.Score))
-			if v.Score <= 100 {
+			if v.Score <= 100 && userLen > 100 {
 				isBreak = true
 				break
 			}
@@ -209,9 +209,7 @@ func pushHistoryWorldRankDataEntry() {
 		case <-ctx.Done():
 			return
 		case <-t.C:
-			if debug {
-				log.Println("开始推送历史世界榜单数据...")
-			}
+			ziLog.Info("开始推送历史世界榜单数据...", debug)
 			ok, err := rdb.SetKeyNX(monitor_world_history_push_db, nodeUuid, 8*time.Minute)
 			if err != nil {
 				ziLog.Error(fmt.Sprintf("推送历史世界榜单数据失败: %v", err), debug)
