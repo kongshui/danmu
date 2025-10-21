@@ -29,7 +29,7 @@ type (
 	GiftExtendInfoFunc        func() string
 	ScrollFunc                func(string)
 	InitFunc                  func(bool)
-	SetIntegralToRoundFunc    func(roomId, openId string, score float64) error
+	SetIntegralToRoundFunc    func(roomId, anchorOpenId, openId string, score float64) error
 )
 
 var (

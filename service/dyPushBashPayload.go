@@ -62,7 +62,7 @@ func pushDyBasePayloayDirect(roomId, anchorOpenId, msgType string, data []byte) 
 
 			if score != 0 {
 				// 添加积分
-				go matchAddIntrage(roomId, v.SecOpenid, score)
+				go matchAddIntrage(roomId, anchorOpenId, v.SecOpenid, score)
 			}
 			dyPayloadSendMessage(v, pmsg.MessageId_LiveComment, roomId, anchorOpenId)
 		}
@@ -89,7 +89,7 @@ func pushDyBasePayloayDirect(roomId, anchorOpenId, msgType string, data []byte) 
 			// 	ziLog.Write(logError, fmt.Sprintf("PushDyBasePayloayDirect json.Unmarshal err: %v, data: %v", err, bByte), debug)
 			// }
 			if score != 0 {
-				go matchAddIntrage(roomId, v.SecOpenid, score)
+				go matchAddIntrage(roomId, anchorOpenId, v.SecOpenid, score)
 				// 数据到数据库中，防止数据丢失
 				go mysql.InsertGiftData(roomId, anchorOpenId, anchorName.NickName, strconv.FormatInt(roundId, 10), v.SecOpenid, v.Nickname, v.MsgId, v.SecGiftId,
 					v.GiftNum, v.GiftValue, v.Test)
@@ -114,7 +114,7 @@ func pushDyBasePayloayDirect(roomId, anchorOpenId, msgType string, data []byte) 
 			dataList = append(dataList, msgAckInfo)
 			score = live_like_score
 			if score != 0 {
-				go matchAddIntrage(roomId, v.SecOpenid, score)
+				go matchAddIntrage(roomId, anchorOpenId, v.SecOpenid, score)
 				// 送礼直接添加到世界排行榜
 				// go worldRankNumerAdd(v.(map[string]any)["userInfo"].(map[string]any)["userId"].(string), score)
 			}

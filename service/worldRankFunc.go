@@ -158,10 +158,10 @@ func liveCurrentRoundDel(roomId string) error {
 }
 
 // 设置快速返回入口
-func fastReturnAdd(roomId, openId string, score float64) {
+func fastReturnAdd(roomId, anchorOpenId, openId string, score float64) {
 	if _, ok := queryRoomIdToRoundId(roomId); ok {
 		if setIntegralToRound != nil {
-			if err := setIntegralToRound(roomId, openId, score); err != nil {
+			if err := setIntegralToRound(roomId, anchorOpenId, openId, score); err != nil {
 				ziLog.Error(fmt.Sprintf("SetPlayer comment score to pool err: roomid: %v, openId: %v, score: %v, err: %v", roomId, openId, 0.5, err), debug)
 			}
 		}

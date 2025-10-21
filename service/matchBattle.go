@@ -124,10 +124,10 @@ func MatchErrorV1(openIdList []string, msgErr, groupId string, errLabel int32) {
 }
 
 // 增加积分池积分
-func matchAddIntrage(roomId, openId string, score float64) {
+func matchAddIntrage(roomId, anchorOpenId, openId string, score float64) {
 	// ctx := first_ctx
 	WorldRankNumerAdd(openId, score)
-	fastReturnAdd(roomId, openId, score)
+	fastReturnAdd(roomId, anchorOpenId, openId, score)
 	// go userInfoCompareStore(openId, nickName, avatarUrl, false)
 }
 

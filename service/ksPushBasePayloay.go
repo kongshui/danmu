@@ -156,7 +156,7 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 		}
 		//分数不为0时添加积分
 		if score != 0 {
-			go matchAddIntrage(data.Data.RoomCode, openId, score)
+			go matchAddIntrage(data.Data.RoomCode, anchorOpenId, openId, score)
 			// 送礼直接添加到世界排行榜
 			// go worldRankNumerAdd(v.(map[string]any)["userInfo"].(map[string]any)["userId"].(string), score)
 		}
@@ -294,7 +294,7 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 		}
 		//分数不为0时添加积分
 		if score != 0 {
-			go matchAddIntrage(data.RoomCode, openId, score)
+			go matchAddIntrage(data.RoomCode, data.AuthorOpenId, openId, score)
 		}
 		if !isLottery {
 			// 格式化消息
