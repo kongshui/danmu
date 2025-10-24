@@ -1,0 +1,21 @@
+syntax = "proto3";
+package pmsg;
+
+option  go_package="./pmsg";
+
+// SendLogInfoMessage 发送日志信息
+message SendLogInfoMessage {
+    string  anchor_open_id = 1; // 主播openid
+    string  log_label = 2; // 日志标签, 例如: "pk", "match", "game", "error" 等 + 时间戳，例如: "pk_20230801120000"
+    int64   log_id = 3; // 日志id
+    bytes   log_content = 4; // 日志内容 // 建议控制在1024k以下，即1MB以下，建议512k以下
+}
+
+// SendLogInfoAckMessage 发送日志信息返回
+message SendLogInfoAckMessage {
+    string  anchor_open_id = 1; // 主播openid
+    string  log_label = 2; // 日志标签, 例如: "pk", "match", "game", "error" 等 + 时间戳，例如: "pk_20230801120000"
+    int64   log_id = 3; // 日志id
+    int32   code = 4; // 错误码
+    string  msg = 5; // 错误信息
+}

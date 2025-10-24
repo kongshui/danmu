@@ -30,6 +30,9 @@ enum MessageId {
     PkDataRecvAck = 23; // pk数据接收返回
     PkDataError = 24; // pk数据错误
     PkDataErrorAck = 25; // pk数据错误返回
+    // send log --------------------------------------------------
+    SendLogInfo = 30; // 发送日志信息
+    SendLogInfoAck = 31; // 发送日志信息返回
     //pk---------------------------------------------------
     MatchBattleQuitWithError = 43; // 因网络原因退出匹配组
     MatchBattleStartGamedConfirm = 45; // 游戏开始前确认

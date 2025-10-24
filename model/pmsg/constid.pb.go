@@ -48,6 +48,9 @@ const (
 	MessageId_PkDataRecvAck  MessageId = 23 // pk数据接收返回
 	MessageId_PkDataError    MessageId = 24 // pk数据错误
 	MessageId_PkDataErrorAck MessageId = 25 // pk数据错误返回
+	// send log --------------------------------------------------
+	MessageId_SendLogInfo    MessageId = 30 // 发送日志信息
+	MessageId_SendLogInfoAck MessageId = 31 // 发送日志信息返回
 	// pk---------------------------------------------------
 	MessageId_MatchBattleQuitWithError          MessageId = 43  // 因网络原因退出匹配组
 	MessageId_MatchBattleStartGamedConfirm      MessageId = 45  // 游戏开始前确认
@@ -163,6 +166,8 @@ var (
 		23:  "PkDataRecvAck",
 		24:  "PkDataError",
 		25:  "PkDataErrorAck",
+		30:  "SendLogInfo",
+		31:  "SendLogInfoAck",
 		43:  "MatchBattleQuitWithError",
 		45:  "MatchBattleStartGamedConfirm",
 		46:  "MatchBattleStartGamedConfirmAck",
@@ -273,6 +278,8 @@ var (
 		"PkDataRecvAck":                     23,
 		"PkDataError":                       24,
 		"PkDataErrorAck":                    25,
+		"SendLogInfo":                       30,
+		"SendLogInfoAck":                    31,
 		"MatchBattleQuitWithError":          43,
 		"MatchBattleStartGamedConfirm":      45,
 		"MatchBattleStartGamedConfirmAck":   46,
@@ -393,7 +400,7 @@ var File_proto_constid_proto protoreflect.FileDescriptor
 
 const file_proto_constid_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/constid.proto\x12\x04pmsg*\x86\x13\n" +
+	"\x13proto/constid.proto\x12\x04pmsg*\xab\x13\n" +
 	"\tMessageId\x12\v\n" +
 	"\aUnknown\x10\x00\x12\f\n" +
 	"\bNodeInfo\x10\x01\x12\x0f\n" +
@@ -423,7 +430,9 @@ const file_proto_constid_proto_rawDesc = "" +
 	"\rPkDataSendAck\x10\x16\x12\x11\n" +
 	"\rPkDataRecvAck\x10\x17\x12\x0f\n" +
 	"\vPkDataError\x10\x18\x12\x12\n" +
-	"\x0ePkDataErrorAck\x10\x19\x12\x1c\n" +
+	"\x0ePkDataErrorAck\x10\x19\x12\x0f\n" +
+	"\vSendLogInfo\x10\x1e\x12\x12\n" +
+	"\x0eSendLogInfoAck\x10\x1f\x12\x1c\n" +
 	"\x18MatchBattleQuitWithError\x10+\x12 \n" +
 	"\x1cMatchBattleStartGamedConfirm\x10-\x12#\n" +
 	"\x1fMatchBattleStartGamedConfirmAck\x10.\x12\x19\n" +

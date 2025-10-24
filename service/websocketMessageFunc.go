@@ -140,6 +140,8 @@ func websocketMessageFunc(msg *pmsg.MessageBody) error {
 		return levelQuery(msg)
 	case pmsg.MessageId_FrontSendMessageError: // 前端发送消息错误
 		return getFrontEndErrorInfo(msg)
+	case pmsg.MessageId_SendLogInfo: // 发送日志信息
+		return recvLog(msg)
 	default:
 		if otherWebsocket != nil {
 			return otherWebsocket(msg)

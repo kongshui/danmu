@@ -558,3 +558,38 @@ func levelQuery(msg *pmsg.MessageBody) error {
 	}
 	return nil
 }
+
+// 接收日志
+func recvLog(msg *pmsg.MessageBody) error {
+	code := 0
+	ackMsg := "success"
+	data := &pmsg.SendLogInfoMessage{}
+	if err := proto.Unmarshal(msg.MessageData, data); err != nil {
+		code = 1
+		ackMsg = "recvLog Unmarshal err: " + err.Error()
+	} else {
+		// 写入文件
+		err := writeToFile(data.GetAnchorOpenId()+"_"+data.GetLogLabel()+".log", data.GetLogContent())
+		if err != nil {
+			code = 2
+			ackMsg = "writeToFile err: " + err.Error()
+		}
+	}
+	// 发送日志信息返回
+	sData := &pmsg.SendLogInfoAckMessage{
+		AnchorOpenId: data.GetAnchorOpenId(),
+		LogLabel:     data.GetLogLabel(),
+		LogId:        data.GetLogId(),
+		Code:         int32(code),
+		Msg:          ackMsg,
+	}
+	// 发送日志信息返回
+	sDataByte, err := proto.Marshal(sData)
+	if err != nil {
+		return errors.New("recvLog proto Marshal err: " + err.Error())
+	}
+	if err := sse.SseSend(pmsg.MessageId_SendLogInfoAck, []string{msg.Uuid}, sDataByte); err != nil {
+		return errors.New("recvLog 发送日志信息返回 err: " + err.Error())
+	}
+	return nil
+}

@@ -28,7 +28,7 @@ type AddIntegralReq struct {
 	GroupId       string                 `protobuf:"bytes,3,opt,name=GroupId,proto3" json:"GroupId,omitempty"`           // 分组id
 	AnchorOpenId  string                 `protobuf:"bytes,4,opt,name=AnchorOpenId,proto3" json:"AnchorOpenId,omitempty"` // 用户id
 	Integral      float64                `protobuf:"fixed64,5,opt,name=Integral,proto3" json:"Integral,omitempty"`       // 积分
-	AddType       int64                  `protobuf:"varint,6,opt,name=AddType,proto3" json:"AddType,omitempty"`          // 增加类型 0:默认增加，此时查看openId和AnchoropenId，谁不为空给谁，其实这个时候openId和anchorOpenId时相同的，nodeId是节点 1:给opneId增加 2:给AnchorOpenId积分池增加 3:给GroupId增加 4： openId和AnchorOpenId积分池都增加
+	AddType       int64                  `protobuf:"varint,6,opt,name=AddType,proto3" json:"AddType,omitempty"`          // 增加类型 0:默认增加，此时查看openId和AnchoropenId，谁不为空给谁，其实这个时候openId和anchorOpenId时相同的，nodeId是节点 1:给opneId增加 2:给AnchorOpenId积分池增加 3：openId和AnchorOpenId积分池都增加
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
