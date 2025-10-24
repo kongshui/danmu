@@ -575,12 +575,11 @@ func recvLog(msg *pmsg.MessageBody) error {
 		if dataDir == "" {
 			dataDir, err = os.Executable()
 			if err != nil {
-				panic("get log dir err: " + err.Error())
-
+				return errors.New("recvLog get log dir err: " + err.Error())
 			}
 			dataDir = filepath.Join(filepath.Dir(dataDir), "logs")
 		}
-		err := writeToFile(dataDir+data.GetAnchorOpenId()+"_"+data.GetLogLabel()+".log", data.GetLogContent())
+		err := writeToFile(filepath.Join(dataDir, data.GetAnchorOpenId()+"_"+data.GetLogLabel()+".log"), data.GetLogContent())
 		if err != nil {
 			code = 2
 			ackMsg = "writeToFile err: " + err.Error()
