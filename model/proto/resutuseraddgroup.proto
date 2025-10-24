@@ -3,17 +3,17 @@ package pmsg;
 
 option go_package="./pmsg";
 
-message ResultUserAddGroupMessage {
-    repeated UserInfoStruct UserInfoList = 1; //userInfoList
-    int64 TimeStamp = 2;
-}
+// message ResultUserAddGroupMessage {
+//     repeated UserInfoStruct UserInfoList = 1; //userInfoList
+//     int64 TimeStamp = 2;
+// }
 
-message UserInfoStruct {
-    string OpenId = 1;              //玩家用户id
-    int64 VersionScore = 2;           //世界积分
-    int64 VersionRank = 3;            //世界排名
-    int64 WinningStreamCoin = 4;    //连胜币
-    bool IsFirstConsume  = 5;             //是否是第一次消费
-    int64 Level = 6;                //玩家等级
-    int64 WinningPoints = 7;        //胜点
-}
+// message UserInfoStruct {
+//     string OpenId = 1;              //玩家用户id
+//     int64 VersionScore = 2;           //世界积分
+//     int64 VersionRank = 3;            //世界排名
+//     int64 WinningStreamCoin = 4;    //连胜币
+//     bool IsFirstConsume  = 5;             //是否是第一次消费
+//     int64 Level = 6;                //玩家等级
+//     int64 WinningPoints = 7;        //胜点
+// }
