@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"os"
 	"path"
+	"path/filepath"
 	"strconv"
 	"time"
 
@@ -569,7 +571,16 @@ func recvLog(msg *pmsg.MessageBody) error {
 		ackMsg = "recvLog Unmarshal err: " + err.Error()
 	} else {
 		// 写入文件
-		err := writeToFile(data.GetAnchorOpenId()+"_"+data.GetLogLabel()+".log", data.GetLogContent())
+		dataDir := config.Logging.LogPath
+		if dataDir == "" {
+			dataDir, err = os.Executable()
+			if err != nil {
+				panic("get log dir err: " + err.Error())
+
+			}
+			dataDir = filepath.Join(filepath.Dir(dataDir), "logs")
+		}
+		err := writeToFile(dataDir+data.GetAnchorOpenId()+"_"+data.GetLogLabel()+".log", data.GetLogContent())
 		if err != nil {
 			code = 2
 			ackMsg = "writeToFile err: " + err.Error()
