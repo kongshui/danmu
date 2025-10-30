@@ -25,7 +25,7 @@ func autoNewVersion() {
 				nowVersionT, _ := time.Parse(version_time_layout, nowWorldRankVersion)
 				worldRankVersionT, _ := time.Parse(version_time_layout, currentRankVersion)
 				//时间不够时间间隔，不轮转
-				if nowVersionT.Unix()-worldRankVersionT.Unix() < version_time_interval {
+				if nowVersionT.Unix()-worldRankVersionT.Unix() < version_time_interval || int64((week_set-1)*7)*24*60*60 > nowVersionT.Unix()-worldRankVersionT.Unix() {
 					continue
 				}
 				// 设置上期前100名名单列表
