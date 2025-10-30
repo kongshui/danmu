@@ -1,8 +1,12 @@
 package service
 
 import (
+	"context"
 	"fmt"
+	"path"
 	"time"
+
+	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
 // 每周二0点检测更新
@@ -17,9 +21,8 @@ func autoNewVersion() {
 		if time.Now().Hour() == 0 {
 			monthVersionSet()
 		}
-		if (week_set != 0 && time.Now().Weekday() == scrollDay && time.Now().Hour() == scrollHour) || (week_set == 0 && time.Now().Day() == month_day) {
+		if (week_set != 0 && time.Now().Weekday() == scrollDay && time.Now().Hour() == scrollHour && time.Now().Minute() <= 5) || (week_set == 0 && time.Now().Day() == month_day && time.Now().Hour() == scrollHour && time.Now().Minute() <= 5) {
 			if isFirst {
-				isFirst = false
 				nowWorldRankVersion := time.Now().Format(version_time_layout)
 				//比较版本号
 				nowVersionT, _ := time.Parse(version_time_layout, nowWorldRankVersion)
@@ -30,9 +33,13 @@ func autoNewVersion() {
 				}
 				// 设置上期前100名名单列表
 				// go top100Rank(currentVersionRankDb)
-
+				// 设置isFirst状态
 				// 设置版本号
 				currentRankVersion = nowWorldRankVersion
+				if !autoNewVersionLock() {
+					continue
+				}
+				isFirst = false
 				// 设置level
 				if is_level_scroll {
 					// 等级滚动
@@ -58,4 +65,19 @@ func autoNewVersion() {
 			isFirst = true
 		}
 	}
+}
+
+// 使用etcd锁，避免多台服务器同时轮转
+func autoNewVersionLock() bool {
+	listenId := etcdClient.NewLease(context.Background(), 3)
+
+	ok := etcdClient.PutIfNotExist(context.Background(), path.Join("/", config.Project, monitor_auto_new_version_lock), "1", listenId)
+	if ok {
+		go func(id clientv3.LeaseID) {
+			ctx, cancel := context.WithTimeout(context.Background(), 6*time.Minute)
+			defer cancel()
+			etcdClient.KeepLease(ctx, listenId)
+		}(listenId)
+	}
+	return ok
 }
