@@ -59,7 +59,9 @@ func pushDyBasePayloayDirect(roomId, anchorOpenId, msgType string, data []byte) 
 			if strings.HasPrefix(v.Content, "666") && strings.HasSuffix(v.Content, "666") {
 				score = live_like_score
 			}
-
+			ziLog.Info(fmt.Sprintf("PushDyBasePayloayDirect live_comment: %v", v), debug)
+			// 加入玩家信息
+			go UserInfoCompareStore(v.SecOpenid, v.Nickname, v.AvatarUrl, false)
 			if score != 0 {
 				// 添加积分
 				go matchAddIntrage(roomId, anchorOpenId, v.SecOpenid, score)
@@ -71,7 +73,7 @@ func pushDyBasePayloayDirect(roomId, anchorOpenId, msgType string, data []byte) 
 		if err := json.NewDecoder(strings.NewReader(string(data))).Decode(&getData); err != nil {
 			ziLog.Error(fmt.Sprintf("PushDyBasePayloayDirect json.Unmarshal err: %v, data: %v", err, string(data)), debug)
 		}
-		ziLog.Gift(fmt.Sprintf("PushDyBasePayloayDirect getData: %v", string(data)), debug)
+		ziLog.Gift(fmt.Sprintf("PushDyBasePayloayDirect live_gift: %v", string(data)), debug)
 		for _, v := range getData {
 			var msgAckInfo MsgAckInfoStruct
 			msgAckInfo.MsgId = v.MsgId
@@ -83,11 +85,10 @@ func pushDyBasePayloayDirect(roomId, anchorOpenId, msgType string, data []byte) 
 			} else {
 				score = 0
 			}
-			// bByte, _ := json.Marshal(v)
-			// var dataMap map[string]any
-			// if err := json.Unmarshal(bByte, &dataMap); err != nil {
-			// 	ziLog.Write(logError, fmt.Sprintf("PushDyBasePayloayDirect json.Unmarshal err: %v, data: %v", err, bByte), debug)
-			// }
+
+			// 加入玩家信息
+			go UserInfoCompareStore(v.SecOpenid, v.Nickname, v.AvatarUrl, false)
+
 			if score != 0 {
 				go matchAddIntrage(roomId, anchorOpenId, v.SecOpenid, score)
 				// 数据到数据库中，防止数据丢失

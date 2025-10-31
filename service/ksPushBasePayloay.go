@@ -72,6 +72,8 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 			}
 			// 获取用户信息
 			openId = gift.UserInfo.UserId
+			// 加入用户信息
+			go UserInfoCompareStore(gift.UserInfo.UserId, gift.UserInfo.NickName, gift.UserInfo.AvatarUrl, false)
 			// 后端记录数据库
 			anchorName, err := UserInfoGet(anchorOpenId, true)
 			if err != nil {
@@ -131,6 +133,8 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 			}
 			// 获取用户信息
 			openId = commentData.UserInfo.UserId
+			// 加入用户信息
+			go UserInfoCompareStore(commentData.UserInfo.UserId, commentData.UserInfo.NickName, commentData.UserInfo.AvatarUrl, false)
 			// 评论
 
 			if commentData.Content == "666" {
