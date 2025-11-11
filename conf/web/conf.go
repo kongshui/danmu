@@ -28,6 +28,7 @@ type (
 		QueryGroupSecret  string `toml:"query_group_secret"`  //查询组密钥
 		RaceSecret        string `toml:"race_secret"`         // 比赛密钥
 		ConfigDir         string `toml:"config_dir"`          // 配置文件目录
+		LogStoreDir       string `toml:"log_store_dir"`       // 存储日志目录
 		UserChangeTime    int64  `toml:"user_change_time"`    // 用户信息变更时间,单位秒
 		IsAnonymous       bool   `toml:"is_anonymous"`        // 是否匿名
 		IsOnline          bool   `toml:"is_online"`           // 是否上线
@@ -94,7 +95,7 @@ func newConf() *Config {
 		Nats:    Nats{[]string{"nats://localhost:4222"}},
 		Redis:   Redis{"127.0.0.1:6379", 0, "", false},
 		Mysql:   Mysql{"127.0.0.1:3306", "root", "123456", "store_log", true},
-		App:     App{"ks", "", "", "", "", "", "", "", "", "", 300, true, false, false, false},
+		App:     App{"ks", "", "", "", "", "", "", "", "", "", "./logstore", 300, true, false, false, false},
 	}
 }
 

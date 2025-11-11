@@ -571,13 +571,21 @@ func recvLog(msg *pmsg.MessageBody) error {
 		ackMsg = "recvLog Unmarshal err: " + err.Error()
 	} else {
 		// 写入文件
-		dataDir := cfg.Logging.LogPath
-		if dataDir == "" {
+		dataDir := cfg.App.LogStoreDir
+		if cfg.App.LogStoreDir == "" {
 			dataDir, err = os.Executable()
 			if err != nil {
 				return errors.New("recvLog get log dir err: " + err.Error())
 			}
-			dataDir = filepath.Join(filepath.Dir(dataDir), "logs")
+			dataDir = filepath.Join(filepath.Dir(dataDir), "logstore")
+			cfg.App.LogStoreDir = dataDir
+		}
+		// 检查目录是否存在
+		if _, err := os.Stat(dataDir); os.IsNotExist(err) {
+			// 创建目录
+			if err := os.MkdirAll(dataDir, 0755); err != nil {
+				return errors.New("recvLog create log dir err: " + err.Error())
+			}
 		}
 		err := writeToFile(filepath.Join(dataDir, data.GetAnchorOpenId()+"_"+data.GetLogLabel()+".log"), data.GetLogContent())
 		if err != nil {
