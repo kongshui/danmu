@@ -142,6 +142,8 @@ func websocketMessageFunc(msg *pmsg.MessageBody) error {
 		return getFrontEndErrorInfo(msg)
 	case pmsg.MessageId_SendLogInfo: // 发送日志信息
 		return recvLog(msg)
+	case pmsg.MessageId_ConfigMapRequest: // 配置文件请求
+		return configMapRequest(msg)
 	default:
 		if otherWebsocket != nil {
 			return otherWebsocket(msg)

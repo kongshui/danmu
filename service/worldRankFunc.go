@@ -201,6 +201,12 @@ func GetPlayerWorldRankData(openId string) (int64, int64, error) {
 	return int64(score), rank, nil
 }
 
+// 添加玩家至分组
+func PlayerGroupAdd(roomId, openId, group string, roundId int64) (bool, error) {
+	name := roomId + "_" + strconv.FormatInt(roundId, 10) + "_group"
+	return rdb.HSetNX(name, openId, group)
+}
+
 // 查询玩家是否在分组中
 func queryPlayerInGroup(roomId, openId string) (string, int64, bool, error) {
 	var group string

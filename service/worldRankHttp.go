@@ -57,7 +57,7 @@ func worldRankSet(worldRankVersion string) {
 	}
 	body, err := json.Marshal(map[string]any{
 		"app_id":             app_id,
-		"is_online_version":  config.App.IsOnline,
+		"is_online_version":  cfg.App.IsOnline,
 		"world_rank_version": worldRankVersion,
 	})
 	if err != nil {
@@ -94,7 +94,7 @@ func worldRankCompleteUpload() {
 	}
 	body, err := json.Marshal(map[string]any{
 		"app_id":             app_id,
-		"is_online_version":  config.App.IsOnline,
+		"is_online_version":  cfg.App.IsOnline,
 		"world_rank_version": currentRankVersion,
 		"complete_time":      time.Now().Unix(),
 	})

@@ -30,7 +30,7 @@ func queryAnchorOpenIdByRoomId(roomId string) (string, error) {
 
 // 通过roomid获取主播id
 func QueryRoomIdInterconvertAnchorOpenId(roomId string) string {
-	res, err := etcdClient.Client.Get(first_ctx, path.Join("/", config.Project, common.RoomId_OpenId_Register_key, roomId))
+	res, err := etcdClient.Client.Get(first_ctx, path.Join("/", cfg.Project, common.RoomId_OpenId_Register_key, roomId))
 	if err != nil {
 		ziLog.Error(fmt.Sprintf("queryRoomIdToAnchorOpenId,查询%v失败: %v", roomId, err), debug)
 		return ""
@@ -54,7 +54,7 @@ func queryRoomIdToRoundId(roomId string) (int64, bool) {
 // 通过roomid获取到uid
 func queryRoomIdToUid(roomId string) string {
 	// 获取房间信息
-	result, err := etcdClient.Client.Get(first_ctx, path.Join("/", config.Project, common.RoomId_Register_Uid_key, roomId))
+	result, err := etcdClient.Client.Get(first_ctx, path.Join("/", cfg.Project, common.RoomId_Register_Uid_key, roomId))
 	if err != nil {
 		ziLog.Error(fmt.Sprintf("queryRoomIdToUid etcdClient.Client.Get err: %v", err), debug)
 		return ""

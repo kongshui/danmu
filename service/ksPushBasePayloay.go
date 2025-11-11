@@ -19,7 +19,6 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 		isgift       bool = false
 		isLottery    bool = false
 		isSendAck    bool = false // 是否发送ack
-		isFirst      bool = true  // 是否第一次
 		openId       string
 		anchorOpenId string = data.Data.AuthorOpenId
 	)
@@ -89,10 +88,9 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 				go mysql.InsertGiftData(data.Data.RoomCode, anchorOpenId, anchorName.NickName, strconv.FormatInt(roundId, 10), gift.UserInfo.UserId,
 					gift.UserInfo.NickName, gift.UniqueNo, gift.GiftId, int(gift.GiftCount), int(gift.GiftTotalPrice), false)
 
-				if isFirst {
+				if !QueryIsConsume(gift.UserInfo.UserId) {
 					// 设置用户是否已经消费
 					setIsConsume(gift.UserInfo.UserId, time.Now().UnixMilli())
-					isFirst = false
 				}
 			}
 			if gift.GiftTotalPrice > 0 {
@@ -148,9 +146,13 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 				ziLog.Error(fmt.Sprintf("ksPushBasePayloay json.Unmarshal err:  %v,失败数据为： %v", err, v), debug)
 				continue
 			}
+			if _, _, ok, _ := queryPlayerInGroup(data.Data.RoomCode, liveLikeData.UserInfo.UserId); ok {
+				score = live_like_score
+			} else {
+				go UserInfoCompareStore(liveLikeData.UserInfo.UserId, liveLikeData.UserInfo.NickName, liveLikeData.UserInfo.AvatarUrl, false)
+			}
 			// 获取用户信息
 			openId = liveLikeData.UserInfo.UserId
-			score = live_like_score
 			msgId = pmsg.MessageId_liveLike
 		default:
 			continue
@@ -182,7 +184,7 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 		}
 	}
 	if isgift {
-		if config.App.IsOnline && isSendAck {
+		if cfg.App.IsOnline && isSendAck {
 			ksMsgAckSend(data.Data.RoomCode, "cpClientReceive", ack)
 		}
 		sendAck := &pmsg.KsMsgAck{}
@@ -318,7 +320,7 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 
 	}
 	// 推送消息验证
-	if config.App.IsOnline {
+	if cfg.App.IsOnline {
 		ksMsgAckSend(data.RoomCode, "cpClientReceive", ack)
 	}
 	sendAck := &pmsg.KsMsgAck{}

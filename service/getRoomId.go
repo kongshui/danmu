@@ -36,7 +36,7 @@ func setRoomInfo(uid string, roomInfo *pmsg.AnchorInfoMessage) (*pmsg.AnchorInfo
 		ziLog.Error(fmt.Sprintf("json转换失败， info: %v，err: %v", data, err), debug)
 	}
 
-	etcdClient.Client.Put(first_ctx, path.Join("/", config.Project, common.RoomInfo_Register_key, roomInfo.RoomId), string(dataByte))
+	etcdClient.Client.Put(first_ctx, path.Join("/", cfg.Project, common.RoomInfo_Register_key, roomInfo.RoomId), string(dataByte))
 	return roomInfo, nil
 }
 

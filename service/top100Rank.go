@@ -31,7 +31,7 @@ func getTopWorldRankData(startIndex int64, endIndex int64, reverse bool) *pmsg.U
 			}
 		}
 		nickName := user.NickName
-		if config.App.IsAnonymous {
+		if cfg.App.IsAnonymous {
 			nickName = stringToAnonymouse(nickName)
 		}
 		data.UserInfoList = append(data.UserInfoList, &pmsg.UserInfo{

@@ -23,11 +23,11 @@ func BaseDyCallBackHandle(c *gin.Context) {
 	var secret string
 	switch headers["x-msg-type"] {
 	case "live_comment":
-		secret = config.App.CommentSecret
+		secret = cfg.App.CommentSecret
 	case "live_gift":
-		secret = config.App.GiftSecret
+		secret = cfg.App.GiftSecret
 	case "live_like":
-		secret = config.App.LikeSecret
+		secret = cfg.App.LikeSecret
 	}
 	if c.GetHeader("x-signature") != common.DySignature(headers, string(*bodyByte), secret) {
 		ziLog.Error("BaseCallBackHandle dy签名错误", debug)

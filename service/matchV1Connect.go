@@ -113,7 +113,7 @@ func matchV1HeardBeat() {
 	// )
 	for {
 		<-t.C
-		res, err := etcdClient.Client.Get(first_ctx, path.Join("/", config.Project, match_battle_group_time), clientv3.WithPrefix())
+		res, err := etcdClient.Client.Get(first_ctx, path.Join("/", cfg.Project, match_battle_group_time), clientv3.WithPrefix())
 		if err != nil {
 			ziLog.Error(fmt.Sprintf("MatchV1HeardBeat etcdClient.Client.Get err: %v", err), debug)
 			continue

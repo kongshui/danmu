@@ -33,6 +33,13 @@ enum MessageId {
     // send log --------------------------------------------------
     SendLogInfo = 30; // 发送日志信息
     SendLogInfoAck = 31; // 发送日志信息返回
+    //从序号36开始发送配置文件
+    ConfigFileRequest = 35; // 配置文件请求
+    ConfigFileSend = 36; // 配置文件发送
+    ConfigFileSendAck = 37; // 配置文件发送返回
+    ConfigFileSendEnd = 38; // 配置文件发送结束
+    ConfigMapRequest = 39; // 配置文件请求
+    ConfigMapRequestAck = 40; // 配置文件请求返回
     //pk---------------------------------------------------
     MatchBattleQuitWithError = 43; // 因网络原因退出匹配组
     MatchBattleStartGamedConfirm = 45; // 游戏开始前确认

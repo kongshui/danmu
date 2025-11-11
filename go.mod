@@ -54,7 +54,7 @@ require (
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.3 // indirect
 	github.com/nats-io/nats.go v1.43.0
-	go.etcd.io/etcd/api/v3 v3.6.2 // indirect
+	go.etcd.io/etcd/api/v3 v3.6.2
 	go.etcd.io/etcd/client/pkg/v3 v3.6.2 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect

@@ -84,28 +84,28 @@ func HandleAddWorldRank(c *gin.Context) {
 }
 
 // 添加连胜次数
-func HandlestreamCount(c *gin.Context) {
-	type AddCoin struct {
-		OpenId string `json:"open_id"`
-		Stats  int    `json:"stats"`
-	}
-	var addCoin AddCoin
-	if err := c.ShouldBindJSON(&addCoin); err != nil {
-		log.Println(err)
-		c.JSON(404, gin.H{
-			"err": err,
-		})
-		return
-	}
-	if err := winningStreamCountAdd(addCoin.Stats, addCoin.OpenId); err != nil {
-		log.Println(err)
-		c.JSON(404, gin.H{
-			"err": err,
-		})
-		return
-	}
-	c.JSON(200, "添加成功")
-}
+// func HandlestreamCount(c *gin.Context) {
+// 	type AddCoin struct {
+// 		OpenId string `json:"open_id"`
+// 		Stats  int    `json:"stats"`
+// 	}
+// 	var addCoin AddCoin
+// 	if err := c.ShouldBindJSON(&addCoin); err != nil {
+// 		log.Println(err)
+// 		c.JSON(404, gin.H{
+// 			"err": err,
+// 		})
+// 		return
+// 	}
+// 	if err := winningStreamCountAdd(addCoin.Stats, addCoin.OpenId); err != nil {
+// 		log.Println(err)
+// 		c.JSON(404, gin.H{
+// 			"err": err,
+// 		})
+// 		return
+// 	}
+// 	c.JSON(200, "添加成功")
+// }
 
 // 发送虚拟评论
 func HandleSendFakeComment(c *gin.Context) {
@@ -424,7 +424,7 @@ func HandleAddGroup(c *gin.Context) {
 
 // 获取所有直播间信息
 func HandleGetAllRoom(c *gin.Context) {
-	uidList, err := etcdClient.Client.Get(first_ctx, path.Join("/", config.Project, common.Uid_Register_RoomId_key), clientv3.WithPrefix())
+	uidList, err := etcdClient.Client.Get(first_ctx, path.Join("/", cfg.Project, common.Uid_Register_RoomId_key), clientv3.WithPrefix())
 	if err != nil {
 		ziLog.Error(fmt.Sprintf("ksCallBackQueryToKs 查询直播房间号失败:  %v", err), debug)
 		c.JSON(200, gin.H{
@@ -559,7 +559,7 @@ func getTestCode() string {
 
 // 获取所有主播
 func GetAllAnchor(c *gin.Context) {
-	req, err := etcdClient.Client.Get(context.Background(), path.Join("/"+config.Project+common.Uid_Register_OpenId_key), clientv3.WithPrefix())
+	req, err := etcdClient.Client.Get(context.Background(), path.Join("/"+cfg.Project+common.Uid_Register_OpenId_key), clientv3.WithPrefix())
 
 	if err != nil {
 		log.Println("获取所有主播失败", err)

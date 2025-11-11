@@ -1,0 +1,32 @@
+syntax = "proto3";
+package pmsg;
+
+option go_package="./pmsg";
+
+// 配置文件请求
+message ConfigFileRequestMessage {
+    string open_id = 1; // 用户open_id
+}
+
+// 配置文件发送
+message ConfigFileSendMessage {
+    string open_id = 1; // 用户open_id
+    string file_name = 2; // 配置文件名
+    bytes content = 3; // 配置文件内容
+    int64 send_id = 4;   // 日志id, 用于匹配返回,默认0：表示文件一次性发送完毕，否则表示分块发送
+}
+
+// 配置文件发送返回,如果send_id不为0,表示分块发送，需要返回send_id确认
+message ConfigFileSendAckMessage {
+    string open_id = 1; // 用户open_id
+    string file_name = 2; // 配置文件名
+    int64 send_id = 3; // 日志id
+    int64 code = 4;        // 状态码
+    string msg = 5;        // 消息
+}
+
+// 配置文件发送结束
+message ConfigFileSendEndMessage {
+    string open_id = 1; // 日志id
+    repeated string file_names = 2; // 所有发送配置文件名
+}

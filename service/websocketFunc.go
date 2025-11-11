@@ -145,7 +145,7 @@ func TestTokenFunc(msg *pmsg.MessageBody) error {
 		log.Println("json转换失败， info:", data, err, "err: ", err)
 	}
 
-	etcdClient.Client.Put(first_ctx, path.Join("/", config.Project, common.RoomInfo_Register_key, roomInfo.RoomId), string(dataByte))
+	etcdClient.Client.Put(first_ctx, path.Join("/", cfg.Project, common.RoomInfo_Register_key, roomInfo.RoomId), string(dataByte))
 	sData, err := proto.Marshal(roomInfo)
 	if err != nil {
 		return errors.New("token proto Marshal err: " + err.Error())
@@ -455,7 +455,7 @@ func ksMsgAck(msg *pmsg.MessageBody) error {
 		if err != nil {
 			return errors.New("ksMsgAck Unmarshal err: " + err.Error())
 		}
-		if config.App.IsOnline {
+		if cfg.App.IsOnline {
 			ksMsgAckSend(data.GetRoomId(), "cpClientShow", KsMsgAckReceiveStruct{
 				UniqueMessageId:  data.GetData().GetUniqueMessageId(),
 				PushType:         "giftSend",
@@ -571,7 +571,7 @@ func recvLog(msg *pmsg.MessageBody) error {
 		ackMsg = "recvLog Unmarshal err: " + err.Error()
 	} else {
 		// 写入文件
-		dataDir := config.Logging.LogPath
+		dataDir := cfg.Logging.LogPath
 		if dataDir == "" {
 			dataDir, err = os.Executable()
 			if err != nil {
@@ -600,6 +600,15 @@ func recvLog(msg *pmsg.MessageBody) error {
 	}
 	if err := sse.SseSend(pmsg.MessageId_SendLogInfoAck, []string{msg.Uuid}, sDataByte); err != nil {
 		return errors.New("recvLog 发送日志信息返回 err: " + err.Error())
+	}
+	return nil
+}
+
+// 配置文件请求
+func configMapRequest(msg *pmsg.MessageBody) error {
+	data, nil := json.Marshal(&cfgConfig)
+	if err := sse.SseSend(pmsg.MessageId_ConfigMapRequestAck, []string{msg.Uuid}, data); err != nil {
+		return errors.New("configMapRequest 发送配置文件请求返回 err: " + err.Error())
 	}
 	return nil
 }

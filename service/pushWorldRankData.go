@@ -19,7 +19,7 @@ func pushWorldRankData() error {
 	)
 	//初始化app
 	worldRank.AppId = app_id
-	worldRank.IsOnlineVersion = config.App.IsOnline
+	worldRank.IsOnlineVersion = cfg.App.IsOnline
 	worldRank.WorldRankVersion = currentRankVersion
 	worldRank.RankList = make([]UserRankStruct, 0)
 	// //获取总长度
@@ -82,7 +82,7 @@ func pushHistoryWorldRankData() error {
 	)
 	//初始化app
 	worldRank.AppId = app_id
-	worldRank.IsOnlineVersion = config.App.IsOnline
+	worldRank.IsOnlineVersion = cfg.App.IsOnline
 	worldRank.WorldRankVersion = currentRankVersion
 
 	// //获取总长度
@@ -153,9 +153,9 @@ func pushHistoryWorldRankData() error {
 	return nil
 }
 
-// 出啊hi话玩家世界排行数据
+// 玩家世界排行数据
 func getWorldPlayerData(openId string, rank, score int64) (userData UserRankStruct) {
-	winningStreakCountInt, err := rdb.ZScore(winning_streak_coin_db, openId)
+	winningStreakCountInt, err := rdb.ZScore(winning_stream_count_db, openId)
 	if err != nil {
 		winningStreakCountInt = 0
 	}

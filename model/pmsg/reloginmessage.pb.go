@@ -30,6 +30,8 @@ type ReloginMessage struct {
 	OpenId        string                 `protobuf:"bytes,5,opt,name=OpenId,proto3" json:"OpenId,omitempty"`          // 用户open_id
 	RoomId        string                 `protobuf:"bytes,6,opt,name=RoomId,proto3" json:"RoomId,omitempty"`          // 房间id
 	GradeLevel    int64                  `protobuf:"varint,7,opt,name=GradeLevel,proto3" json:"GradeLevel,omitempty"` // 段位
+	Code          int64                  `protobuf:"varint,8,opt,name=Code,proto3" json:"Code,omitempty"`             // 状态码
+	Msg           string                 `protobuf:"bytes,9,opt,name=Msg,proto3" json:"Msg,omitempty"`                // 消息
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -113,11 +115,25 @@ func (x *ReloginMessage) GetGradeLevel() int64 {
 	return 0
 }
 
+func (x *ReloginMessage) GetCode() int64 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *ReloginMessage) GetMsg() string {
+	if x != nil {
+		return x.Msg
+	}
+	return ""
+}
+
 var File_proto_reloginmessage_proto protoreflect.FileDescriptor
 
 const file_proto_reloginmessage_proto_rawDesc = "" +
 	"\n" +
-	"\x1aproto/reloginmessage.proto\x12\x04pmsg\"\xc6\x01\n" +
+	"\x1aproto/reloginmessage.proto\x12\x04pmsg\"\xec\x01\n" +
 	"\x0eReloginMessage\x12\x14\n" +
 	"\x05Token\x18\x01 \x01(\tR\x05Token\x12\x1c\n" +
 	"\tTimestamp\x18\x02 \x01(\x03R\tTimestamp\x12\x18\n" +
@@ -127,7 +143,9 @@ const file_proto_reloginmessage_proto_rawDesc = "" +
 	"\x06RoomId\x18\x06 \x01(\tR\x06RoomId\x12\x1e\n" +
 	"\n" +
 	"GradeLevel\x18\a \x01(\x03R\n" +
-	"GradeLevelB\bZ\x06./pmsgb\x06proto3"
+	"GradeLevel\x12\x12\n" +
+	"\x04Code\x18\b \x01(\x03R\x04Code\x12\x10\n" +
+	"\x03Msg\x18\t \x01(\tR\x03MsgB\bZ\x06./pmsgb\x06proto3"
 
 var (
 	file_proto_reloginmessage_proto_rawDescOnce sync.Once

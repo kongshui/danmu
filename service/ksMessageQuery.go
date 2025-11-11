@@ -90,7 +90,7 @@ func getFailMessage() {
 		if !isQueryOk || !ok {
 			continue
 		}
-		uidList, err := etcdClient.Client.Get(first_ctx, path.Join("/", config.Project, common.Uid_Register_RoomId_key), clientv3.WithPrefix())
+		uidList, err := etcdClient.Client.Get(first_ctx, path.Join("/", cfg.Project, common.Uid_Register_RoomId_key), clientv3.WithPrefix())
 		if err != nil {
 			ziLog.Error(fmt.Sprintf("ksCallBackQueryToKs 查询直播房间号失败:  %v", err), debug)
 			isQueryOk = true

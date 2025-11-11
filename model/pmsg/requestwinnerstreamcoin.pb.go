@@ -27,7 +27,7 @@ type RequestwinnerstreamcoinMessage struct {
 	OpenId        string                 `protobuf:"bytes,1,opt,name=OpenId,proto3" json:"OpenId,omitempty"`        //用户ID
 	UseNum        int64                  `protobuf:"varint,2,opt,name=UseNum,proto3" json:"UseNum,omitempty"`       //使用连胜币数量
 	RoundId       int64                  `protobuf:"varint,3,opt,name=RoundId,proto3" json:"RoundId,omitempty"`     //对局ID
-	GiftId        int64                  `protobuf:"varint,4,opt,name=GiftId,proto3" json:"GiftId,omitempty"`       //礼物ID
+	GiftId        string                 `protobuf:"bytes,4,opt,name=GiftId,proto3" json:"GiftId,omitempty"`        //礼物ID
 	TimeStamp     int64                  `protobuf:"varint,5,opt,name=TimeStamp,proto3" json:"TimeStamp,omitempty"` //时间戳
 	RoomId        string                 `protobuf:"bytes,6,opt,name=RoomId,proto3" json:"RoomId,omitempty"`        //房间ID
 	unknownFields protoimpl.UnknownFields
@@ -85,11 +85,11 @@ func (x *RequestwinnerstreamcoinMessage) GetRoundId() int64 {
 	return 0
 }
 
-func (x *RequestwinnerstreamcoinMessage) GetGiftId() int64 {
+func (x *RequestwinnerstreamcoinMessage) GetGiftId() string {
 	if x != nil {
 		return x.GiftId
 	}
-	return 0
+	return ""
 }
 
 func (x *RequestwinnerstreamcoinMessage) GetTimeStamp() int64 {
@@ -112,7 +112,7 @@ type ResponsewinnerstreamcoinMessage struct {
 	OpenId            string                 `protobuf:"bytes,1,opt,name=OpenId,proto3" json:"OpenId,omitempty"`                        //用户ID
 	WinningStreamCoin int64                  `protobuf:"varint,2,opt,name=WinningStreamCoin,proto3" json:"WinningStreamCoin,omitempty"` //现在连胜币数量
 	RoundId           int64                  `protobuf:"varint,3,opt,name=RoundId,proto3" json:"RoundId,omitempty"`                     //对局ID
-	GiftId            int64                  `protobuf:"varint,4,opt,name=GiftId,proto3" json:"GiftId,omitempty"`                       //礼物ID
+	GiftId            string                 `protobuf:"bytes,4,opt,name=GiftId,proto3" json:"GiftId,omitempty"`                        //礼物ID
 	TimeStamp         int64                  `protobuf:"varint,5,opt,name=TimeStamp,proto3" json:"TimeStamp,omitempty"`                 //时间戳
 	CanUse            bool                   `protobuf:"varint,6,opt,name=CanUse,proto3" json:"CanUse,omitempty"`                       //是否能够使用
 	RoomId            string                 `protobuf:"bytes,7,opt,name=RoomId,proto3" json:"RoomId,omitempty"`                        //房间ID
@@ -171,11 +171,11 @@ func (x *ResponsewinnerstreamcoinMessage) GetRoundId() int64 {
 	return 0
 }
 
-func (x *ResponsewinnerstreamcoinMessage) GetGiftId() int64 {
+func (x *ResponsewinnerstreamcoinMessage) GetGiftId() string {
 	if x != nil {
 		return x.GiftId
 	}
-	return 0
+	return ""
 }
 
 func (x *ResponsewinnerstreamcoinMessage) GetTimeStamp() int64 {
@@ -208,14 +208,14 @@ const file_proto_requestwinnerstreamcoin_proto_rawDesc = "" +
 	"\x06OpenId\x18\x01 \x01(\tR\x06OpenId\x12\x16\n" +
 	"\x06UseNum\x18\x02 \x01(\x03R\x06UseNum\x12\x18\n" +
 	"\aRoundId\x18\x03 \x01(\x03R\aRoundId\x12\x16\n" +
-	"\x06GiftId\x18\x04 \x01(\x03R\x06GiftId\x12\x1c\n" +
+	"\x06GiftId\x18\x04 \x01(\tR\x06GiftId\x12\x1c\n" +
 	"\tTimeStamp\x18\x05 \x01(\x03R\tTimeStamp\x12\x16\n" +
 	"\x06RoomId\x18\x06 \x01(\tR\x06RoomId\"\xe7\x01\n" +
 	"\x1fResponsewinnerstreamcoinMessage\x12\x16\n" +
 	"\x06OpenId\x18\x01 \x01(\tR\x06OpenId\x12,\n" +
 	"\x11WinningStreamCoin\x18\x02 \x01(\x03R\x11WinningStreamCoin\x12\x18\n" +
 	"\aRoundId\x18\x03 \x01(\x03R\aRoundId\x12\x16\n" +
-	"\x06GiftId\x18\x04 \x01(\x03R\x06GiftId\x12\x1c\n" +
+	"\x06GiftId\x18\x04 \x01(\tR\x06GiftId\x12\x1c\n" +
 	"\tTimeStamp\x18\x05 \x01(\x03R\tTimeStamp\x12\x16\n" +
 	"\x06CanUse\x18\x06 \x01(\bR\x06CanUse\x12\x16\n" +
 	"\x06RoomId\x18\a \x01(\tR\x06RoomIdB\bZ\x06./pmsgb\x06proto3"

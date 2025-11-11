@@ -16,7 +16,7 @@ import (
 // 注册后端域名
 func registerBackDomain(ctx context.Context) {
 	time.Sleep(6 * time.Second)
-	domain := "http://" + config.Server.Addr + ":" + config.Server.Port
+	domain := "http://" + cfg.Server.Addr + ":" + cfg.Server.Port
 	// 租约
 	listenId := etcdClient.NewLease(ctx, 3)
 	if listenId == 0 {
@@ -29,7 +29,7 @@ func registerBackDomain(ctx context.Context) {
 		for {
 			select {
 			case <-t.C:
-				_, err := etcdClient.Client.Put(ctx, path.Join("/", config.Project, backend_domain_key, config.Server.Addr+":"+config.Server.Port), domain, clientv3.WithLease(id))
+				_, err := etcdClient.Client.Put(ctx, path.Join("/", cfg.Project, backend_domain_key, cfg.Server.Addr+":"+cfg.Server.Port), domain, clientv3.WithLease(id))
 				if err != nil {
 					log.Println("发送消息至etcd失败", err)
 					continue
@@ -47,7 +47,7 @@ func registerBackDomain(ctx context.Context) {
 // Get  foward domain
 func GetFowardDomain(ctx context.Context) {
 	oneGetFowardDomain()
-	respond := etcdClient.Client.Watch(ctx, path.Join("/", config.Project, forward_domain_key), clientv3.WithPrefix(), clientv3.WithPrevKV())
+	respond := etcdClient.Client.Watch(ctx, path.Join("/", cfg.Project, forward_domain_key), clientv3.WithPrefix(), clientv3.WithPrevKV())
 	for wresp := range respond {
 		for _, ev := range wresp.Events {
 			switch ev.Type {
@@ -68,7 +68,7 @@ func GetFowardDomain(ctx context.Context) {
 
 // 获取前端服务器
 func oneGetFowardDomain() error {
-	respond, err := etcdClient.Client.Get(first_ctx, path.Join("/", config.Project, forward_domain_key), clientv3.WithPrefix())
+	respond, err := etcdClient.Client.Get(first_ctx, path.Join("/", cfg.Project, forward_domain_key), clientv3.WithPrefix())
 	if err != nil {
 		log.Println("获取前端服务器失败", err)
 		return errors.New("获取前端服务器失败: " + err.Error())

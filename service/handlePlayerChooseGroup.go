@@ -42,7 +42,7 @@ func PlayerChooseGroupHandle(c *gin.Context) {
 		"x-roomid":    c.GetHeader("x-roomid"),
 		"x-msg-type":  c.GetHeader("x-msg-type"),
 	}
-	if c.GetHeader("x-signature") != common.DySignature(headers, string(*bodyByte), config.App.ChooseGroupSecret) {
+	if c.GetHeader("x-signature") != common.DySignature(headers, string(*bodyByte), cfg.App.ChooseGroupSecret) {
 		ziLog.Error("PlayerChooseGroupHandle dy签名错误", debug)
 		c.JSON(400, gin.H{
 			"errcode": 11,

@@ -45,10 +45,10 @@ redisClient：redis链接
 logWirte：日志
 */
 func ConnectInit(conf *conf.Config, etcClient *dao_etcd.Etcd, mysqlClient *dao_mysql.MysqlClient, redisClient dao_redis.RedisClient, logWirte *zilog.LogStruct) {
-	config = conf
+	cfg = conf
 	etcdClient = etcClient
 	battlematchv1.InitEtcd(etcClient)
-	battlematchv1.InitProjectName(config.Project)
+	battlematchv1.InitProjectName(cfg.Project)
 	mysql = mysqlClient
 	rdb = redisClient
 	ziLog = logWirte

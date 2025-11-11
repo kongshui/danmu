@@ -12,4 +12,6 @@ message ReloginMessage {
     string OpenId = 5;      // 用户open_id
     string RoomId = 6;      // 房间id
     int64 GradeLevel = 7;        // 段位
+    int64 Code = 8;        // 状态码
+    string Msg = 9;        // 消息
 }

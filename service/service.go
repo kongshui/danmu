@@ -17,11 +17,11 @@ accessToken : 全局token
 
 func ServiceInit() {
 	// 设置全局变量
-	is_mock = config.App.IsMock
-	app_id = config.App.AppId         // appId
-	app_secret = config.App.AppSecret // appSecret
-	platform = config.App.PlatForm    // 平台
-	debug = config.Server.Debug
+	is_mock = cfg.App.IsMock
+	app_id = cfg.App.AppId         // appId
+	app_secret = cfg.App.AppSecret // appSecret
+	platform = cfg.App.PlatForm    // 平台
+	debug = cfg.Server.Debug
 	setUrl()
 	monthVersionSet()
 
@@ -32,21 +32,21 @@ func ServiceInit() {
 		// 设置token
 		if err := setToken(); err != nil {
 			log.Println("设置token失败： ", err)
-			ziLog.Error("设置token失败： "+err.Error(), config.Server.Debug)
+			ziLog.Error("设置token失败： "+err.Error(), cfg.Server.Debug)
 			os.Exit(1)
 		}
 		go setAccessToken()
 		//获取token
 		if err := getToken(); err != nil {
 			log.Println("获取token失败： ", err)
-			ziLog.Error("获取token失败： "+err.Error(), config.Server.Debug)
+			ziLog.Error("获取token失败： "+err.Error(), cfg.Server.Debug)
 			os.Exit(1)
 		}
 		go getAccessToken()
 		//初始化世界排行版
 		if err := worldRankInit(); err != nil {
 			log.Println("初始化世界排行版失败： ", err)
-			ziLog.Error("初始化世界排行版失败： "+err.Error(), config.Server.Debug)
+			ziLog.Error("初始化世界排行版失败： "+err.Error(), cfg.Server.Debug)
 			os.Exit(1)
 		}
 		// 失败消息获取
@@ -81,7 +81,11 @@ func ServiceInit() {
 	if initService != nil {
 		initService(is_mock)
 	}
-
+	// 读取配置映射
+	if err := configMapRead(); err != nil {
+		ziLog.Error("读取配置映射失败： "+err.Error(), cfg.Server.Debug)
+		os.Exit(1)
+	}
 	// 平台分开推送的内容
 	switch platform {
 	case "ks":
@@ -95,7 +99,7 @@ func ServiceInit() {
 			break
 		}
 		worldRankSet(currentRankVersion)
-		if config.App.NoSend {
+		if cfg.App.NoSend {
 			break
 		}
 		go pushWorldRankDataEntry()

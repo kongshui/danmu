@@ -8,7 +8,7 @@ import (
 
 // 通过openId获取uid
 func queryUidByOpenid(openid string) string {
-	res, err := etcdClient.Client.Get(first_ctx, path.Join("/", config.Project, common.OpenId_Register_Uid_key, openid))
+	res, err := etcdClient.Client.Get(first_ctx, path.Join("/", cfg.Project, common.OpenId_Register_Uid_key, openid))
 	if err != nil {
 		// ziLog.Write(logError, fmt.Sprintf("PlayerChooseGroupHandle 获取uid失败， err: %v", err), debug)
 		return ""

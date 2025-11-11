@@ -383,5 +383,15 @@ message relineTo{
    }
    *文件名：* sendlog.proto
    **备注：** 此协议为发送日志返回协议，其中anchor_open_id为主播openid，log_label为日志标签，log_id为日志id，code为错误码，msg为错误信息
-
+- **ConfigMapRequest 配置文件请求协议**
+   结构体为空，只要发送配置文件请求协议即可
+- **ConfigMapRequestAck 配置文件请求返回协议**
+   为json格式：
+   map[string]*config.CfgConfig
+   type CfgConfig struct {
+      Type   map[string]string
+      Fields []map[string]any
+   }
+   最外层为配置文件名称（去除掉.txt文件后缀）和CfgConfig结构体组成的键值对，cfgConfig为配置文件内容，Type为配置文件字段对应的类型，Fields为配置文件字段对应的具体值
+   **备注：** 此协议为配置文件请求返回协议，其中anchor_open_id为主播openid，code为错误码，msg为错误信息，config_map为配置文件内容
 - **备注**

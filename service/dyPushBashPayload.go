@@ -26,8 +26,7 @@ func pushDyBasePayloayDirect(roomId, anchorOpenId, msgType string, data []byte) 
 	msgAck.AckType = 1
 	var dataList []MsgAckInfoStruct = make([]MsgAckInfoStruct, 0)
 	var (
-		score   float64
-		isFirst bool = true
+		score float64
 		// avatarUrl string
 		nickName string
 	)
@@ -95,9 +94,8 @@ func pushDyBasePayloayDirect(roomId, anchorOpenId, msgType string, data []byte) 
 				go mysql.InsertGiftData(roomId, anchorOpenId, anchorName.NickName, strconv.FormatInt(roundId, 10), v.SecOpenid, v.Nickname, v.MsgId, v.SecGiftId,
 					v.GiftNum, v.GiftValue, v.Test)
 				// 设置用户是否已经消费
-				if isFirst {
+				if !QueryIsConsume(v.SecOpenid) {
 					setIsConsume(v.SecOpenid, time.Now().UnixMilli())
-					isFirst = false
 				}
 			}
 			dyPayloadSendMessage(v, pmsg.MessageId_liveGift, roomId, anchorOpenId)
@@ -108,12 +106,18 @@ func pushDyBasePayloayDirect(roomId, anchorOpenId, msgType string, data []byte) 
 			ziLog.Error(fmt.Sprintf("PushDyBasePayloayDirect json.Unmarshal err: %v, data: %v", err, data), debug)
 		}
 		for _, v := range getData {
+			// 检查玩家是否在分组中, 如果不在分组中, 则跳过
+			if _, _, ok, _ := queryPlayerInGroup(roomId, v.SecOpenid); ok {
+				score = live_like_score
+			} else {
+				go UserInfoCompareStore(v.SecOpenid, v.Nickname, v.AvatarUrl, false)
+			}
 			var msgAckInfo MsgAckInfoStruct
 			msgAckInfo.MsgId = v.MsgId
 			msgAckInfo.MsgType = msgType
 			msgAckInfo.ClientTime = time.Now().UnixMilli()
 			dataList = append(dataList, msgAckInfo)
-			score = live_like_score
+
 			if score != 0 {
 				go matchAddIntrage(roomId, anchorOpenId, v.SecOpenid, score)
 				// 送礼直接添加到世界排行榜

@@ -65,7 +65,7 @@ func ksStartFinishGameInfo(roomId, url, label, uid string, isSend bool) error {
 		if isMember {
 			return fmt.Errorf("anchor is black")
 		}
-		if !config.App.IsOnline {
+		if !cfg.App.IsOnline {
 			log.Println("startFinishGameInfo roomInfo: ", roomInfo.RoomId, roomInfo.AnchorOpenId, roomInfo.NickName)
 		}
 		dataByte, err := proto.Marshal(roomInfo)
