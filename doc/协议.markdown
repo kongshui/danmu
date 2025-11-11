@@ -387,11 +387,33 @@ message relineTo{
    结构体为空，只要发送配置文件请求协议即可
 - **ConfigMapRequestAck 配置文件请求返回协议**
    为json格式：
-   map[string]*config.CfgConfig
+   type CfgConfig struct {
+      FileMd5 map[string]string
+      Config  map[string]config.CfgConfig
+   }
    type CfgConfig struct {
       Type   map[string]string
       Fields []map[string]any
    }
-   最外层为配置文件名称（去除掉.txt文件后缀）和CfgConfig结构体组成的键值对，cfgConfig为配置文件内容，Type为配置文件字段对应的类型，Fields为配置文件字段对应的具体值
-   **备注：** 此协议为配置文件请求返回协议，其中anchor_open_id为主播openid，code为错误码，msg为错误信息，config_map为配置文件内容
+   **例如**
+   {
+      FileMd5: {
+         "gift": "1234567890",
+      },
+      Config: {
+         "gift": {
+            Type: {
+               "gift_id": "int",
+               "gift_name": "string",
+               "gift_price": "float",
+               "gift_count": "int",
+            },
+            Fields: [
+               {"gift_id": 1001, "gift_name": "100元", "gift_price": 100, "gift_count": 1000},
+               {"gift_id": 1002, "gift_name": "200元", "gift_price": 200, "gift_count": 500},
+            ],
+         },
+      },
+   }
+   **备注：** 最外层FileMd5为配置文件名称（去除掉.txt文件后缀）和文件MD5值组成的键值对，最外层Config为配置文件名称（去除掉.txt文件后缀）和CfgConfig结构体组成的键值对，cfgConfig为配置文件内容，Type为配置文件字段对应的类型，Fields为配置文件字段对应的具体值
 - **备注**

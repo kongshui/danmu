@@ -31,6 +31,10 @@ type (
 	ScrollFunc                func(string)
 	InitFunc                  func(bool)
 	SetIntegralToRoundFunc    func(roomId, anchorOpenId, openId string, score float64) error
+	CfgConfig                 struct {
+		FileMd5 map[string]string
+		Config  map[string]config.CfgConfig
+	}
 )
 
 var (
@@ -49,23 +53,26 @@ var (
 	cfg         *conf.Config
 	accessToken *AccessTokenStruct = &AccessTokenStruct{Lock: &sync.RWMutex{}} //全局token使用
 	// isNotMock            bool                                                           //是否不模拟
-	debug                 bool                                                            //是否调试
-	giftToScoreMap        map[string]float64                                              //礼物对应的积分
-	commentToScore        map[string]float64                                              //评论对应的积分
-	winCoinToComment      map[int64]string                                                //连胜币对应的评论
-	commentToCoin         map[string]int64                                                //连胜币对应的评论
-	commentTogiftId       map[string]string                                               //连胜币对应的礼物Id
-	giftIdToName          map[string]string                                               //礼物id对应的礼物名称
-	nodeIdToIntegral      map[int64]int64                                                 //节点id对应的积分
-	cfgConfig             map[string]config.CfgConfig = make(map[string]config.CfgConfig) //配置文件数据
-	expireTime            time.Duration                                                   //过期时间
-	currentRankVersion    string                                                          //世界排行版version
-	nowMonth              string                                                          //当前月
-	monthVersionRankDb    string                                                          //月排行版db名称
-	app_id                string                                                          // appId
-	app_secret            string                                                          // appSecret
-	platform              string                                                          // 平台
-	url_GetAccessTokenUrl string                                                          // 获取全局token的url
+	debug            bool               //是否调试
+	giftToScoreMap   map[string]float64 //礼物对应的积分
+	commentToScore   map[string]float64 //评论对应的积分
+	winCoinToComment map[int64]string   //连胜币对应的评论
+	commentToCoin    map[string]int64   //连胜币对应的评论
+	commentTogiftId  map[string]string  //连胜币对应的礼物Id
+	giftIdToName     map[string]string  //礼物id对应的礼物名称
+	nodeIdToIntegral map[int64]int64    //节点id对应的积分
+	cfgConfig        CfgConfig          = CfgConfig{
+		FileMd5: make(map[string]string),
+		Config:  make(map[string]config.CfgConfig),
+	} //配置文件数据
+	expireTime            time.Duration //过期时间
+	currentRankVersion    string        //世界排行版version
+	nowMonth              string        //当前月
+	monthVersionRankDb    string        //月排行版db名称
+	app_id                string        // appId
+	app_secret            string        // appSecret
+	platform              string        // 平台
+	url_GetAccessTokenUrl string        // 获取全局token的url
 	// rdb                   = dao_redis.GetRedisClient(config.Redis.Addr, config.Redis.Password, config.Redis.IsCluster, false)
 	rdb         dao_redis.RedisClient
 	mysql       = dao_mysql.NewMysqlClient()

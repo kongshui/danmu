@@ -138,12 +138,37 @@ func configMapRead() error {
 		if info.IsDir() {
 			return nil
 		}
+		// 计算文件的MD5值
+		md5, err := FileMD5(path)
+		if err != nil {
+			return fmt.Errorf("ConfigMapRead 计算文件MD5失败：%v", err)
+		}
+		okMd5, ok := cfgConfig.FileMd5[strings.TrimSuffix(info.Name(), filepath.Ext(info.Name()))]
+		if ok && okMd5 == md5 {
+			return nil
+		}
+		// 读取配置文件内容
 		fileConfig, err := config.ReadCfgConfig(path)
 		if err != nil {
 			return fmt.Errorf("ConfigMapRead 读取配置文件失败：%v", err)
 		}
+		// 编写日志
 		ziLog.Info(fmt.Sprintf("ConfigMapRead 读取配置文件 %s 成功", info.Name()), debug)
-		cfgConfig[strings.TrimSuffix(info.Name(), filepath.Ext(info.Name()))] = *fileConfig
+		cfgConfig.FileMd5[strings.TrimSuffix(info.Name(), filepath.Ext(info.Name()))] = md5
+		cfgConfig.Config[strings.TrimSuffix(info.Name(), filepath.Ext(info.Name()))] = *fileConfig
 		return nil
 	})
+}
+
+// 自动检测配置文件变更
+func autoDetectConfigChange() {
+	// 定时检测配置文件变更
+	ticker := time.NewTicker(10 * time.Minute)
+	defer ticker.Stop()
+	for {
+		<-ticker.C
+		if err := configMapRead(); err != nil {
+			ziLog.Error(fmt.Sprintf("autoDetectConfigChange 自动检测配置文件变更失败：%v", err), debug)
+		}
+	}
 }
