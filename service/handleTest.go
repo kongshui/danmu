@@ -84,28 +84,31 @@ func HandleAddWorldRank(c *gin.Context) {
 }
 
 // 添加连胜次数
-// func HandlestreamCount(c *gin.Context) {
-// 	type AddCoin struct {
-// 		OpenId string `json:"open_id"`
-// 		Stats  int    `json:"stats"`
-// 	}
-// 	var addCoin AddCoin
-// 	if err := c.ShouldBindJSON(&addCoin); err != nil {
-// 		log.Println(err)
-// 		c.JSON(404, gin.H{
-// 			"err": err,
-// 		})
-// 		return
-// 	}
-// 	if err := winningStreamCountAdd(addCoin.Stats, addCoin.OpenId); err != nil {
-// 		log.Println(err)
-// 		c.JSON(404, gin.H{
-// 			"err": err,
-// 		})
-// 		return
-// 	}
-// 	c.JSON(200, "添加成功")
-// }
+func HandlestreamCount(c *gin.Context) {
+	type AddCoin struct {
+		OpenId string `json:"open_id"`
+		Stats  int    `json:"stats"`
+	}
+	var addCoin AddCoin
+	if err := c.ShouldBindJSON(&addCoin); err != nil {
+		log.Println(err)
+		c.JSON(404, gin.H{
+			"err": err,
+		})
+		return
+	}
+	coin, err := AddUserWinStreamCoin(addCoin.OpenId, int64(addCoin.Stats))
+	if err != nil {
+		log.Println(err)
+		c.JSON(404, gin.H{
+			"err": err,
+		})
+		return
+	}
+	c.JSON(200, gin.H{
+		"coin": coin,
+	})
+}
 
 // 发送虚拟评论
 func HandleSendFakeComment(c *gin.Context) {
