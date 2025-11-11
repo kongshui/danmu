@@ -11,8 +11,8 @@ import (
 
 // 配置文件结构体
 type CfgConfig struct {
-	Type   map[string]string
-	Fields []map[string]any
+	Type   map[string]string `json:"type"`
+	Fields []map[string]any  `json:"fields"`
 }
 
 // 读取配置文件

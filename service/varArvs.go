@@ -32,8 +32,8 @@ type (
 	InitFunc                  func(bool)
 	SetIntegralToRoundFunc    func(roomId, anchorOpenId, openId string, score float64) error
 	CfgConfig                 struct {
-		FileMd5 map[string]string
-		Config  map[string]config.CfgConfig
+		FileMd5 map[string]string           `json:"file_md5"`
+		Config  map[string]config.CfgConfig `json:"config"`
 	}
 )
 
