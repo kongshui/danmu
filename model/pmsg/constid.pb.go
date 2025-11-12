@@ -147,10 +147,12 @@ const (
 	MessageId_QuerySwallow    MessageId = 133 // 查询吞噬数
 	MessageId_QuerySwallowAck MessageId = 134 // 查询吞噬数返回
 	// 灵珠相关
-	MessageId_AddBeadToUser      MessageId = 135 // 添加灵珠到用户
-	MessageId_AddBeadToUserAck   MessageId = 136 // 添加或使用灵珠到用户回复
-	MessageId_UseBeadFromUser    MessageId = 137 // 使用灵珠
-	MessageId_UseBeadFromUserAck MessageId = 138 // 使用灵珠回复
+	MessageId_AddBeadToUser        MessageId = 135 // 添加灵珠到用户
+	MessageId_AddBeadToUserAck     MessageId = 136 // 添加或使用灵珠到用户回复
+	MessageId_UseBeadFromUser      MessageId = 137 // 使用灵珠
+	MessageId_UseBeadFromUserAck   MessageId = 138 // 使用灵珠回复
+	MessageId_QueryBeadFromUser    MessageId = 151 // 查询灵珠
+	MessageId_QueryBeadFromUserAck MessageId = 152 // 查询灵珠回复
 	// 皮肤相关
 	MessageId_AddSkinToUser         MessageId = 139 // 添加皮肤到用户
 	MessageId_AddSkinToUserAck      MessageId = 140 // 添加或使用皮肤到用户回复
@@ -289,6 +291,8 @@ var (
 		136: "AddBeadToUserAck",
 		137: "UseBeadFromUser",
 		138: "UseBeadFromUserAck",
+		151: "QueryBeadFromUser",
+		152: "QueryBeadFromUserAck",
 		139: "AddSkinToUser",
 		140: "AddSkinToUserAck",
 		141: "UseSkinFromUser",
@@ -423,6 +427,8 @@ var (
 		"AddBeadToUserAck":                  136,
 		"UseBeadFromUser":                   137,
 		"UseBeadFromUserAck":                138,
+		"QueryBeadFromUser":                 151,
+		"QueryBeadFromUserAck":              152,
 		"AddSkinToUser":                     139,
 		"AddSkinToUserAck":                  140,
 		"UseSkinFromUser":                   141,
@@ -469,7 +475,7 @@ var File_proto_constid_proto protoreflect.FileDescriptor
 
 const file_proto_constid_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/constid.proto\x12\x04pmsg*\x97\x17\n" +
+	"\x13proto/constid.proto\x12\x04pmsg*\xca\x17\n" +
 	"\tMessageId\x12\v\n" +
 	"\aUnknown\x10\x00\x12\f\n" +
 	"\bNodeInfo\x10\x01\x12\x0f\n" +
@@ -603,7 +609,9 @@ const file_proto_constid_proto_rawDesc = "" +
 	"\rAddBeadToUser\x10\x87\x01\x12\x15\n" +
 	"\x10AddBeadToUserAck\x10\x88\x01\x12\x14\n" +
 	"\x0fUseBeadFromUser\x10\x89\x01\x12\x17\n" +
-	"\x12UseBeadFromUserAck\x10\x8a\x01\x12\x12\n" +
+	"\x12UseBeadFromUserAck\x10\x8a\x01\x12\x16\n" +
+	"\x11QueryBeadFromUser\x10\x97\x01\x12\x19\n" +
+	"\x14QueryBeadFromUserAck\x10\x98\x01\x12\x12\n" +
 	"\rAddSkinToUser\x10\x8b\x01\x12\x15\n" +
 	"\x10AddSkinToUserAck\x10\x8c\x01\x12\x14\n" +
 	"\x0fUseSkinFromUser\x10\x8d\x01\x12\x17\n" +

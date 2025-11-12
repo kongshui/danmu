@@ -134,6 +134,8 @@ enum MessageId {
     AddBeadToUserAck = 136; // 添加或使用灵珠到用户回复
     UseBeadFromUser = 137; // 使用灵珠
     UseBeadFromUserAck = 138; // 使用灵珠回复
+    QueryBeadFromUser = 151; // 查询灵珠
+    QueryBeadFromUserAck = 152; // 查询灵珠回复
 
     // 皮肤相关
     AddSkinToUser = 139; // 添加皮肤到用户
