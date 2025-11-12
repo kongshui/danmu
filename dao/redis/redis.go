@@ -12,8 +12,8 @@ import (
 type RedisClient interface {
 	Persist(key string) error
 	IncrByFloat(key string, value float64) (float64, error)
-	RedisInit(addr string, password string, isCluster bool)
-	RedisCheckPing(addr string, password string, isCluster bool)
+	RedisInit(addr string, password string, db int, isCluster bool)
+	RedisCheckPing(addr string, password string, db int, isCluster bool)
 	IsExistKey(key string) bool
 	Set(key string, value any, expiration time.Duration) error
 	Get(key string) (string, error)
@@ -57,17 +57,17 @@ type RedisClient interface {
 	Rename(key string, newKey string) error
 }
 
-func GetRedisClient(addr string, password string, isCluster bool, isNil bool) RedisClient {
+func GetRedisClient(addr string, password string, db int, isCluster bool, isNil bool) RedisClient {
 	if isNil {
 		return nil
 	}
 	if isCluster {
 		rdb := &cRedis.RedisClient{}
-		rdb.RedisInit(addr, password, isCluster)
+		rdb.RedisInit(addr, password, db, isCluster)
 		return rdb
 	} else {
 		rdb := &sRedis.RedisClient{}
-		rdb.RedisInit(addr, password, isCluster)
+		rdb.RedisInit(addr, password, db, isCluster)
 		return rdb
 	}
 }

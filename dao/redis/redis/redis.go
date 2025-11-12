@@ -20,7 +20,7 @@ func init() {
 }
 
 // RedisInit 初始化 Redis 客户端
-func (rdb *RedisClient) RedisInit(addr string, password string, isCluster bool) {
+func (rdb *RedisClient) RedisInit(addr string, password string, db int, isCluster bool) {
 	// var (
 	// 	addr     string = "127.0.0.1:6379"
 	// 	password string = ""
@@ -44,21 +44,21 @@ func (rdb *RedisClient) RedisInit(addr string, password string, isCluster bool) 
 	rdb.Client = redis.NewClient(&redis.Options{
 		Addr:         addr,
 		Password:     password,
-		DB:           0,
+		DB:           db,
 		PoolSize:     10,
 		MinIdleConns: 1,
 		DialTimeout:  5 * time.Second,
 	})
 }
 
-func (rdb *RedisClient) RedisCheckPing(addr string, password string, isCluster bool) {
+func (rdb *RedisClient) RedisCheckPing(addr string, password string, db int, isCluster bool) {
 	t := time.NewTicker(5 * time.Second)
 	for {
 		<-t.C
 		_, err := rdb.Ping()
 		if err != nil {
 			log.Println("redis连接失败,重新初始化")
-			rdb.RedisInit(addr, password, isCluster)
+			rdb.RedisInit(addr, password, db, isCluster)
 			continue
 		}
 	}
