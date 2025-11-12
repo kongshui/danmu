@@ -128,4 +128,24 @@ enum MessageId {
     AddSwallowAck = 132; // 增加吞噬数返回
     QuerySwallow = 133; // 查询吞噬数
     QuerySwallowAck = 134; // 查询吞噬数返回
+
+    // 灵珠相关
+    AddBeadToUser = 135; // 添加灵珠到用户
+    AddBeadToUserAck = 136; // 添加或使用灵珠到用户回复
+    UseBeadFromUser = 137; // 使用灵珠
+    UseBeadFromUserAck = 138; // 使用灵珠回复
+
+    // 皮肤相关
+    AddSkinToUser = 139; // 添加皮肤到用户
+    AddSkinToUserAck = 140; // 添加或使用皮肤到用户回复
+    UseSkinFromUser = 141; // 使用皮肤
+    UseSkinFromUserAck = 142; // 使用皮肤回复
+    GetSkinInfo = 143; // 获取皮肤信息
+    GetSkinInfoAck = 144; // 获取皮肤信息回复
+    GetSkinList = 145; // 获取皮肤列表
+    GetSkinListAck = 146; // 获取皮肤列表回复
+    GetSkinPreview = 147; // 获取皮肤预览
+    GetSkinPreviewAck = 148; // 获取皮肤预览回复
+    GetUserAllSkinInfo = 149; // 获取用户所有皮肤信息
+    GetUserAllSkinInfoAck = 150; // 获取用户所有皮肤信息回复
 }

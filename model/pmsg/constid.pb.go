@@ -146,6 +146,24 @@ const (
 	MessageId_AddSwallowAck   MessageId = 132 // 增加吞噬数返回
 	MessageId_QuerySwallow    MessageId = 133 // 查询吞噬数
 	MessageId_QuerySwallowAck MessageId = 134 // 查询吞噬数返回
+	// 灵珠相关
+	MessageId_AddBeadToUser      MessageId = 135 // 添加灵珠到用户
+	MessageId_AddBeadToUserAck   MessageId = 136 // 添加或使用灵珠到用户回复
+	MessageId_UseBeadFromUser    MessageId = 137 // 使用灵珠
+	MessageId_UseBeadFromUserAck MessageId = 138 // 使用灵珠回复
+	// 皮肤相关
+	MessageId_AddSkinToUser         MessageId = 139 // 添加皮肤到用户
+	MessageId_AddSkinToUserAck      MessageId = 140 // 添加或使用皮肤到用户回复
+	MessageId_UseSkinFromUser       MessageId = 141 // 使用皮肤
+	MessageId_UseSkinFromUserAck    MessageId = 142 // 使用皮肤回复
+	MessageId_GetSkinInfo           MessageId = 143 // 获取皮肤信息
+	MessageId_GetSkinInfoAck        MessageId = 144 // 获取皮肤信息回复
+	MessageId_GetSkinList           MessageId = 145 // 获取皮肤列表
+	MessageId_GetSkinListAck        MessageId = 146 // 获取皮肤列表回复
+	MessageId_GetSkinPreview        MessageId = 147 // 获取皮肤预览
+	MessageId_GetSkinPreviewAck     MessageId = 148 // 获取皮肤预览回复
+	MessageId_GetUserAllSkinInfo    MessageId = 149 // 获取用户所有皮肤信息
+	MessageId_GetUserAllSkinInfoAck MessageId = 150 // 获取用户所有皮肤信息回复
 )
 
 // Enum value maps for MessageId.
@@ -267,6 +285,22 @@ var (
 		132: "AddSwallowAck",
 		133: "QuerySwallow",
 		134: "QuerySwallowAck",
+		135: "AddBeadToUser",
+		136: "AddBeadToUserAck",
+		137: "UseBeadFromUser",
+		138: "UseBeadFromUserAck",
+		139: "AddSkinToUser",
+		140: "AddSkinToUserAck",
+		141: "UseSkinFromUser",
+		142: "UseSkinFromUserAck",
+		143: "GetSkinInfo",
+		144: "GetSkinInfoAck",
+		145: "GetSkinList",
+		146: "GetSkinListAck",
+		147: "GetSkinPreview",
+		148: "GetSkinPreviewAck",
+		149: "GetUserAllSkinInfo",
+		150: "GetUserAllSkinInfoAck",
 	}
 	MessageId_value = map[string]int32{
 		"Unknown":                           0,
@@ -385,6 +419,22 @@ var (
 		"AddSwallowAck":                     132,
 		"QuerySwallow":                      133,
 		"QuerySwallowAck":                   134,
+		"AddBeadToUser":                     135,
+		"AddBeadToUserAck":                  136,
+		"UseBeadFromUser":                   137,
+		"UseBeadFromUserAck":                138,
+		"AddSkinToUser":                     139,
+		"AddSkinToUserAck":                  140,
+		"UseSkinFromUser":                   141,
+		"UseSkinFromUserAck":                142,
+		"GetSkinInfo":                       143,
+		"GetSkinInfoAck":                    144,
+		"GetSkinList":                       145,
+		"GetSkinListAck":                    146,
+		"GetSkinPreview":                    147,
+		"GetSkinPreviewAck":                 148,
+		"GetUserAllSkinInfo":                149,
+		"GetUserAllSkinInfoAck":             150,
 	}
 )
 
@@ -419,7 +469,7 @@ var File_proto_constid_proto protoreflect.FileDescriptor
 
 const file_proto_constid_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/constid.proto\x12\x04pmsg*\xb3\x14\n" +
+	"\x13proto/constid.proto\x12\x04pmsg*\x97\x17\n" +
 	"\tMessageId\x12\v\n" +
 	"\aUnknown\x10\x00\x12\f\n" +
 	"\bNodeInfo\x10\x01\x12\x0f\n" +
@@ -549,7 +599,23 @@ const file_proto_constid_proto_rawDesc = "" +
 	"AddSwallow\x10\x83\x01\x12\x12\n" +
 	"\rAddSwallowAck\x10\x84\x01\x12\x11\n" +
 	"\fQuerySwallow\x10\x85\x01\x12\x14\n" +
-	"\x0fQuerySwallowAck\x10\x86\x01B\bZ\x06./pmsgb\x06proto3"
+	"\x0fQuerySwallowAck\x10\x86\x01\x12\x12\n" +
+	"\rAddBeadToUser\x10\x87\x01\x12\x15\n" +
+	"\x10AddBeadToUserAck\x10\x88\x01\x12\x14\n" +
+	"\x0fUseBeadFromUser\x10\x89\x01\x12\x17\n" +
+	"\x12UseBeadFromUserAck\x10\x8a\x01\x12\x12\n" +
+	"\rAddSkinToUser\x10\x8b\x01\x12\x15\n" +
+	"\x10AddSkinToUserAck\x10\x8c\x01\x12\x14\n" +
+	"\x0fUseSkinFromUser\x10\x8d\x01\x12\x17\n" +
+	"\x12UseSkinFromUserAck\x10\x8e\x01\x12\x10\n" +
+	"\vGetSkinInfo\x10\x8f\x01\x12\x13\n" +
+	"\x0eGetSkinInfoAck\x10\x90\x01\x12\x10\n" +
+	"\vGetSkinList\x10\x91\x01\x12\x13\n" +
+	"\x0eGetSkinListAck\x10\x92\x01\x12\x13\n" +
+	"\x0eGetSkinPreview\x10\x93\x01\x12\x16\n" +
+	"\x11GetSkinPreviewAck\x10\x94\x01\x12\x17\n" +
+	"\x12GetUserAllSkinInfo\x10\x95\x01\x12\x1a\n" +
+	"\x15GetUserAllSkinInfoAck\x10\x96\x01B\bZ\x06./pmsgb\x06proto3"
 
 var (
 	file_proto_constid_proto_rawDescOnce sync.Once
