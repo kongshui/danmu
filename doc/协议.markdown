@@ -416,4 +416,46 @@ message relineTo{
       },
    }
    **备注：** 最外层FileMd5为配置文件名称（去除掉.txt文件后缀）和文件MD5值组成的键值对，最外层Config为配置文件名称（去除掉.txt文件后缀）和CfgConfig结构体组成的键值对，cfgConfig为配置文件内容，Type为配置文件字段对应的类型，Fields为配置文件字段对应的具体值
+- **AddBeadToUser 添加灵珠到用户协议**
+   *protobuf结构体为：*
+   message BeadToUserMessage {
+      string open_id = 1;      //玩家用户id
+      int64 bead_id = 2;      //灵珠ID
+      int64 bead_count = 3;   //灵珠数量
+   }
+   *文件名：* bead.proto
+   **备注：** 此协议为添加灵珠到用户协议，其中open_id为用户id，bead为灵珠数量
+- **AddBeadToUserAck 添加或使用灵珠到用户回复协议**
+   *protobuf结构体为：*
+   message BeadToUserAckMessage {
+      string open_id = 1;      //玩家用户id
+      int64 bead_id = 2;      //灵珠ID
+      int64 bead_count = 3;   //灵珠数量
+      int32 code = 4; //返回码
+      string msg = 5; //返回信息
+   }
+   *文件名：* bead.proto
+   **备注：** 此协议为添加或使用灵珠到用户回复协议，其中open_id为用户id，bead为现在总灵珠数量，success为是否成功
+- **QueryBeadFromUser 查询灵珠协议**
+   *protobuf结构体为：*
+   message QueryBeadFromUserMessage {
+      string open_id = 1;      //玩家用户id
+      int64 bead_id = 2;      //灵珠ID
+   }
+   *文件名：* bead.proto
+   **备注：** 此协议为查询灵珠协议，其中open_id为用户id，bead_id为灵珠ID
+- **QueryBeadFromUserAck 查询灵珠回复协议**
+      *protobuf结构体为：*
+      message QueryBeadFromUserAckMessage {
+         string open_id = 1;      //玩家用户id
+         int64 bead_id = 2;      //灵珠ID
+         int64 bead_count = 3;   //灵珠数量
+         int32 code = 4; //返回码
+         string msg = 5; //返回信息
+      }
+      *文件名：* bead.proto
+      **备注：** 此协议为查询灵珠回复协议，其中open_id为用户id，bead_id为灵珠ID，bead_count为灵珠数量，code为返回码，msg为返回信息
+- **UseBeadFromUser 使用灵珠协议**
+   *protobuf结构体为：*
+— **
 - **备注**
