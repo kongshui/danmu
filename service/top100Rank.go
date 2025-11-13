@@ -5,20 +5,15 @@ import (
 	"fmt"
 	"time"
 	"unicode/utf8"
-
-	"github.com/kongshui/danmu/model/pmsg"
 )
 
 // 返回世界排行榜前100名
-func getTopWorldRankData(startIndex int64, endIndex int64, reverse bool) *pmsg.UserInfoListMessage {
-	data := &pmsg.UserInfoListMessage{}
+func getTopWorldRankData(startIndex int64, endIndex int64, reverse bool) []map[string]any {
+	data := make([]map[string]any, 0)
 	openIdList := GetRedisZsetData(world_rank_week, startIndex, endIndex, reverse)
 	for i, userInfo := range openIdList {
 		openId := userInfo.Member.(string)
 		user, _ := UserInfoGet(openId, false)
-		coin, _ := QueryUserWinStreamCoin(openId)
-		level, _ := QueryLevelInfo(openId)
-		winPoint, _ := QueryUserWinningPoint(openId)
 
 		if user.NickName == "" || user.AvatarUrl == "" {
 			// 从数据库查询玩家信息
@@ -34,45 +29,42 @@ func getTopWorldRankData(startIndex int64, endIndex int64, reverse bool) *pmsg.U
 		if cfg.App.IsAnonymous {
 			nickName = stringToAnonymouse(nickName)
 		}
-		data.UserInfoList = append(data.UserInfoList, &pmsg.UserInfo{
-			OpenId:            openId,
-			Rank:              int64(i + 1),
-			Score:             int64(userInfo.Score),
-			AvatarUrl:         user.AvatarUrl,
-			NickName:          nickName,
-			WinningStreamCoin: coin,
-			Level:             level,
-			WinningPoint:      winPoint,
+		data = append(data, map[string]any{
+			"open_id":    openId,
+			"rank":       int64(i + 1),
+			"score":      int64(userInfo.Score),
+			"avatar_url": user.AvatarUrl,
+			"nick_name":  nickName,
 		})
 	}
 	return data
 }
 
-// 返回世界排行榜前100名
-func getTopMonthRankData() *pmsg.UserInfoListMessage {
-	data := &pmsg.UserInfoListMessage{}
-	openIdList, err := rdb.ZRevRangeWithScores(monthVersionRankDb, 0, 99)
-	if err != nil {
-		return data
-	}
-	for i, userInfo := range openIdList {
-		openId := userInfo.Member.(string)
-		user, _ := UserInfoGet(openId, false)
-		coin, _ := QueryUserWinStreamCoin(openId)
-		level, _ := QueryLevelInfo(openId)
+// // 返回世界排行榜前100名
+// func getTopMonthRankData() *pmsg.UserInfoListMessage {
+// 	data := &pmsg.UserInfoListMessage{}
+// 	openIdList, err := rdb.ZRevRangeWithScores(monthVersionRankDb, 0, 99)
+// 	if err != nil {
+// 		return data
+// 	}
+// 	for i, userInfo := range openIdList {
+// 		openId := userInfo.Member.(string)
+// 		user, _ := UserInfoGet(openId, false)
+// 		coin, _ := QueryUserWinStreamCoin(openId)
+// 		level, _ := QueryLevelInfo(openId)
 
-		data.UserInfoList = append(data.UserInfoList, &pmsg.UserInfo{
-			OpenId:            openId,
-			Rank:              int64(i + 1),
-			Score:             int64(userInfo.Score),
-			AvatarUrl:         user.AvatarUrl,
-			NickName:          user.NickName,
-			WinningStreamCoin: coin,
-			Level:             level,
-		})
-	}
-	return data
-}
+// 		data.UserInfoList = append(data.UserInfoList, &pmsg.UserInfo{
+// 			OpenId:            openId,
+// 			Rank:              int64(i + 1),
+// 			Score:             int64(userInfo.Score),
+// 			AvatarUrl:         user.AvatarUrl,
+// 			NickName:          user.NickName,
+// 			WinningStreamCoin: coin,
+// 			Level:             level,
+// 		})
+// 	}
+// 	return data
+// }
 
 // 设置上一周期百强榜
 func Top100Rank(key string) error {

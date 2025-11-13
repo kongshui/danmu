@@ -247,35 +247,35 @@ func roundDataUpload(msg *pmsg.MessageBody) error {
 }
 
 // get_user_worldinfo,获取玩家世界列表
-func GetTopUserInfoTemplate(msg *pmsg.MessageBody) error {
-	var (
-		data  *pmsg.UserInfoListMessage
-		msgId pmsg.MessageId
-	)
-	// 获取前一百名用户世界信息
-	switch msg.MsgId {
-	case pmsg.MessageId_GetVersionTopHundred:
-		data = getTopWorldRankData(0, 99, false)
-		msgId = pmsg.MessageId_GetVersionTopHundredAck
-	case pmsg.MessageId_GetMonthTopHundred:
-		data = getTopMonthRankData()
-		msgId = pmsg.MessageId_GetMonthTopHundredAck
-	default:
-		return errors.New("get user world info Unmarshal err: " + msg.MsgId.String())
-	}
-	// sdatabyte
-	data.Timestamp = time.Now().Unix()
-	sDataByte, err := proto.Marshal(data)
-	if err != nil {
-		return errors.New("get user world info proto Marshal err: " + err.Error())
-	}
+// func GetTopUserInfoTemplate(msg *pmsg.MessageBody) error {
+// 	var (
+// 		data  *pmsg.UserInfoListMessage
+// 		msgId pmsg.MessageId
+// 	)
+// 	// 获取前一百名用户世界信息
+// 	switch msg.MsgId {
+// 	case pmsg.MessageId_GetVersionTopHundred:
+// 		data = getTopWorldRankData(0, 99, false)
+// 		msgId = pmsg.MessageId_GetVersionTopHundredAck
+// 	case pmsg.MessageId_GetMonthTopHundred:
+// 		data = getTopMonthRankData()
+// 		msgId = pmsg.MessageId_GetMonthTopHundredAck
+// 	default:
+// 		return errors.New("get user world info Unmarshal err: " + msg.MsgId.String())
+// 	}
+// 	// sdatabyte
+// 	data.Timestamp = time.Now().Unix()
+// 	sDataByte, err := proto.Marshal(data)
+// 	if err != nil {
+// 		return errors.New("get user world info proto Marshal err: " + err.Error())
+// 	}
 
-	//获取用户世界信息
-	if err := sse.SseSend(msgId, []string{msg.Uuid}, sDataByte); err != nil {
-		return errors.New("玩家获取世界信息 err: " + err.Error())
-	}
-	return nil
-}
+// 	//获取用户世界信息
+// 	if err := sse.SseSend(msgId, []string{msg.Uuid}, sDataByte); err != nil {
+// 		return errors.New("玩家获取世界信息 err: " + err.Error())
+// 	}
+// 	return nil
+// }
 
 // useWinningStreamCoin,使用奖池 连胜币
 func useUserWinningStreamCoin(msg *pmsg.MessageBody) error {

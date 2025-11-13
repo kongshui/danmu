@@ -46,25 +46,11 @@ func GetPlayerTopHandle(c *gin.Context) {
 	// 获取排行榜数据和总长度
 	data := getTopWorldRankData(pt.StartIndex, pt.EndIndex, pt.Revrse)
 	total, _ := getTop100RankLen()
-	userInfos := make([]map[string]any, 0)
-	// 重组userinfo list
-	for _, v := range data.GetUserInfoList() {
-		if v.GetOpenId() == "" {
-			continue
-		}
-		userInfos = append(userInfos, map[string]any{
-			"open_id":    v.OpenId,
-			"rank":       v.Rank,
-			"score":      v.Score,
-			"avatar_url": v.AvatarUrl,
-			"nick_name":  v.NickName,
-		})
-	}
 
 	c.JSON(200, gin.H{
 		"errcode": 0,
 		"errmsg":  "success",
-		"data":    userInfos,
+		"data":    data,
 		"total":   total,
 	})
 }

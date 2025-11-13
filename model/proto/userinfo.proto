@@ -3,14 +3,14 @@ package pmsg;
 
 option go_package="./pmsg";
 
-message UserInfo {
-    string OpenId = 1;      // 用户的openId
-    string NickName = 2;    // 用户的昵称
-    string AvatarUrl = 3;  // 用户的头像
-    int64 Score = 4;       // 用户的积分
-    int64 Rank = 5;        // 用户的排名
-    int64 WinningStreamCoin = 6;  // 用户的连胜币
-    int64 Swallow = 7;      // 用户的吞噬次数
-    int64 Level = 8;       // 用户的等级
-    int64 WinningPoint = 9;  // 用户的胜点
-}
+// message UserInfo {
+//     string OpenId = 1;      // 用户的openId
+//     string NickName = 2;    // 用户的昵称
+//     string AvatarUrl = 3;  // 用户的头像
+//     int64 Score = 4;       // 用户的积分
+//     int64 Rank = 5;        // 用户的排名
+//     int64 WinningStreamCoin = 6;  // 用户的连胜币
+//     int64 Swallow = 7;      // 用户的吞噬次数
+//     int64 Level = 8;       // 用户的等级
+//     int64 WinningPoint = 9;  // 用户的胜点
+// }

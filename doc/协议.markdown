@@ -397,23 +397,45 @@ message relineTo{
    }
    **例如**
    {
-      FileMd5: {
-         "gift": "1234567890",
+      "file_md5": {
+         "boss": "603ae21a80d6761d0a6b16b3eaa6e036"
       },
-      Config: {
-         "gift": {
-            Type: {
-               "gift_id": "int",
-               "gift_name": "string",
-               "gift_price": "float",
-               "gift_count": "int",
-            },
-            Fields: [
-               {"gift_id": 1001, "gift_name": "100元", "gift_price": 100, "gift_count": 1000},
-               {"gift_id": 1002, "gift_name": "200元", "gift_price": 200, "gift_count": 500},
-            ],
-         },
-      },
+      "config": {
+         "boss": {
+               "type": {
+                  "attackDamage": "Int",
+                  "attackInterval": "Float",
+                  "bigFoodReward": "Int",
+                  "childCount": "Int",
+                  "creatureDamage": "Int",
+                  "creatureInterval": "Float",
+                  "frenzyAttackInterval": "Float",
+                  "frenzyHealth": "Float",
+                  "health": "Int",
+                  "id": "Int",
+                  "rangeDamage": "Int",
+                  "rangeDamageInterval": "Float",
+                  "spawnTime": "Int"
+               },
+               "fields": [
+                  {
+                     "attackDamage": 300,
+                     "attackInterval": 1.5,
+                     "bigFoodReward": 100,
+                     "childCount": 6,
+                     "creatureDamage": 300,
+                     "creatureInterval": 10,
+                     "frenzyAttackInterval": 0.5,
+                     "frenzyHealth": 0.2,
+                     "health": 40000,
+                     "id": 1,
+                     "rangeDamage": 200,
+                     "rangeDamageInterval": 5,
+                     "spawnTime": 300
+                  },
+               ]
+         }
+      }
    }
    **备注：** 最外层FileMd5为配置文件名称（去除掉.txt文件后缀）和文件MD5值组成的键值对，最外层Config为配置文件名称（去除掉.txt文件后缀）和CfgConfig结构体组成的键值对，cfgConfig为配置文件内容，Type为配置文件字段对应的类型，Fields为配置文件字段对应的具体值
 - **AddBeadToUser 添加灵珠到用户协议**
