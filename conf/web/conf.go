@@ -30,6 +30,7 @@ type (
 		ConfigDir         string `toml:"config_dir"`          // 配置文件目录
 		LogStoreDir       string `toml:"log_store_dir"`       // 存储日志目录
 		UserChangeTime    int64  `toml:"user_change_time"`    // 用户信息变更时间,单位秒
+		DeleteDay         int    `toml:"delete_day"`          // 删除多少天之前的日志文件
 		IsAnonymous       bool   `toml:"is_anonymous"`        // 是否匿名
 		IsOnline          bool   `toml:"is_online"`           // 是否上线
 		IsMock            bool   `toml:"is_mock"`             // 是否模拟
@@ -95,7 +96,7 @@ func newConf() *Config {
 		Nats:    Nats{[]string{"nats://localhost:4222"}},
 		Redis:   Redis{"127.0.0.1:6379", 0, "", false},
 		Mysql:   Mysql{"127.0.0.1:3306", "root", "123456", "store_log", true},
-		App:     App{"ks", "", "", "", "", "", "", "", "", "", "./logstore", 300, true, false, false, false},
+		App:     App{"ks", "", "", "", "", "", "", "", "", "", "./logstore", 300, 7, true, false, false, false},
 	}
 }
 

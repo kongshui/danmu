@@ -86,7 +86,11 @@ func ServiceInit() {
 		ziLog.Error("读取配置映射失败： "+err.Error(), cfg.Server.Debug)
 		os.Exit(1)
 	}
+	// 自动检测配置变更
 	go autoDetectConfigChange()
+	// 自动删除日志文件
+	go autoDeleteLogFile()
+
 	// 平台分开推送的内容
 	switch platform {
 	case "ks":

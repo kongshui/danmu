@@ -422,7 +422,7 @@ func (logS *LogStruct) checkLogRotate() {
 	if logS.maxSize == 0 && logS.maxAge == 0 {
 		return
 	}
-	t := time.NewTicker(1 * time.Minute)
+	t := time.NewTicker(10 * time.Minute)
 	for {
 		<-t.C
 		for _, label := range []string{"debug", "info", "error", "warn", "gift"} {

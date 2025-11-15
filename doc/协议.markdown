@@ -444,6 +444,7 @@ message relineTo{
       string open_id = 1;      //玩家用户id
       int64 bead_id = 2;      //灵珠ID
       int64 bead_count = 3;   //灵珠数量
+      string verify_key = 4;   //验证唯一标识 MD5（openId+beadId+count+时间戳）
    }
    *文件名：* bead.proto
    **备注：** 此协议为添加灵珠到用户协议，其中open_id为用户id，bead为灵珠数量
@@ -453,8 +454,9 @@ message relineTo{
       string open_id = 1;      //玩家用户id
       int64 bead_id = 2;      //灵珠ID
       int64 bead_count = 3;   //灵珠数量
-      int32 code = 4; //返回码
-      string msg = 5; //返回信息
+      string verify_key = 4;   //验证唯一标识 MD5（openId+beadId+count+时间戳）
+      int32 code = 5; //返回码
+      string msg = 6; //返回信息
    }
    *文件名：* bead.proto
    **备注：** 此协议为添加或使用灵珠到用户回复协议，其中open_id为用户id，bead为现在总灵珠数量，success为是否成功
