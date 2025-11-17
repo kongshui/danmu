@@ -9,8 +9,8 @@ import (
 	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
-// 每周二0点检测更新
-func autoNewVersion() {
+// 检测更新
+func AutoNewVersion() {
 	//查看周几 Monday Tuesday Wednesday Thursday Friday Saturday Sunday
 	isFirst := true
 	t := time.NewTicker(1 * time.Minute)
@@ -19,7 +19,7 @@ func autoNewVersion() {
 		fmt.Println("现在版本号为：", currentRankVersion)
 		// 月榜初始化
 		if time.Now().Hour() == 0 {
-			monthVersionSet()
+			// monthVersionSet()
 		}
 		if (week_set != 0 && time.Now().Weekday() == scrollDay && time.Now().Hour() == scrollHour && time.Now().Minute() <= 5) || (week_set == 0 && time.Now().Day() == month_day && time.Now().Hour() == scrollHour && time.Now().Minute() <= 5) {
 			if isFirst {
@@ -36,22 +36,22 @@ func autoNewVersion() {
 				// 设置isFirst状态
 				// 设置版本号
 				currentRankVersion = nowWorldRankVersion
-				if !autoNewVersionLock() {
+				if !AutoNewVersionLock() {
 					continue
 				}
 				isFirst = false
 				// 设置level
 				if is_level_scroll {
 					// 等级滚动
-					scrollClearLevelInfo(currentRankVersion)
+					ScrollClearLevelInfo(currentRankVersion)
 				}
 
 				// 设置排行榜生效版本
 				if !is_mock {
-					worldRankSet(currentRankVersion)
+					WorldRankSet(currentRankVersion)
 				}
 				if scrollAuto != nil {
-					scrollAuto(currentRankVersion)
+					scrollAuto(&currentRankVersion)
 				}
 
 				// 版本号初始化
@@ -68,7 +68,7 @@ func autoNewVersion() {
 }
 
 // 使用etcd锁，避免多台服务器同时轮转
-func autoNewVersionLock() bool {
+func AutoNewVersionLock() bool {
 	listenId := etcdClient.NewLease(context.Background(), 3)
 
 	ok := etcdClient.PutIfNotExist(context.Background(), path.Join("/", cfg.Project, monitor_auto_new_version_lock), "1", listenId)

@@ -150,4 +150,20 @@ enum MessageId {
     GetSkinPreviewAck = 148; // 获取皮肤预览回复
     GetUserAllSkinInfo = 149; // 获取用户所有皮肤信息
     GetUserAllSkinInfoAck = 150; // 获取用户所有皮肤信息回复
+
+    // 获取下次更新日期
+    GetNextUpdateTime = 153; // 获取下次更新日期
+    GetNextUpdateTimeAck = 154; // 获取下次更新日期返回
+
+    // 灵珠商城
+    GetBeadShopInfo = 155; // 获取灵珠商城信息
+    GetBeadShopInfoAck = 156; // 获取灵珠商城信息返回
+
+    // 霸王系统
+    GetWinnerSystemInfo = 157; // 获取霸王系统信息
+    GetWinnerSystemInfoAck = 158; // 获取霸王系统信息返回
+    AddWinnerSytemInfo = 159; // 添加霸王系统信息
+    AddWinnerSytemInfoAck = 160; // 添加霸王系统信息返回
+    DeleteWinnerSytemInfo = 161; // 删除霸王系统信息
+    DeleteWinnerSytemInfoAck = 162; // 删除霸王系统信息返回
 }

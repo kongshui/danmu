@@ -28,7 +28,7 @@ type (
 	WebsocketFunc             func(msg *pmsg.MessageBody) error
 	InteractiveFunc           func(roomId, roundId string, label int) bool //自动选边
 	GiftExtendInfoFunc        func() string
-	ScrollFunc                func(string)
+	ScrollFunc                func(*string)
 	InitFunc                  func(bool)
 	SetIntegralToRoundFunc    func(roomId, anchorOpenId, openId string, score float64) error
 	CfgConfig                 struct {
@@ -65,14 +65,14 @@ var (
 		FileMd5: make(map[string]string),
 		Config:  make(map[string]config.CfgConfig),
 	} //配置文件数据
-	expireTime            time.Duration //过期时间
-	currentRankVersion    string        //世界排行版version
-	nowMonth              string        //当前月
-	monthVersionRankDb    string        //月排行版db名称
-	app_id                string        // appId
-	app_secret            string        // appSecret
-	platform              string        // 平台
-	url_GetAccessTokenUrl string        // 获取全局token的url
+	expireTime         time.Duration //过期时间
+	currentRankVersion string        //世界排行版version
+	// nowMonth              string        //当前月
+	monthVersionRankDb    string //月排行版db名称
+	app_id                string // appId
+	app_secret            string // appSecret
+	platform              string // 平台
+	url_GetAccessTokenUrl string // 获取全局token的url
 	// rdb                   = dao_redis.GetRedisClient(config.Redis.Addr, config.Redis.Password, config.Redis.IsCluster, false)
 	rdb         dao_redis.RedisClient
 	mysql       = dao_mysql.NewMysqlClient()

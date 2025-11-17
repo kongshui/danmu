@@ -23,7 +23,7 @@ func ServiceInit() {
 	platform = cfg.App.PlatForm    // 平台
 	debug = cfg.Server.Debug
 	setUrl()
-	monthVersionSet()
+	// monthVersionSet()
 
 	//设置uuid
 	nodeUuid = uuid.New().String()
@@ -64,7 +64,10 @@ func ServiceInit() {
 	// etcdClient.InitEtcd(config.Etcd.Addr, config.Etcd.Username, config.Etcd.Password)
 
 	//周二自动滚动
-	go autoNewVersion()
+	if scrollAuto != nil {
+		go scrollAuto(&currentRankVersion)
+	}
+	// go autoNewVersion()
 
 	//注册后端域名
 	go registerBackDomain(first_ctx)
@@ -103,7 +106,7 @@ func ServiceInit() {
 		if is_mock {
 			break
 		}
-		worldRankSet(currentRankVersion)
+		WorldRankSet(currentRankVersion)
 		if cfg.App.NoSend {
 			break
 		}

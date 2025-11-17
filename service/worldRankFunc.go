@@ -23,21 +23,21 @@ func worldRankInit() error {
 }
 
 // 当前生效的月版本
-func monthVersionSet() error {
-	if nowMonth == "" {
-		nowMonth = time.Now().Format("01")
-		monthVersionRankDb = "month_rank_" + nowMonth
-	} else {
-		if nowMonth != time.Now().Format("01") {
-			nowMonth = time.Now().Format("01")
-			monthVersionRankDb = "month_rank_" + nowMonth
-		}
-	}
-	if monthVersionRankDb == "" {
-		monthVersionRankDb = "month_rank_" + nowMonth
-	}
-	return nil
-}
+// func monthVersionSet() error {
+// 	if nowMonth == "" {
+// 		nowMonth = time.Now().Format("01")
+// 		monthVersionRankDb = "month_rank_" + nowMonth
+// 	} else {
+// 		if nowMonth != time.Now().Format("01") {
+// 			nowMonth = time.Now().Format("01")
+// 			monthVersionRankDb = "month_rank_" + nowMonth
+// 		}
+// 	}
+// 	if monthVersionRankDb == "" {
+// 		monthVersionRankDb = "month_rank_" + nowMonth
+// 	}
+// 	return nil
+// }
 
 // 当前生效版本设置
 func worldRankVersionInit() error {

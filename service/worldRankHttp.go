@@ -49,7 +49,7 @@ func dyWorldRankListUpload(data any, url string) bool {
 }
 
 // 世界排行榜设置
-func worldRankSet(worldRankVersion string) {
+func WorldRankSet(worldRankVersion string) {
 	defer RecoverFunc()
 	headers := map[string]string{
 		"Content-Type": "application/json",

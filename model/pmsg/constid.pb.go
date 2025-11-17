@@ -166,6 +166,19 @@ const (
 	MessageId_GetSkinPreviewAck     MessageId = 148 // 获取皮肤预览回复
 	MessageId_GetUserAllSkinInfo    MessageId = 149 // 获取用户所有皮肤信息
 	MessageId_GetUserAllSkinInfoAck MessageId = 150 // 获取用户所有皮肤信息回复
+	// 获取下次更新日期
+	MessageId_GetNextUpdateTime    MessageId = 153 // 获取下次更新日期
+	MessageId_GetNextUpdateTimeAck MessageId = 154 // 获取下次更新日期返回
+	// 灵珠商城
+	MessageId_GetBeadShopInfo    MessageId = 155 // 获取灵珠商城信息
+	MessageId_GetBeadShopInfoAck MessageId = 156 // 获取灵珠商城信息返回
+	// 霸王系统
+	MessageId_GetWinnerSystemInfo      MessageId = 157 // 获取霸王系统信息
+	MessageId_GetWinnerSystemInfoAck   MessageId = 158 // 获取霸王系统信息返回
+	MessageId_AddWinnerSytemInfo       MessageId = 159 // 添加霸王系统信息
+	MessageId_AddWinnerSytemInfoAck    MessageId = 160 // 添加霸王系统信息返回
+	MessageId_DeleteWinnerSytemInfo    MessageId = 161 // 删除霸王系统信息
+	MessageId_DeleteWinnerSytemInfoAck MessageId = 162 // 删除霸王系统信息返回
 )
 
 // Enum value maps for MessageId.
@@ -305,6 +318,16 @@ var (
 		148: "GetSkinPreviewAck",
 		149: "GetUserAllSkinInfo",
 		150: "GetUserAllSkinInfoAck",
+		153: "GetNextUpdateTime",
+		154: "GetNextUpdateTimeAck",
+		155: "GetBeadShopInfo",
+		156: "GetBeadShopInfoAck",
+		157: "GetWinnerSystemInfo",
+		158: "GetWinnerSystemInfoAck",
+		159: "AddWinnerSytemInfo",
+		160: "AddWinnerSytemInfoAck",
+		161: "DeleteWinnerSytemInfo",
+		162: "DeleteWinnerSytemInfoAck",
 	}
 	MessageId_value = map[string]int32{
 		"Unknown":                           0,
@@ -441,6 +464,16 @@ var (
 		"GetSkinPreviewAck":                 148,
 		"GetUserAllSkinInfo":                149,
 		"GetUserAllSkinInfoAck":             150,
+		"GetNextUpdateTime":                 153,
+		"GetNextUpdateTimeAck":              154,
+		"GetBeadShopInfo":                   155,
+		"GetBeadShopInfoAck":                156,
+		"GetWinnerSystemInfo":               157,
+		"GetWinnerSystemInfoAck":            158,
+		"AddWinnerSytemInfo":                159,
+		"AddWinnerSytemInfoAck":             160,
+		"DeleteWinnerSytemInfo":             161,
+		"DeleteWinnerSytemInfoAck":          162,
 	}
 )
 
@@ -475,7 +508,7 @@ var File_proto_constid_proto protoreflect.FileDescriptor
 
 const file_proto_constid_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/constid.proto\x12\x04pmsg*\xca\x17\n" +
+	"\x13proto/constid.proto\x12\x04pmsg*\xd3\x19\n" +
 	"\tMessageId\x12\v\n" +
 	"\aUnknown\x10\x00\x12\f\n" +
 	"\bNodeInfo\x10\x01\x12\x0f\n" +
@@ -623,7 +656,17 @@ const file_proto_constid_proto_rawDesc = "" +
 	"\x0eGetSkinPreview\x10\x93\x01\x12\x16\n" +
 	"\x11GetSkinPreviewAck\x10\x94\x01\x12\x17\n" +
 	"\x12GetUserAllSkinInfo\x10\x95\x01\x12\x1a\n" +
-	"\x15GetUserAllSkinInfoAck\x10\x96\x01B\bZ\x06./pmsgb\x06proto3"
+	"\x15GetUserAllSkinInfoAck\x10\x96\x01\x12\x16\n" +
+	"\x11GetNextUpdateTime\x10\x99\x01\x12\x19\n" +
+	"\x14GetNextUpdateTimeAck\x10\x9a\x01\x12\x14\n" +
+	"\x0fGetBeadShopInfo\x10\x9b\x01\x12\x17\n" +
+	"\x12GetBeadShopInfoAck\x10\x9c\x01\x12\x18\n" +
+	"\x13GetWinnerSystemInfo\x10\x9d\x01\x12\x1b\n" +
+	"\x16GetWinnerSystemInfoAck\x10\x9e\x01\x12\x17\n" +
+	"\x12AddWinnerSytemInfo\x10\x9f\x01\x12\x1a\n" +
+	"\x15AddWinnerSytemInfoAck\x10\xa0\x01\x12\x1a\n" +
+	"\x15DeleteWinnerSytemInfo\x10\xa1\x01\x12\x1d\n" +
+	"\x18DeleteWinnerSytemInfoAck\x10\xa2\x01B\bZ\x06./pmsgb\x06proto3"
 
 var (
 	file_proto_constid_proto_rawDescOnce sync.Once
