@@ -66,6 +66,12 @@ func ReadCfgConfig(filePath string) (*CfgConfig, error) {
 						return nil, fmt.Errorf("ReadCfgConfig 转换float失败：%v", err)
 					}
 					data[fileList[i]] = floatVal
+				case "bool":
+					boolVal, err := strconv.ParseBool(field)
+					if err != nil {
+						return nil, fmt.Errorf("ReadCfgConfig 转换bool失败：%v", err)
+					}
+					data[fileList[i]] = boolVal
 				default:
 					data[fileList[i]] = field
 				}
