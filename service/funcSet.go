@@ -1,8 +1,6 @@
 package service
 
 import (
-	"time"
-
 	battlematchv1 "github.com/kongshui/danmu/battlematch/v1"
 	conf "github.com/kongshui/danmu/conf/web"
 	dao_etcd "github.com/kongshui/danmu/dao/etcd"
@@ -62,12 +60,11 @@ storeLevel: 存储等级
 liveLike: 直播点赞积分
 groupIdList: 组名
 */
-func InitGlobalVar(isPkMatch, levelScorll bool, storeLevel int64, liveLike float64, groupIdList []string) {
-	is_pk_match = isPkMatch       // 是否开启pk匹配
-	is_level_scroll = levelScorll // 是否开启等级滚动
-	store_level = storeLevel      // 存储等级
-	live_like_score = liveLike    // 直播点赞积分
-	groupid_list = groupIdList    // 组名
+func InitGlobalVar(isPkMatch bool, storeLevel int64, liveLike float64, groupIdList []string) {
+	is_pk_match = isPkMatch    // 是否开启pk匹配
+	store_level = storeLevel   // 存储等级
+	live_like_score = liveLike // 直播点赞积分
+	groupid_list = groupIdList // 组名
 }
 
 /*
@@ -80,12 +77,12 @@ isCalculate 即直至本期结束后才会过期，即为本期内不过期
 weekSet: 多长时间滚动
 versionTimeInterval: 滚动版本最小时间间隔
 */
-func InitTime(d time.Weekday, h int, expireT time.Duration, day, weekSet int, versionTimeInterval int64, isCalculate bool) {
-	scrollDay = d
-	scrollHour = h
-	expireTime = expireT
-	month_day = day
-	isCalculateExpireTime = isCalculate
-	week_set = weekSet                          // 1 是一周，2是两周 ，3是三周 4是四周 0是一个月
-	version_time_interval = versionTimeInterval // 版本滚动时间间隔
-}
+// func InitTime(d time.Weekday, h int, expireT time.Duration, day, weekSet int, versionTimeInterval int64, isCalculate bool) {
+// 	scrollDay = d
+// 	scrollHour = h
+// 	expireTime = expireT
+// 	month_day = day
+// 	isCalculateExpireTime = isCalculate
+// 	week_set = weekSet                          // 1 是一周，2是两周 ，3是三周 4是四周 0是一个月
+// 	version_time_interval = versionTimeInterval // 版本滚动时间间隔
+// }

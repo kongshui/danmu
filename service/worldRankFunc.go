@@ -12,7 +12,7 @@ func worldRankInit() error {
 	// 初始化月
 	// MonthVersionSet()
 	//初始化版本信息
-	if err := worldRankVersionInit(); err != nil {
+	if err := WorldRankVersionInit(); err != nil {
 		return fmt.Errorf("初始化版本信息失败：: %v", err)
 	}
 	//设置分组信息
@@ -40,7 +40,7 @@ func worldRankInit() error {
 // }
 
 // 当前生效版本设置
-func worldRankVersionInit() error {
+func WorldRankVersionInit() error {
 	// 查看世界版本号是否存在
 	if rdb.IsExistKey(world_rank_version_db) && currentRankVersion == "" {
 		//获取世界版本列表
