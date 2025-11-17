@@ -179,6 +179,9 @@ const (
 	MessageId_AddWinnerSytemInfoAck    MessageId = 160 // 添加霸王系统信息返回
 	MessageId_DeleteWinnerSytemInfo    MessageId = 161 // 删除霸王系统信息
 	MessageId_DeleteWinnerSytemInfoAck MessageId = 162 // 删除霸王系统信息返回
+	// 用户信息
+	MessageId_GetUserAllInfo    MessageId = 163 // 获取用户所有信息
+	MessageId_GetUserAllInfoAck MessageId = 164 // 获取用户所有信息返回
 )
 
 // Enum value maps for MessageId.
@@ -328,6 +331,8 @@ var (
 		160: "AddWinnerSytemInfoAck",
 		161: "DeleteWinnerSytemInfo",
 		162: "DeleteWinnerSytemInfoAck",
+		163: "GetUserAllInfo",
+		164: "GetUserAllInfoAck",
 	}
 	MessageId_value = map[string]int32{
 		"Unknown":                           0,
@@ -474,6 +479,8 @@ var (
 		"AddWinnerSytemInfoAck":             160,
 		"DeleteWinnerSytemInfo":             161,
 		"DeleteWinnerSytemInfoAck":          162,
+		"GetUserAllInfo":                    163,
+		"GetUserAllInfoAck":                 164,
 	}
 )
 
@@ -508,7 +515,7 @@ var File_proto_constid_proto protoreflect.FileDescriptor
 
 const file_proto_constid_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/constid.proto\x12\x04pmsg*\xd3\x19\n" +
+	"\x13proto/constid.proto\x12\x04pmsg*\x80\x1a\n" +
 	"\tMessageId\x12\v\n" +
 	"\aUnknown\x10\x00\x12\f\n" +
 	"\bNodeInfo\x10\x01\x12\x0f\n" +
@@ -666,7 +673,9 @@ const file_proto_constid_proto_rawDesc = "" +
 	"\x12AddWinnerSytemInfo\x10\x9f\x01\x12\x1a\n" +
 	"\x15AddWinnerSytemInfoAck\x10\xa0\x01\x12\x1a\n" +
 	"\x15DeleteWinnerSytemInfo\x10\xa1\x01\x12\x1d\n" +
-	"\x18DeleteWinnerSytemInfoAck\x10\xa2\x01B\bZ\x06./pmsgb\x06proto3"
+	"\x18DeleteWinnerSytemInfoAck\x10\xa2\x01\x12\x13\n" +
+	"\x0eGetUserAllInfo\x10\xa3\x01\x12\x16\n" +
+	"\x11GetUserAllInfoAck\x10\xa4\x01B\bZ\x06./pmsgb\x06proto3"
 
 var (
 	file_proto_constid_proto_rawDescOnce sync.Once

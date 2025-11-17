@@ -166,4 +166,8 @@ enum MessageId {
     AddWinnerSytemInfoAck = 160; // 添加霸王系统信息返回
     DeleteWinnerSytemInfo = 161; // 删除霸王系统信息
     DeleteWinnerSytemInfoAck = 162; // 删除霸王系统信息返回
+
+    // 用户信息
+    GetUserAllInfo = 163; // 获取用户所有信息
+    GetUserAllInfoAck = 164; // 获取用户所有信息返回
 }
