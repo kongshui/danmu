@@ -21,9 +21,10 @@ interFunc：快手加边函数，其实可以包装更加深一点，暂时不�
 giftExtendInfo: 礼物置顶函数
 scrollfunc：自动滚动函数
 initFunction：初始化函数
+getCfgFunc：获取读取到的配置函数
 */
 func ServiceFuncSet(addGroupSetFunc SingleUserAddGroupSetFunc, setWinningScoreFunc SetWinScoreFunc, lotteryFunc LotteryFunc, webSocketFunc WebsocketFunc, interFunc InteractiveFunc,
-	giftExtendInfoFunc GiftExtendInfoFunc, scrollFunc ScrollFunc, initFunc InitFunc, setIntegralToRoundFunc SetIntegralToRoundFunc) {
+	giftExtendInfoFunc GiftExtendInfoFunc, scrollFunc ScrollFunc, initFunc InitFunc, setIntegralToRoundFunc SetIntegralToRoundFunc, gCfgFunc GetCfgConfigFunc) {
 
 	interactive = interFunc
 	playerGroupAddin = addGroupSetFunc
@@ -34,6 +35,7 @@ func ServiceFuncSet(addGroupSetFunc SingleUserAddGroupSetFunc, setWinningScoreFu
 	scrollAuto = scrollFunc
 	initService = initFunc
 	setIntegralToRound = setIntegralToRoundFunc
+	getCfgFunc = gCfgFunc
 }
 
 /*

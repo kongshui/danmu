@@ -72,6 +72,9 @@ func ServiceInit() {
 	//注册后端域名
 	go registerBackDomain(first_ctx)
 
+	if getCfgFunc != nil {
+		getCfgFunc(&cfgConfig)
+	}
 	//获取前端域名
 	// go getFowardDomain(first_ctx)
 

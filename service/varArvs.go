@@ -35,6 +35,7 @@ type (
 		FileMd5 map[string]string           `json:"file_md5"`
 		Config  map[string]config.CfgConfig `json:"config"`
 	}
+	GetCfgConfigFunc func(*CfgConfig)
 )
 
 var (
@@ -47,6 +48,7 @@ var (
 	scrollAuto         ScrollFunc
 	initService        InitFunc
 	setIntegralToRound SetIntegralToRoundFunc
+	getCfgFunc         GetCfgConfigFunc
 
 	is_mock bool
 
