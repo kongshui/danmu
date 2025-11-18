@@ -154,24 +154,18 @@ const (
 	MessageId_QueryBeadFromUser    MessageId = 151 // 查询灵珠
 	MessageId_QueryBeadFromUserAck MessageId = 152 // 查询灵珠回复
 	// 皮肤相关
-	MessageId_AddSkinToUser         MessageId = 139 // 添加皮肤到用户
-	MessageId_AddSkinToUserAck      MessageId = 140 // 添加或使用皮肤到用户回复
-	MessageId_UseSkinFromUser       MessageId = 141 // 使用皮肤
-	MessageId_UseSkinFromUserAck    MessageId = 142 // 使用皮肤回复
-	MessageId_GetSkinInfo           MessageId = 143 // 获取皮肤信息
-	MessageId_GetSkinInfoAck        MessageId = 144 // 获取皮肤信息回复
-	MessageId_GetSkinList           MessageId = 145 // 获取皮肤列表
-	MessageId_GetSkinListAck        MessageId = 146 // 获取皮肤列表回复
-	MessageId_GetSkinPreview        MessageId = 147 // 获取皮肤预览
-	MessageId_GetSkinPreviewAck     MessageId = 148 // 获取皮肤预览回复
-	MessageId_GetUserAllSkinInfo    MessageId = 149 // 获取用户所有皮肤信息
-	MessageId_GetUserAllSkinInfoAck MessageId = 150 // 获取用户所有皮肤信息回复
+	MessageId_AddSkinToUser    MessageId = 139 // 添加皮肤到用户
+	MessageId_AddSkinToUserAck MessageId = 140 // 添加或使用皮肤到用户回复
+	MessageId_SetUserSkin      MessageId = 141 // 设置用户皮肤
+	MessageId_SetUserSkinAck   MessageId = 142 // 设置用户皮肤回复
+	MessageId_GetSkinInfo      MessageId = 143 // 获取皮肤信息
+	MessageId_GetSkinInfoAck   MessageId = 144 // 获取皮肤信息回复
+	// 灵珠商城
+	MessageId_GetBeadShopInfo    MessageId = 147 // 获取灵珠商城信息
+	MessageId_GetBeadShopInfoAck MessageId = 148 // 获取灵珠商城信息返回
 	// 获取下次更新日期
 	MessageId_GetNextUpdateTime    MessageId = 153 // 获取下次更新日期
 	MessageId_GetNextUpdateTimeAck MessageId = 154 // 获取下次更新日期返回
-	// 灵珠商城
-	MessageId_GetBeadShopInfo    MessageId = 155 // 获取灵珠商城信息
-	MessageId_GetBeadShopInfoAck MessageId = 156 // 获取灵珠商城信息返回
 	// 霸王系统
 	MessageId_GetWinnerSystemInfo      MessageId = 157 // 获取霸王系统信息
 	MessageId_GetWinnerSystemInfoAck   MessageId = 158 // 获取霸王系统信息返回
@@ -311,20 +305,14 @@ var (
 		152: "QueryBeadFromUserAck",
 		139: "AddSkinToUser",
 		140: "AddSkinToUserAck",
-		141: "UseSkinFromUser",
-		142: "UseSkinFromUserAck",
+		141: "SetUserSkin",
+		142: "SetUserSkinAck",
 		143: "GetSkinInfo",
 		144: "GetSkinInfoAck",
-		145: "GetSkinList",
-		146: "GetSkinListAck",
-		147: "GetSkinPreview",
-		148: "GetSkinPreviewAck",
-		149: "GetUserAllSkinInfo",
-		150: "GetUserAllSkinInfoAck",
+		147: "GetBeadShopInfo",
+		148: "GetBeadShopInfoAck",
 		153: "GetNextUpdateTime",
 		154: "GetNextUpdateTimeAck",
-		155: "GetBeadShopInfo",
-		156: "GetBeadShopInfoAck",
 		157: "GetWinnerSystemInfo",
 		158: "GetWinnerSystemInfoAck",
 		159: "AddWinnerSytemInfo",
@@ -459,20 +447,14 @@ var (
 		"QueryBeadFromUserAck":              152,
 		"AddSkinToUser":                     139,
 		"AddSkinToUserAck":                  140,
-		"UseSkinFromUser":                   141,
-		"UseSkinFromUserAck":                142,
+		"SetUserSkin":                       141,
+		"SetUserSkinAck":                    142,
 		"GetSkinInfo":                       143,
 		"GetSkinInfoAck":                    144,
-		"GetSkinList":                       145,
-		"GetSkinListAck":                    146,
-		"GetSkinPreview":                    147,
-		"GetSkinPreviewAck":                 148,
-		"GetUserAllSkinInfo":                149,
-		"GetUserAllSkinInfoAck":             150,
+		"GetBeadShopInfo":                   147,
+		"GetBeadShopInfoAck":                148,
 		"GetNextUpdateTime":                 153,
 		"GetNextUpdateTimeAck":              154,
-		"GetBeadShopInfo":                   155,
-		"GetBeadShopInfoAck":                156,
 		"GetWinnerSystemInfo":               157,
 		"GetWinnerSystemInfoAck":            158,
 		"AddWinnerSytemInfo":                159,
@@ -515,7 +497,7 @@ var File_proto_constid_proto protoreflect.FileDescriptor
 
 const file_proto_constid_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/constid.proto\x12\x04pmsg*\x80\x1a\n" +
+	"\x13proto/constid.proto\x12\x04pmsg*\xef\x18\n" +
 	"\tMessageId\x12\v\n" +
 	"\aUnknown\x10\x00\x12\f\n" +
 	"\bNodeInfo\x10\x01\x12\x0f\n" +
@@ -653,21 +635,15 @@ const file_proto_constid_proto_rawDesc = "" +
 	"\x11QueryBeadFromUser\x10\x97\x01\x12\x19\n" +
 	"\x14QueryBeadFromUserAck\x10\x98\x01\x12\x12\n" +
 	"\rAddSkinToUser\x10\x8b\x01\x12\x15\n" +
-	"\x10AddSkinToUserAck\x10\x8c\x01\x12\x14\n" +
-	"\x0fUseSkinFromUser\x10\x8d\x01\x12\x17\n" +
-	"\x12UseSkinFromUserAck\x10\x8e\x01\x12\x10\n" +
+	"\x10AddSkinToUserAck\x10\x8c\x01\x12\x10\n" +
+	"\vSetUserSkin\x10\x8d\x01\x12\x13\n" +
+	"\x0eSetUserSkinAck\x10\x8e\x01\x12\x10\n" +
 	"\vGetSkinInfo\x10\x8f\x01\x12\x13\n" +
-	"\x0eGetSkinInfoAck\x10\x90\x01\x12\x10\n" +
-	"\vGetSkinList\x10\x91\x01\x12\x13\n" +
-	"\x0eGetSkinListAck\x10\x92\x01\x12\x13\n" +
-	"\x0eGetSkinPreview\x10\x93\x01\x12\x16\n" +
-	"\x11GetSkinPreviewAck\x10\x94\x01\x12\x17\n" +
-	"\x12GetUserAllSkinInfo\x10\x95\x01\x12\x1a\n" +
-	"\x15GetUserAllSkinInfoAck\x10\x96\x01\x12\x16\n" +
+	"\x0eGetSkinInfoAck\x10\x90\x01\x12\x14\n" +
+	"\x0fGetBeadShopInfo\x10\x93\x01\x12\x17\n" +
+	"\x12GetBeadShopInfoAck\x10\x94\x01\x12\x16\n" +
 	"\x11GetNextUpdateTime\x10\x99\x01\x12\x19\n" +
-	"\x14GetNextUpdateTimeAck\x10\x9a\x01\x12\x14\n" +
-	"\x0fGetBeadShopInfo\x10\x9b\x01\x12\x17\n" +
-	"\x12GetBeadShopInfoAck\x10\x9c\x01\x12\x18\n" +
+	"\x14GetNextUpdateTimeAck\x10\x9a\x01\x12\x18\n" +
 	"\x13GetWinnerSystemInfo\x10\x9d\x01\x12\x1b\n" +
 	"\x16GetWinnerSystemInfoAck\x10\x9e\x01\x12\x17\n" +
 	"\x12AddWinnerSytemInfo\x10\x9f\x01\x12\x1a\n" +
