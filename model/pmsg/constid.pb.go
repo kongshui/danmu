@@ -176,6 +176,11 @@ const (
 	// 用户信息
 	MessageId_GetUserAllInfo    MessageId = 163 // 获取用户所有信息
 	MessageId_GetUserAllInfoAck MessageId = 164 // 获取用户所有信息返回
+	// 玩家技能相关
+	MessageId_AddPlayerSkillLevel    MessageId = 165 // 添加玩家技能等级
+	MessageId_AddPlayerSkillLevelAck MessageId = 166 // 添加玩家技能等级返回
+	MessageId_GetPlayerSkillLevel    MessageId = 167 // 获取玩家技能等级
+	MessageId_GetPlayerSkillLevelAck MessageId = 168 // 获取玩家技能等级返回
 )
 
 // Enum value maps for MessageId.
@@ -321,6 +326,10 @@ var (
 		162: "DeleteWinnerSytemInfoAck",
 		163: "GetUserAllInfo",
 		164: "GetUserAllInfoAck",
+		165: "AddPlayerSkillLevel",
+		166: "AddPlayerSkillLevelAck",
+		167: "GetPlayerSkillLevel",
+		168: "GetPlayerSkillLevelAck",
 	}
 	MessageId_value = map[string]int32{
 		"Unknown":                           0,
@@ -463,6 +472,10 @@ var (
 		"DeleteWinnerSytemInfoAck":          162,
 		"GetUserAllInfo":                    163,
 		"GetUserAllInfoAck":                 164,
+		"AddPlayerSkillLevel":               165,
+		"AddPlayerSkillLevelAck":            166,
+		"GetPlayerSkillLevel":               167,
+		"GetPlayerSkillLevelAck":            168,
 	}
 )
 
@@ -497,7 +510,7 @@ var File_proto_constid_proto protoreflect.FileDescriptor
 
 const file_proto_constid_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/constid.proto\x12\x04pmsg*\xef\x18\n" +
+	"\x13proto/constid.proto\x12\x04pmsg*\xdd\x19\n" +
 	"\tMessageId\x12\v\n" +
 	"\aUnknown\x10\x00\x12\f\n" +
 	"\bNodeInfo\x10\x01\x12\x0f\n" +
@@ -651,7 +664,11 @@ const file_proto_constid_proto_rawDesc = "" +
 	"\x15DeleteWinnerSytemInfo\x10\xa1\x01\x12\x1d\n" +
 	"\x18DeleteWinnerSytemInfoAck\x10\xa2\x01\x12\x13\n" +
 	"\x0eGetUserAllInfo\x10\xa3\x01\x12\x16\n" +
-	"\x11GetUserAllInfoAck\x10\xa4\x01B\bZ\x06./pmsgb\x06proto3"
+	"\x11GetUserAllInfoAck\x10\xa4\x01\x12\x18\n" +
+	"\x13AddPlayerSkillLevel\x10\xa5\x01\x12\x1b\n" +
+	"\x16AddPlayerSkillLevelAck\x10\xa6\x01\x12\x18\n" +
+	"\x13GetPlayerSkillLevel\x10\xa7\x01\x12\x1b\n" +
+	"\x16GetPlayerSkillLevelAck\x10\xa8\x01B\bZ\x06./pmsgb\x06proto3"
 
 var (
 	file_proto_constid_proto_rawDescOnce sync.Once

@@ -165,4 +165,10 @@ enum MessageId {
     // 用户信息
     GetUserAllInfo = 163; // 获取用户所有信息
     GetUserAllInfoAck = 164; // 获取用户所有信息返回
+
+    // 玩家技能相关
+    AddPlayerSkillLevel = 165; // 添加玩家技能等级
+    AddPlayerSkillLevelAck = 166; // 添加玩家技能等级返回
+    GetPlayerSkillLevel = 167; // 获取玩家技能等级
+    GetPlayerSkillLevelAck = 168; // 获取玩家技能等级返回
 }

@@ -481,5 +481,89 @@ message relineTo{
       **备注：** 此协议为查询灵珠回复协议，其中open_id为用户id，bead_id为灵珠ID，bead_count为灵珠数量，code为返回码，msg为返回信息
 - **UseBeadFromUser 使用灵珠协议**
    *protobuf结构体为：*
-— **
+   // 扣除用户灵珠
+   message BeadDeductByUserMessage {
+      string open_id = 1;      //玩家用户id
+      int64 bead_id = 2;      //灵珠ID
+      string verify_key = 3;   //验证唯一标识 MD5（openId+beadId+count+时间戳）
+      int64 goods_id = 4; //灵珠购买商品ID
+      int64 goods_count = 5;   //灵珠购买商品数量
+   }
+— **UseBeadFromUserAck 使用灵珠回复协议**
+   *protobuf结构体为：*
+   message BeadDeductByUserAckMessage {
+      string open_id = 1;      //玩家用户id
+      int64 bead_id = 2;      //灵珠ID
+      int64 bead_count = 3;   //玩家剩余灵珠数量
+      string verify_key = 4;   //验证唯一标识 MD5（openId+beadId+count+时间戳）
+      int32 code = 5; //返回码
+      string msg = 6; //返回信息
+   }
+- **GetNextUpdateTime 获取下一次更新时间协议**
+   nil 空结构体
+— **GetNextUpdateTimeAck 获取下一次更新时间回复协议**
+   返回为string，如"2023年08月01日12时"
+- **AddWinnerSytemInfo 添加赢家系统信息协议**
+   *protobuf结构体为：*
+   message UpdateWinnerSystemInfoMessage {
+      string open_id = 1; // 玩家用户id
+      int64 win_count = 2; // 赢的次数
+      int64 win_type = 3; // 赢的类型
+   }
+— **AddWinnerSytemInfoAck 添加赢家系统信息回复协议**
+   *protobuf结构体为：*
+   // 更新赢家系统信息回复
+   message UpdateWinnerSystemInfoAckMessage {
+      string open_id = 1; // 玩家用户id
+      int64 win_count = 2; // 赢的次数,更新后的赢的次数
+   }
+— **GetWinnerSystemInfo 获取赢家系统信息协议**
+   *protobuf结构体为：*
+   nmessage GetWinnerSystemInfoMessage {
+      repeated string open_id_list = 1; // 玩家用户id列表
+   }
+— **GetWinnerSystemInfoAck 获取赢家系统信息回复协议**
+   *protobuf结构体为：*
+   // 获取赢家系统信息回复
+   message GetWinnerSystemInfoAckMessage {
+      message WinnerSystemInfo {
+         string open_id = 1; // 玩家用户id
+         int64 win_count = 2; // 赢的次数
+      }
+      repeated WinnerSystemInfo winner_system_info_list = 1; // 赢家系统信息列表
+   }
+- **SetUserSkin 设置用户皮肤协议**
+   *protobuf结构体为：*
+   message SetSkinToUserMessage {
+      string open_id = 1;      //玩家用户id
+      int64 skin_id = 2;      // 皮肤Id
+      int64 fish_kind = 3;      // 鱼种
+   }
+— **SetUserSkinAck 设置用户皮肤回复协议**
+   *protobuf结构体为：*
+   message SetSkinToUserAckMessage {
+      string open_id = 1;      //玩家用户id
+      int64 skin_id = 2;      // 皮肤Id
+      int64 fish_kind = 3;      // 鱼种
+      int32 code = 4; //返回码
+      string msg = 5; //返回信息
+   }
+— **GetSkinInfo 获取用户皮肤协议**
+   *protobuf结构体为：*
+   message GetPlayerSkinMessage {
+      string open_id = 1;      // 玩家用户id
+   }
+— **GetSkinInfoAck 获取用户皮肤回复协议**
+   *protobuf结构体为：*
+   message GetPlayerSkinAckMessage {
+      string open_id = 1;      // 玩家用户id
+      PlayerSkinEquipSlot skin_equip_slot = 2;      // 装备槽位信息
+   }
+   message PlayerSkinEquipSlot {
+      int64 fish_id = 2;      // 鱼种ID
+      int64 skin_id = 3;      // 皮肤ID
+   }
+— **GetBeadShopInfo 获取灵珠商店信息协议**
+   json格式：
+   ConfigMapRequestAck中包含灵珠商店信息，暂定关键字为"beadShop"
 - **备注**
