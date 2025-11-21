@@ -171,4 +171,13 @@ enum MessageId {
     AddPlayerSkillLevelAck = 166; // 添加玩家技能等级返回
     GetPlayerSkillLevel = 167; // 获取玩家技能等级
     GetPlayerSkillLevelAck = 168; // 获取玩家技能等级返回
+
+
+    // 全服通告
+    GetBossKillLvelMsg = 169; // 获取Boss击杀消息
+    GetBossKillLvelMsgAck = 170; // 获取Boss击杀消息返回
+    SendBossKillMsg = 171; // 发送Boss击杀消息
+    BossFirstBloodNotice = 172; // Boss首杀全服通知
+    SendEvolutionKunMsg = 173; // 发送进化鲲消息
+    KunEvolutionNotice = 174; // 鲲进化全服通知
 }

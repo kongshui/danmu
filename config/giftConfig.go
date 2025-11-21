@@ -48,6 +48,12 @@ func ReadCfgConfig(filePath string) (*CfgConfig, error) {
 		}
 		if lineNum == 3 {
 			fileList = fields
+			if len(typeList) != len(fileList) {
+				return nil, fmt.Errorf("ReadCfgConfig 配置文件格式错误：第%d行，字段数与配置类型数不一致", lineNum)
+			}
+		}
+		if len(fields) != len(typeList) {
+			return nil, fmt.Errorf("ReadCfgConfig 配置文件格式错误：第%d行，字段数与配置类型数不一致", lineNum)
 		}
 		if lineNum > 3 {
 			data := make(map[string]any)
