@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"strconv"
 
 	"github.com/kongshui/danmu/common"
 
@@ -19,7 +20,7 @@ func QueryPlayerGroupHandler(c *gin.Context) {
 	var (
 		queryInfo queryPlayerGroup
 		endGame   int
-		userGroup int = 1
+		userGroup string
 	)
 	bodyByte := bytePool.Get().(*[]byte)
 	defer bytePool.Put(bodyByte)
@@ -56,24 +57,26 @@ func QueryPlayerGroupHandler(c *gin.Context) {
 		})
 		return
 	}
-	group, roundId, ok, err := queryPlayerInGroup(queryInfo.RoomId, queryInfo.OpenId)
+	group, roundId, _, err := queryPlayerInGroup(queryInfo.RoomId, queryInfo.OpenId)
 	if err != nil {
 		ziLog.Error(fmt.Sprintf("QueryPlayerGroupHandler 查询玩家所在组失败, group: %v, roundId: %v, roomId: %v, openId： %v, err: %v",
 			group, roundId, queryInfo.RoomId, queryInfo.OpenId, err), debug)
-		log.Println("QueryPlayerGroupHandler 查询玩家所在组失败", group, roundId, ok, err)
+		log.Println("QueryPlayerGroupHandler 查询玩家所在组失败", group, roundId, err)
 		c.JSON(200, gin.H{
 			"errcode": 1,
 			"errmsg":  "参数不合法",
 		})
 		return
 	}
+	if group == "" {
+		userGroup = groupid_list[0]
+	}
+	//获取游戏是否完成
+	ok, _ := rdb.HExists(queryInfo.RoomId+"_"+strconv.FormatInt(roundId, 10)+"_group", group)
 	if ok {
 		endGame = 2
 	} else {
 		endGame = 1
-	}
-	if group == "" {
-		userGroup = 0
 	}
 	c.JSON(200, gin.H{
 		"errcode": 0,

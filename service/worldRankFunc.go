@@ -219,15 +219,10 @@ func queryPlayerInGroup(roomId, openId string) (string, int64, bool, error) {
 	//获取玩家分组
 	ok, err := rdb.HExists(name, openId)
 	if err != nil || !ok {
-		gOk, _ := rdb.HExists(name, groupid_list[0])
-		return "", roundId, gOk, err
-	}
-	group, err = rdb.HGet(name, openId)
-	if err != nil {
+		// gOk, _ := rdb.HExists(name, groupid_list[0])
 		return "", roundId, false, err
 	}
-	//获取游戏是否完成
-	ok, err = rdb.HExists(name, group)
+	group, err = rdb.HGet(name, openId)
 	if err != nil {
 		return "", roundId, false, err
 	}
