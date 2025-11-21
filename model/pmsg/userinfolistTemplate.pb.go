@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.6
 // 	protoc        v6.31.1
-// source: proto/userinfolist.proto
+// source: proto/userinfolistTemplate.proto
 
 package pmsg
 
@@ -20,14 +20,14 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-var File_proto_userinfolist_proto protoreflect.FileDescriptor
+var File_proto_userinfolistTemplate_proto protoreflect.FileDescriptor
 
-const file_proto_userinfolist_proto_rawDesc = "" +
+const file_proto_userinfolistTemplate_proto_rawDesc = "" +
 	"\n" +
-	"\x18proto/userinfolist.proto\x12\x04pmsgB\bZ\x06./pmsgb\x06proto3"
+	" proto/userinfolistTemplate.proto\x12\x04pmsgB\bZ\x06./pmsgb\x06proto3"
 
-var file_proto_userinfolist_proto_goTypes = []any{}
-var file_proto_userinfolist_proto_depIdxs = []int32{
+var file_proto_userinfolistTemplate_proto_goTypes = []any{}
+var file_proto_userinfolistTemplate_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
 	0, // [0:0] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -35,25 +35,25 @@ var file_proto_userinfolist_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_proto_userinfolist_proto_init() }
-func file_proto_userinfolist_proto_init() {
-	if File_proto_userinfolist_proto != nil {
+func init() { file_proto_userinfolistTemplate_proto_init() }
+func file_proto_userinfolistTemplate_proto_init() {
+	if File_proto_userinfolistTemplate_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_userinfolist_proto_rawDesc), len(file_proto_userinfolist_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_userinfolistTemplate_proto_rawDesc), len(file_proto_userinfolistTemplate_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   0,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_proto_userinfolist_proto_goTypes,
-		DependencyIndexes: file_proto_userinfolist_proto_depIdxs,
+		GoTypes:           file_proto_userinfolistTemplate_proto_goTypes,
+		DependencyIndexes: file_proto_userinfolistTemplate_proto_depIdxs,
 	}.Build()
-	File_proto_userinfolist_proto = out.File
-	file_proto_userinfolist_proto_goTypes = nil
-	file_proto_userinfolist_proto_depIdxs = nil
+	File_proto_userinfolistTemplate_proto = out.File
+	file_proto_userinfolistTemplate_proto_goTypes = nil
+	file_proto_userinfolistTemplate_proto_depIdxs = nil
 }
