@@ -509,4 +509,19 @@ type (
 		MsgType    string `json:"msg_type"`    // 消息类型
 		ClientTime int64  `json:"client_time"` // 客户端接收时间
 	}
+
+	ScrollTime struct {
+		WeekInterval          int  `json:"weekInterval"`          // 周滚动间隔, 单位秒
+		WeekDay               int  `json:"weekDay"`               // 周几滚动, 0表示周日, 1表示周一, 2表示周二, 3表示周三, 4表示周四, 5表示周五, 6表示周六
+		WeekHour              int  `json:"weekHour"`              // 周滚动时, 单位小时
+		MonthDay              int  `json:"monthDay"`              // 月滚动日, 0表示每月1号, 1表示每月2号, 2表示每月3号, 3表示每月4号, 4表示每月5号, 5表示每月6号, 6表示每月7号, 7表示每月8号, 8表示每月9号, 9表示每月10号, 10表示每月11号, 11表示每月12号
+		MonthHour             int  `json:"monthHour"`             // 月滚动时, 单位小时
+		IsWeekScroll          bool `json:"isWeekScroll"`          // 是否周滚动
+		IsMonthScroll         bool `json:"isMonthScroll"`         // 是否月滚动
+		IsCalculateExpireTime bool `json:"isCalculateExpireTime"` // 是否计算过期时间
+	}
+	SetScrollTime struct {
+		ScrollTime ScrollTime `json:"scrollTime"` // 滚动时间
+		MD5        string     `json:"md5"`        // 滚动时间的md5值
+	}
 )

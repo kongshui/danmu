@@ -67,10 +67,11 @@ import (
 // }
 
 // 使用etcd锁，避免多台服务器同时轮转
-func AutoNewVersionLock() bool {
-	listenId := etcdClient.NewLease(context.Background(), 3)
+func AutoNewVersionLock(name string, ttl int64) bool {
+	listenId := etcdClient.NewLease(context.Background(), ttl)
 
-	ok := etcdClient.PutIfNotExist(context.Background(), path.Join("/", cfg.Project, monitor_auto_new_version_lock), "1", listenId)
+	// ok := etcdClient.PutIfNotExist(context.Background(), path.Join("/", cfg.Project, monitor_auto_new_version_lock), "1", listenId)
+	ok := etcdClient.PutIfNotExist(context.Background(), path.Join("/", cfg.Project, name), "1", listenId)
 	if ok {
 		go func(id clientv3.LeaseID) {
 			ctx, cancel := context.WithTimeout(context.Background(), 6*time.Minute)

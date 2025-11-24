@@ -89,9 +89,9 @@ func endClean(roomId, openId string) {
 	if expireTime > 0 {
 		ok := rdb.IsExistKey(integral_pool_Prefix + openId)
 		// 计算过期时间
-		if isCalculateExpireTime {
+		if scrollTime.ScrollTime.IsCalculateExpireTime {
 			// 计算过期时间
-			expireTime = GetNextExpireTime()
+			expireTime = GetNextExpireTime(false)
 			if expireTime == 0 {
 				expireTime = 1
 				rdb.Del(integral_pool_Prefix + openId)

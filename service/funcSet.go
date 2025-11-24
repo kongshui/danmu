@@ -1,8 +1,6 @@
 package service
 
 import (
-	"time"
-
 	battlematchv1 "github.com/kongshui/danmu/battlematch/v1"
 	conf "github.com/kongshui/danmu/conf/web"
 	dao_etcd "github.com/kongshui/danmu/dao/etcd"
@@ -81,12 +79,12 @@ isCalculate 即直至本期结束后才会过期，即为本期内不过期
 weekSet: 多长时间滚动
 versionTimeInterval: 滚动版本最小时间间隔
 */
-func InitTime(d time.Weekday, h int, expireT time.Duration, day, weekSet int, isMonth, isCalculate bool) {
-	scrollDay = d
-	scrollHour = h
-	expireTime = expireT
-	month_day = day
-	isCalculateExpireTime = isCalculate
-	week_set = weekSet // 1 是一周，2是两周 ，3是三周 4是四周 0是一个月
-	is_month = isMonth
+func InitTime(setScrollTime *SetScrollTime) {
+	// scrollDay = d
+	// scrollHour = h
+	// expireTime = expireT
+	// month_day = day
+	// isCalculateExpireTime = isCalculate
+	// week_set = weekSet // 1 是一周，2是两周 ，3是三周 4是四周 0是一个月
+	scrollTime = setScrollTime
 }
