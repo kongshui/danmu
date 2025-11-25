@@ -180,4 +180,12 @@ enum MessageId {
     BossFirstBloodNotice = 172; // Boss首杀全服通知
     SendEvolutionKunMsg = 173; // 发送进化鲲消息
     KunEvolutionNotice = 174; // 鲲进化全服通知
+
+    // 称号系统，从180开始
+    GetTitleInfo = 180; // 获取称号信息
+    GetTitleInfoAck = 181; // 获取称号信息返回
+    SetTitleInfo = 182; // 设置称号信息
+    SetTitleInfoAck = 183; // 设置称号信息返回
+    GetTitle = 184; // 获取称号
+    GetTitleAck = 185; // 获取称号返回
 }

@@ -1,12 +1,12 @@
 package service
 
 const (
-	winning_stream_count_db    = "winning_stream_coin_store" //存储玩家连胜
-	winning_point_db           = "winning_point"             //连胜点
-	world_rank_version_db      = "world_rank_version"        //世界排行版版本信息
-	world_rank_version_list_db = "world_rank_version_list"   //世界排行版版本列表
-	black_anchor_list_db       = "black_anchor_list"         //黑名单主播列表
-	// world_rank_historical_db      = "world_rank_historical"      //历史排行版
+	winning_stream_count_db       = "winning_stream_coin_store"  //存储玩家连胜
+	winning_point_db              = "winning_point"              //连胜点
+	world_rank_version_db         = "world_rank_version"         //世界排行版版本信息
+	world_rank_version_list_db    = "world_rank_version_list"    //世界排行版版本列表
+	black_anchor_list_db          = "black_anchor_list"          //黑名单主播列表
+	world_rank_month              = "world_rank_month"           //月排行版
 	world_rank_week               = "world_rank_week"            //周排行版
 	group_list_db                 = "group_list"                 //分组列表
 	integral_pool_Prefix          = "integral_pool_"             //积分池前缀
@@ -40,9 +40,6 @@ const (
 	match_battle_status_stop     = 5                   // 匹配结束状态
 	match_battle_group_time      = "/match/time/"      // 战斗匹配时间
 	group_integral_pool_key      = "groupIntegralPool" // pk积分池
-	// scroll_time_hours            = 20                  // 清榜时间小时,晚8点
-	// scroll_time_week             = time.Thursday       // 清榜时间周
-	// live_like_score              = 1                   // 点赞或者666的积分
 	// 抖音相关接口
 	url_start_push_url                 = "https://webcast.bytedance.com/api/live_data/task/start"                              // 开始推送地址
 	url_stop_push_url                  = "https://webcast.bytedance.com/api/live_data/task/stop"                               // 停止推送地址
@@ -68,6 +65,4 @@ const (
 	url_TopGiftUrl        = "https://open.kuaishou.com/openapi/developer/live/smallPlay/gift"                  //礼物置顶接口
 	// url_InteractiveUrl    = "https://open.kuaishou.com/openapi/developer/live/data/interactive/start"          //快捷选边
 	url_ChatUrl = "https://open.kuaishou.com/openapi/developer/live/data/interactive/action/chat" // 连线对局url
-	// is_maintain_db                = "is_maintain"                              //维护开关
-	// integral_pool_db               = "integral_pool"                                                                       //积分池
 )

@@ -70,7 +70,7 @@ var (
 	expireTime         time.Duration //过期时间
 	currentRankVersion string        //世界排行版version
 	// nowMonth              string        //当前月
-	monthVersionRankDb    string //月排行版db名称
+	// monthVersionRankDb    string //月排行版db名称
 	app_id                string // appId
 	app_secret            string // appSecret
 	platform              string // 平台

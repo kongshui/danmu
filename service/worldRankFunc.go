@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"testing"
 	"time"
 )
 
@@ -115,12 +116,11 @@ func WorldRankNumerAdd(openId string, score float64) {
 	if _, err := rdb.ZIncrBy(world_rank_week, score, openId); err != nil {
 		panic("添加玩家数据至世界排行榜失败，玩家OpenId： " + openId + ",玩家获得的积分为：" + strconv.FormatInt(int64(score), 10) + ",err： " + err.Error())
 	}
-	// if _, err := rdb.ZIncrBy(world_rank_historical_db, score, openId); err != nil {
-	// 	panic("添加玩家数据至历史世界排行榜失败，玩家OpenId： " + openId + ",玩家获得的积分为：" + strconv.FormatInt(int64(score), 10) + ",err： " + err.Error())
-	// }
 	// 添加月榜
-	if _, err := rdb.ZIncrBy(monthVersionRankDb, score, openId); err != nil {
-		panic("添加玩家数据至历史世界排行榜失败，玩家OpenId： " + openId + ",玩家获得的积分为：" + strconv.FormatInt(int64(score), 10) + ",err： " + err.Error())
+	if scrollTime.ScrollTime.IsMonthScroll {
+		if _, err := rdb.ZIncrBy(world_rank_month, score, openId); err != nil {
+			panic("添加玩家数据至历史世界排行榜失败，玩家OpenId： " + openId + ",玩家获得的积分为：" + strconv.FormatInt(int64(score), 10) + ",err： " + err.Error())
+		}
 	}
 	if err := mysql.UpdateRank(openId, int64(score)); err != nil {
 		panic("更新添加玩家数据至世界排行榜失败，玩家OpenId： " + openId + ",玩家获得的积分为：" + strconv.FormatInt(int64(score), 10) + ",err： " + err.Error())
@@ -229,7 +229,7 @@ func queryPlayerInGroup(roomId, openId string) (string, int64, bool, error) {
 	return group, roundId, ok, nil
 }
 
-func scrollWorldRank(version string, count int) error {
+func ScrollWorldRank(version string, count int) error {
 	if !rdb.IsExistKey(world_rank_week) {
 		return nil
 	}
@@ -241,7 +241,7 @@ func scrollWorldRank(version string, count int) error {
 			return fmt.Errorf("scrollWorldRank 滚动世界榜单失败： version: %v, count: %v", version, count)
 		}
 		count++
-		return scrollWorldRank(version, count)
+		return ScrollWorldRank(version, count)
 	}
 	rdb.Expire("world_rank_"+version, 24*30*time.Hour)
 	// rdb.Del(user_info_db)
@@ -274,7 +274,7 @@ func scrollow() error {
 	if err := setHistoryVersion(); err != nil {
 		ziLog.Error("设置世界历版本失败： "+err.Error(), debug)
 	}
-	if err := scrollWorldRank(currentRankVersion, 0); err != nil {
+	if err := ScrollWorldRank(currentRankVersion, 0); err != nil {
 		ziLog.Error("autoNewVersion 滚动世界榜单失败： "+err.Error(), debug)
 	}
 	// 统计
@@ -310,4 +310,31 @@ func getUserGroup(roomId, openId string) (string, int, error) {
 		return "", endStatus, err
 	}
 	return group, endStatus, nil
+}
+
+// 滚动月榜单
+func ScrollMonthRank(day time.Duration, count int) error {
+	if !rdb.IsExistKey(world_rank_month) {
+		return nil
+	}
+
+	//获取世界版本列表
+	if err := rdb.Rename(world_rank_month, world_rank_month+"_"+time.Now().Format(version_time_layout)); err != nil {
+		time.Sleep(time.Second * 1)
+		if count > 60 {
+			return fmt.Errorf("ScrollMonthRank 滚动月榜单失败： day: %v, count: %v", day, count)
+		}
+		count++
+		return ScrollMonthRank(day, count)
+	}
+	rdb.Expire(world_rank_month+"_"+time.Now().Format(version_time_layout), 24*day*time.Hour)
+	// rdb.Del(user_info_db)
+	return nil
+}
+
+// 测试滚动月榜单
+func TestScrollMonthRank(t *testing.T) {
+	if err := ScrollMonthRank(7, 0); err != nil {
+		t.Errorf("TestScrollMonthRank 滚动月榜单失败： %v", err)
+	}
 }

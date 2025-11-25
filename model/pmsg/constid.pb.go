@@ -188,6 +188,13 @@ const (
 	MessageId_BossFirstBloodNotice  MessageId = 172 // Boss首杀全服通知
 	MessageId_SendEvolutionKunMsg   MessageId = 173 // 发送进化鲲消息
 	MessageId_KunEvolutionNotice    MessageId = 174 // 鲲进化全服通知
+	// 称号系统，从180开始
+	MessageId_GetTitleInfo    MessageId = 180 // 获取称号信息
+	MessageId_GetTitleInfoAck MessageId = 181 // 获取称号信息返回
+	MessageId_SetTitleInfo    MessageId = 182 // 设置称号信息
+	MessageId_SetTitleInfoAck MessageId = 183 // 设置称号信息返回
+	MessageId_GetTitle        MessageId = 184 // 获取称号
+	MessageId_GetTitleAck     MessageId = 185 // 获取称号返回
 )
 
 // Enum value maps for MessageId.
@@ -343,6 +350,12 @@ var (
 		172: "BossFirstBloodNotice",
 		173: "SendEvolutionKunMsg",
 		174: "KunEvolutionNotice",
+		180: "GetTitleInfo",
+		181: "GetTitleInfoAck",
+		182: "SetTitleInfo",
+		183: "SetTitleInfoAck",
+		184: "GetTitle",
+		185: "GetTitleAck",
 	}
 	MessageId_value = map[string]int32{
 		"Unknown":                           0,
@@ -495,6 +508,12 @@ var (
 		"BossFirstBloodNotice":              172,
 		"SendEvolutionKunMsg":               173,
 		"KunEvolutionNotice":                174,
+		"GetTitleInfo":                      180,
+		"GetTitleInfoAck":                   181,
+		"SetTitleInfo":                      182,
+		"SetTitleInfoAck":                   183,
+		"GetTitle":                          184,
+		"GetTitleAck":                       185,
 	}
 )
 
@@ -529,7 +548,7 @@ var File_proto_constid_proto protoreflect.FileDescriptor
 
 const file_proto_constid_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/constid.proto\x12\x04pmsg*\xf6\x1a\n" +
+	"\x13proto/constid.proto\x12\x04pmsg*\xe9\x1b\n" +
 	"\tMessageId\x12\v\n" +
 	"\aUnknown\x10\x00\x12\f\n" +
 	"\bNodeInfo\x10\x01\x12\x0f\n" +
@@ -693,7 +712,13 @@ const file_proto_constid_proto_rawDesc = "" +
 	"\x0fSendBossKillMsg\x10\xab\x01\x12\x19\n" +
 	"\x14BossFirstBloodNotice\x10\xac\x01\x12\x18\n" +
 	"\x13SendEvolutionKunMsg\x10\xad\x01\x12\x17\n" +
-	"\x12KunEvolutionNotice\x10\xae\x01B\bZ\x06./pmsgb\x06proto3"
+	"\x12KunEvolutionNotice\x10\xae\x01\x12\x11\n" +
+	"\fGetTitleInfo\x10\xb4\x01\x12\x14\n" +
+	"\x0fGetTitleInfoAck\x10\xb5\x01\x12\x11\n" +
+	"\fSetTitleInfo\x10\xb6\x01\x12\x14\n" +
+	"\x0fSetTitleInfoAck\x10\xb7\x01\x12\r\n" +
+	"\bGetTitle\x10\xb8\x01\x12\x10\n" +
+	"\vGetTitleAck\x10\xb9\x01B\bZ\x06./pmsgb\x06proto3"
 
 var (
 	file_proto_constid_proto_rawDescOnce sync.Once
