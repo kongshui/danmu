@@ -78,6 +78,42 @@ func ReadCfgConfig(filePath string) (*CfgConfig, error) {
 						return nil, fmt.Errorf("ReadCfgConfig 转换bool失败：%v", err)
 					}
 					data[fileList[i]] = boolVal
+				case "lint":
+					lint := strings.Split(field, ",")
+					var lintList []int
+					for _, lintVal := range lint {
+						intVal, err := strconv.Atoi(lintVal)
+						if err != nil {
+							return nil, fmt.Errorf("ReadCfgConfig 转换int失败：%v", err)
+						}
+						lintList = append(lintList, intVal)
+					}
+					data[fileList[i]] = lintList
+				case "lfloat":
+					lfloat := strings.Split(field, ",")
+					var lfloatList []float64
+					for _, lfloatVal := range lfloat {
+						floatVal, err := strconv.ParseFloat(lfloatVal, 64)
+						if err != nil {
+							return nil, fmt.Errorf("ReadCfgConfig 转换float失败：%v", err)
+						}
+						lfloatList = append(lfloatList, floatVal)
+					}
+					data[fileList[i]] = lfloatList
+				case "lbool":
+					lbool := strings.Split(field, ",")
+					var lboolList []bool
+					for _, lboolVal := range lbool {
+						boolVal, err := strconv.ParseBool(lboolVal)
+						if err != nil {
+							return nil, fmt.Errorf("ReadCfgConfig 转换bool失败：%v", err)
+						}
+						lboolList = append(lboolList, boolVal)
+					}
+					data[fileList[i]] = lboolList
+				case "lstring":
+					lstring := strings.Split(field, ",")
+					data[fileList[i]] = lstring
 				default:
 					data[fileList[i]] = field
 				}

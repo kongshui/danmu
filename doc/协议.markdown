@@ -652,5 +652,50 @@ message relineTo{
    }
    *文件名：* broadcast.proto
    **备注：** 此协议为升级kun通知协议，其中open_id为玩家用户id，name为玩家昵称，level为玩家等级,或者进化等级，根据事件名称判断
+- **GetTitleInfo 获取称号信息协议**
+   *protobuf结构体为：*
+   message TitleReqMessage {
+      repeated string open_ids = 1;  // 玩家openId  
+   }
+   *文件名：* title.proto
+   **备注：** 此协议为获取称号信息协议，其中open_ids为玩家用户id列表
+- **GetTitleInfoAck 获取称号信息回复协议**
+   *protobuf结构体为：*
+   message TitleReqAckMessage {
+      repeated TitleInfo titles = 1;  // 称号信息
+   }
+   message TitleInfo {
+      string open_id = 1;  // 玩家openId
+      repeated string titles = 2;  // 称号
+      string title = 3;  // 当前称号
+   }
+   *文件名：* title.proto
+   **备注：** 此协议为获取称号信息回复协议，其中title_infos为玩家称号信息列表
+- **SetTitleInfo 设置称号协议**
+   *protobuf结构体为：*
+   message SetTitleMessage {
+      string open_id = 1;  // 玩家openId
+      string title = 2;  // 称号
+   }
+   *文件名：* title.proto
+   **备注：** 此协议为设置称号协议，其中open_id为玩家用户id，title为称号
+- **SetTitleInfoAck 设置称号回复协议**
+   *protobuf结构体为：*
+   message SetTitleAckMessage {
+      string open_id = 1;  // 玩家openId
+      string title = 2;  // 称号
+      int32 code = 3; //返回码
+      string msg = 4; //返回信息
+   }
+   *文件名：* title.proto
+   **备注：** 此协议为设置称号回复协议，其中open_id为玩家用户id，title为称号
+- **GetTitle 获取称号协议**
+   同SetTitleInfo协议
+   *文件名：* title.proto
+   **备注：** 此协议为获取称号协议，其中open_id为玩家用户id，title为称号
+- **GetTitleAck 获取称号回复协议**
+   同SetTitleInfoAck协议
+   *文件名：* title.proto
+   **备注：** 此协议为获取称号回复协议，其中open_id为玩家用户id，title为称号
 - **备注**
    1. kun的UserInfoStruct中添加了Slot、SkillInfo和SkinEquipSlot字段

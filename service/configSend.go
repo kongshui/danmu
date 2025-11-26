@@ -131,9 +131,15 @@ func configMapRead() error {
 	if cfg.App.ConfigDir == "" {
 		return nil
 	}
-	return filepath.Walk(cfg.App.ConfigDir, func(path string, info os.FileInfo, err error) error {
+	var (
+		hasErr     = false
+		configList = make([]string, 0)
+	)
+	filepath.Walk(cfg.App.ConfigDir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
-			return err
+			hasErr = true
+			ziLog.Error(fmt.Sprintf("ConfigMapRead 遍历配置文件失败：%v", err), debug)
+			return nil
 		}
 		if info.IsDir() {
 			return nil
@@ -141,7 +147,10 @@ func configMapRead() error {
 		// 计算文件的MD5值
 		md5, err := FileMD5(path)
 		if err != nil {
-			return fmt.Errorf("ConfigMapRead 计算文件MD5失败：%v", err)
+			hasErr = true
+			configList = append(configList, info.Name())
+			ziLog.Error(fmt.Sprintf("ConfigMapRead 计算文件MD5失败：%v", err), debug)
+			return nil
 		}
 		okMd5, ok := cfgConfig.FileMd5[strings.TrimSuffix(info.Name(), filepath.Ext(info.Name()))]
 		if ok && okMd5 == md5 {
@@ -150,7 +159,10 @@ func configMapRead() error {
 		// 读取配置文件内容
 		fileConfig, err := config.ReadCfgConfig(path)
 		if err != nil {
-			return fmt.Errorf("ConfigMapRead 读取配置文件失败：%v", err)
+			hasErr = true
+			configList = append(configList, info.Name())
+			ziLog.Error(fmt.Sprintf("ConfigMapRead 读取配置文件失败：%v", err), debug)
+			return nil
 		}
 		// 编写日志
 		ziLog.Info(fmt.Sprintf("ConfigMapRead 读取配置文件 %s 成功", info.Name()), debug)
@@ -158,6 +170,10 @@ func configMapRead() error {
 		cfgConfig.Config[strings.TrimSuffix(info.Name(), filepath.Ext(info.Name()))] = *fileConfig
 		return nil
 	})
+	if hasErr {
+		return fmt.Errorf("ConfigMapRead 读取配置文件失败,失败列表：%v", configList)
+	}
+	return nil
 }
 
 // 自动检测配置文件变更
