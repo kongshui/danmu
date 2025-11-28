@@ -82,7 +82,7 @@ func PlayerChooseGroupHandle(c *gin.Context) {
 				AvatarUrl: pCG.AvatarUrl,
 				NickName:  pCG.NickName,
 			},
-		})
+		}, true)
 	}
 
 	c.JSON(200, gin.H{
