@@ -174,12 +174,13 @@ enum MessageId {
 
 
     // 全服通告
-    GetBossKillLvelMsg = 169; // 获取Boss击杀消息
-    GetBossKillLvelMsgAck = 170; // 获取Boss击杀消息返回
-    SendBossKillMsg = 171; // 发送Boss击杀消息
+    GetBossKillLvel = 169; // 获取Boss击杀消息
+    GetBossKillLvelAck = 170; // 获取Boss击杀消息返回
+    SendBossKill = 171; // 发送Boss击杀消息
     BossFirstBloodNotice = 172; // Boss首杀全服通知
-    SendEvolutionKunMsg = 173; // 发送进化鲲消息
+    SendEvolutionKun = 173; // 发送进化鲲消息
     KunEvolutionNotice = 174; // 鲲进化全服通知
+    BroadCast = 175; // 广播消息
 
     // 称号系统，从180开始
     GetTitleInfo = 180; // 获取称号信息
