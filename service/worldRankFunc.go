@@ -278,7 +278,8 @@ func scrollow() error {
 		ziLog.Error("autoNewVersion 滚动世界榜单失败： "+err.Error(), debug)
 	}
 	// 统计
-	go statistic()
+	// go statistic()
+	ziLog.Info(fmt.Sprintf("scrollow 滚动世界榜单成功： version: %v", currentRankVersion), debug)
 	return nil
 }
 
@@ -317,9 +318,9 @@ func ScrollMonthRank(day time.Duration, count int) error {
 	if !rdb.IsExistKey(world_rank_month) {
 		return nil
 	}
-
+	name := world_rank_month + "_" + currentRankVersion
 	//获取世界版本列表
-	if err := rdb.Rename(world_rank_month, world_rank_month+"_"+time.Now().Format(version_time_layout)); err != nil {
+	if err := rdb.Rename(world_rank_month, name); err != nil {
 		time.Sleep(time.Second * 1)
 		if count > 60 {
 			return fmt.Errorf("ScrollMonthRank 滚动月榜单失败： day: %v, count: %v", day, count)
@@ -327,8 +328,9 @@ func ScrollMonthRank(day time.Duration, count int) error {
 		count++
 		return ScrollMonthRank(day, count)
 	}
-	rdb.Expire(world_rank_month+"_"+time.Now().Format(version_time_layout), 24*day*time.Hour)
+	rdb.Expire(name, 24*day*time.Hour)
 	// rdb.Del(user_info_db)
+	ziLog.Info(fmt.Sprintf("ScrollMonthRank 滚动月榜单成功： name: %v, day: %v", name, day), debug)
 	return nil
 }
 

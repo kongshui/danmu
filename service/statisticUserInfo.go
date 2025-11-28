@@ -21,7 +21,7 @@ type StatisticInfo struct {
 }
 
 // 统计
-func statistic() {
+func StatisticTemplate() {
 	var (
 		startTime string
 		endTime   string
@@ -39,12 +39,14 @@ func statistic() {
 	if length == 1 {
 		// 只有一个版本号，直接统计
 	} else {
-		endTimeStamp, _ := rdb.LIndex(world_rank_version_list_db, length-2)
-		endTimeParse, _ := time.Parse(version_time_layout, endTimeStamp)
-		endTime = endTimeParse.Format(mysql_query_time_layout)
+		startTimeStamp, _ := rdb.LIndex(world_rank_version_list_db, length-2)
+		startTimeParse, _ := time.Parse(version_time_layout, startTimeStamp)
+		startTimeParse = time.Date(startTimeParse.Year(), startTimeParse.Month(), startTimeParse.Day(), scrollTime.ScrollTime.WeekHour, 0, 0, 0, startTimeParse.Location())
+		startTime = startTimeParse.Format(mysql_query_time_layout)
 	}
-	startTimeParse, _ := time.Parse(version_time_layout, currentRankVersion)
-	startTime = startTimeParse.Format(mysql_query_time_layout)
+	endTimeParse, _ := time.Parse(version_time_layout, currentRankVersion)
+	endTimeParse = time.Date(endTimeParse.Year(), endTimeParse.Month(), endTimeParse.Day(), scrollTime.ScrollTime.WeekHour, 0, 0, 0, endTimeParse.Location())
+	endTime = endTimeParse.Format(mysql_query_time_layout)
 	top100, err := rdb.ZRevRangeWithScores("world_rank_"+currentRankVersion, 0, 100)
 	if err != nil {
 		ziLog.Error("Statistic rdb ZRevRangeWithScores err: "+err.Error(), debug)
