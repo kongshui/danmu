@@ -607,13 +607,13 @@ message relineTo{
    }
    *文件名：* skill.proto
    **备注：** 此协议为添加玩家技能等级回复协议，其中anchor_open_id为主播OpenId
-- **GetBossKillLvelMsg 获取boss击杀等级协议**
+- **GetBossKillLvel 获取boss击杀等级协议**
    *protobuf结构体为：*
    message GetBossKillLvelMessage {
       repeated int32 bosses = 1;
    }
    *文件名：* boss.proto
-- **GetBossKillLvelMsgAck 获取boss击杀等级回复协议**
+- **GetBossKillLvelAck 获取boss击杀等级回复协议**
    *protobuf结构体为：*
    message GetBossKillLvelAckMessage {
       map<int32, BossKillLevel> levels = 1;
@@ -625,7 +625,7 @@ message relineTo{
       int32 level = 4;     // 击杀等级
    }
    *文件名：* boss.proto
-- **SendBossKillMsg 发送boss击杀等级协议**
+- **SendBossKill 发送boss击杀等级协议**
    *protobuf结构体为：*
    message BossKillLevel {
       int32 boss_id = 1; // boss id
@@ -635,7 +635,7 @@ message relineTo{
    }
    *文件名：* boss.proto
    **备注：** 此协议为发送boss击杀等级协议，其中boss_id为boss id，open_id为击杀玩家open id，name为击杀玩家昵称，level为击杀等级
-- **SendEvolutionKunMsg 发送升级kun协议**
+- **SendEvolutionKun 发送升级kun协议**
    *protobuf结构体为：*
    message KunEvolutionBroadcastMessage {
       string open_id = 1; // 玩家open id
@@ -697,5 +697,15 @@ message relineTo{
    同SetTitleInfoAck协议
    *文件名：* title.proto
    **备注：** 此协议为获取称号回复协议，其中open_id为玩家用户id，title为称号
+- **BroadCast 广播协议**
+   *protobuf结构体为：*
+   message BroadcastMessage {
+      int32 id = 1; // 事件Id, 暂时没想好，先预留
+      string name = 2; // 事件名称
+      int32 type = 3; // 事件类型
+      string content = 4; // 事件内容
+   }
+   *文件名：* broadcast.proto
+   **备注：** 此协议为广播协议，其中content为广播消息
 - **备注**
    1. kun的UserInfoStruct中添加了Slot、SkillInfo和SkinEquipSlot字段

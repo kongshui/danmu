@@ -182,12 +182,13 @@ const (
 	MessageId_GetPlayerSkillLevel    MessageId = 167 // 获取玩家技能等级
 	MessageId_GetPlayerSkillLevelAck MessageId = 168 // 获取玩家技能等级返回
 	// 全服通告
-	MessageId_GetBossKillLvelMsg    MessageId = 169 // 获取Boss击杀消息
-	MessageId_GetBossKillLvelMsgAck MessageId = 170 // 获取Boss击杀消息返回
-	MessageId_SendBossKillMsg       MessageId = 171 // 发送Boss击杀消息
-	MessageId_BossFirstBloodNotice  MessageId = 172 // Boss首杀全服通知
-	MessageId_SendEvolutionKunMsg   MessageId = 173 // 发送进化鲲消息
-	MessageId_KunEvolutionNotice    MessageId = 174 // 鲲进化全服通知
+	MessageId_GetBossKillLvel      MessageId = 169 // 获取Boss击杀消息
+	MessageId_GetBossKillLvelAck   MessageId = 170 // 获取Boss击杀消息返回
+	MessageId_SendBossKill         MessageId = 171 // 发送Boss击杀消息
+	MessageId_BossFirstBloodNotice MessageId = 172 // Boss首杀全服通知
+	MessageId_SendEvolutionKun     MessageId = 173 // 发送进化鲲消息
+	MessageId_KunEvolutionNotice   MessageId = 174 // 鲲进化全服通知
+	MessageId_BroadCast            MessageId = 175 // 广播消息
 	// 称号系统，从180开始
 	MessageId_GetTitleInfo    MessageId = 180 // 获取称号信息
 	MessageId_GetTitleInfoAck MessageId = 181 // 获取称号信息返回
@@ -344,12 +345,13 @@ var (
 		166: "AddPlayerSkillLevelAck",
 		167: "GetPlayerSkillLevel",
 		168: "GetPlayerSkillLevelAck",
-		169: "GetBossKillLvelMsg",
-		170: "GetBossKillLvelMsgAck",
-		171: "SendBossKillMsg",
+		169: "GetBossKillLvel",
+		170: "GetBossKillLvelAck",
+		171: "SendBossKill",
 		172: "BossFirstBloodNotice",
-		173: "SendEvolutionKunMsg",
+		173: "SendEvolutionKun",
 		174: "KunEvolutionNotice",
+		175: "BroadCast",
 		180: "GetTitleInfo",
 		181: "GetTitleInfoAck",
 		182: "SetTitleInfo",
@@ -502,12 +504,13 @@ var (
 		"AddPlayerSkillLevelAck":            166,
 		"GetPlayerSkillLevel":               167,
 		"GetPlayerSkillLevelAck":            168,
-		"GetBossKillLvelMsg":                169,
-		"GetBossKillLvelMsgAck":             170,
-		"SendBossKillMsg":                   171,
+		"GetBossKillLvel":                   169,
+		"GetBossKillLvelAck":                170,
+		"SendBossKill":                      171,
 		"BossFirstBloodNotice":              172,
-		"SendEvolutionKunMsg":               173,
+		"SendEvolutionKun":                  173,
 		"KunEvolutionNotice":                174,
+		"BroadCast":                         175,
 		"GetTitleInfo":                      180,
 		"GetTitleInfoAck":                   181,
 		"SetTitleInfo":                      182,
@@ -548,7 +551,7 @@ var File_proto_constid_proto protoreflect.FileDescriptor
 
 const file_proto_constid_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/constid.proto\x12\x04pmsg*\xe9\x1b\n" +
+	"\x13proto/constid.proto\x12\x04pmsg*\xed\x1b\n" +
 	"\tMessageId\x12\v\n" +
 	"\aUnknown\x10\x00\x12\f\n" +
 	"\bNodeInfo\x10\x01\x12\x0f\n" +
@@ -706,13 +709,14 @@ const file_proto_constid_proto_rawDesc = "" +
 	"\x13AddPlayerSkillLevel\x10\xa5\x01\x12\x1b\n" +
 	"\x16AddPlayerSkillLevelAck\x10\xa6\x01\x12\x18\n" +
 	"\x13GetPlayerSkillLevel\x10\xa7\x01\x12\x1b\n" +
-	"\x16GetPlayerSkillLevelAck\x10\xa8\x01\x12\x17\n" +
-	"\x12GetBossKillLvelMsg\x10\xa9\x01\x12\x1a\n" +
-	"\x15GetBossKillLvelMsgAck\x10\xaa\x01\x12\x14\n" +
-	"\x0fSendBossKillMsg\x10\xab\x01\x12\x19\n" +
-	"\x14BossFirstBloodNotice\x10\xac\x01\x12\x18\n" +
-	"\x13SendEvolutionKunMsg\x10\xad\x01\x12\x17\n" +
-	"\x12KunEvolutionNotice\x10\xae\x01\x12\x11\n" +
+	"\x16GetPlayerSkillLevelAck\x10\xa8\x01\x12\x14\n" +
+	"\x0fGetBossKillLvel\x10\xa9\x01\x12\x17\n" +
+	"\x12GetBossKillLvelAck\x10\xaa\x01\x12\x11\n" +
+	"\fSendBossKill\x10\xab\x01\x12\x19\n" +
+	"\x14BossFirstBloodNotice\x10\xac\x01\x12\x15\n" +
+	"\x10SendEvolutionKun\x10\xad\x01\x12\x17\n" +
+	"\x12KunEvolutionNotice\x10\xae\x01\x12\x0e\n" +
+	"\tBroadCast\x10\xaf\x01\x12\x11\n" +
 	"\fGetTitleInfo\x10\xb4\x01\x12\x14\n" +
 	"\x0fGetTitleInfoAck\x10\xb5\x01\x12\x11\n" +
 	"\fSetTitleInfo\x10\xb6\x01\x12\x14\n" +
