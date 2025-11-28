@@ -284,7 +284,7 @@ func scrollow() error {
 }
 
 // 获取玩家分组信息,group, round是否结束，1为开始，2为结束
-func getUserGroup(roomId, openId string) (string, int, error) {
+func GetUserGroup(roomId, openId string) (string, int, error) {
 	var (
 		endStatus int = 1
 	)

@@ -22,7 +22,7 @@ import (
 )
 
 type (
-	SingleUserAddGroupSetFunc func(roomId, uidStr string, roundId int64, userMap []*pmsg.SingleRoomAddGroupInfo, isChoose bool) error
+	SingleUserAddGroupSetFunc func(roomId, uidStr string, roundId int64, userMap []*pmsg.SingleRoomAddGroupInfo) error
 	SetWinScoreFunc           func(string, RoundUploadStruct, int64) error
 	LotteryFunc               func(string, string, int64) map[string]int64
 	WebsocketFunc             func(msg *pmsg.MessageBody) error
