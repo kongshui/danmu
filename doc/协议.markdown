@@ -585,20 +585,20 @@ message relineTo{
 - **GetBeadShopInfo 获取灵珠商店信息协议**
    json格式：
    ConfigMapRequestAck中包含灵珠商店信息，暂定关键字为"beadShop"
-- **AddPlayerSkillLevel 添加玩家技能等级协议**
+- **PlayerSkillLevelUp 添加玩家技能等级协议**
    *protobuf结构体为：*
-   message AddPlayerSkillLevelMessage{
+   message UpSkillLevelInfoMessage{
       string anchor_open_id = 1; // 主播OpenId
-      repeated SingleSkillExperienceAdd single_skill_experience_adds = 2; // 多个玩家单个技能经验增加
+      repeated UpSkillLevelInfo up_skill_level_infos = 2; // 多个玩家单个技能升级经验
    }
-   message SingleSkillExperienceAdd{
+   message UpSkillLevelInfo{
       string open_id = 1; // 玩家OpenId
       int32 skill_id = 2; // 技能Id
-      int32 skill_experience = 3; // 技能升级经验
+      float skill_experience = 3; // 技能升级经验
    }
    *文件名：* skill.proto
    **备注：** 此协议为添加玩家技能等级协议，其中anchor_open_id为主播OpenId，single_skill_experience_adds为多个玩家单个技能经验增加
-- **AddPlayerSkillLevelAck 添加玩家技能等级回复协议**
+- **PlayerSkillLevelUpAck 添加玩家技能等级回复协议**
    *protobuf结构体为：*
    message AddPlayerSkillLevelAckMessage{
       string anchor_open_id = 1; // 主播OpenId
@@ -707,5 +707,34 @@ message relineTo{
    }
    *文件名：* broadcast.proto
    **备注：** 此协议为广播协议，其中content为广播消息
+- **AddItemToUser 添加物品到用户协议**
+   *protobuf结构体为：*
+   // 添加物品信息消息
+   message AddGoodsItemInfoMessage{
+      string anchor_open_id = 1; // 主播OpenId
+      repeated GoodsItemInfo add_item_infos = 2; // 多个物品增加信息
+      string verify_key = 3; // 验证密钥
+      int32 change_type = 4; // 物品类型变化类型 1<<0:增加 1<<1:减少,1<<2 重置等
+   }
+
+   message GoodsItemInfo{
+      string open_id = 1; // 玩家OpenId
+      int32 item_id = 2; // 物品Id
+      int32 item_num = 3; // 物品数量
+      int32 item_type = 4; // 物品类型
+   }
+   *文件名：* item.proto
+   **备注：** 此协议为添加物品到用户协议，其中open_id为玩家用户id，items为物品信息列表
+- **AddItemToUserAck 添加物品到用户回复协议**
+   *protobuf结构体为：*
+   message AddGoodsItemInfoAckMessage{
+      string anchor_open_id = 1; // 主播OpenId
+      string verify_key = 2; // 验证密钥
+      int32 code = 3; // 状态码
+      string msg = 4; // 状态信息
+   }
+   *文件名：* item.proto
+   **备注：** 此协议为添加物品到用户回复协议，其中open_id为玩家用户id，items为物品信息列表
+- **备注**
 - **备注**
    1. kun的UserInfoStruct中添加了Slot、SkillInfo和SkinEquipSlot字段
