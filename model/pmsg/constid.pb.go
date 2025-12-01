@@ -177,8 +177,8 @@ const (
 	MessageId_GetUserAllInfo    MessageId = 163 // 获取用户所有信息
 	MessageId_GetUserAllInfoAck MessageId = 164 // 获取用户所有信息返回
 	// 玩家技能相关
-	MessageId_AddPlayerSkillLevel    MessageId = 165 // 添加玩家技能等级
-	MessageId_AddPlayerSkillLevelAck MessageId = 166 // 添加玩家技能等级返回
+	MessageId_PlayerSkillLevelUp     MessageId = 165 // 添加玩家技能等级
+	MessageId_PlayerSkillLevelUpAck  MessageId = 166 // 添加玩家技能等级返回
 	MessageId_GetPlayerSkillLevel    MessageId = 167 // 获取玩家技能等级
 	MessageId_GetPlayerSkillLevelAck MessageId = 168 // 获取玩家技能等级返回
 	// 全服通告
@@ -196,6 +196,9 @@ const (
 	MessageId_SetTitleInfoAck MessageId = 183 // 设置称号信息返回
 	MessageId_GetTitle        MessageId = 184 // 获取称号
 	MessageId_GetTitleAck     MessageId = 185 // 获取称号返回
+	// 添加物品协议
+	MessageId_AddItemToUser    MessageId = 186 // 添加物品到用户
+	MessageId_AddItemToUserAck MessageId = 187 // 添加物品到用户返回
 )
 
 // Enum value maps for MessageId.
@@ -341,8 +344,8 @@ var (
 		162: "DeleteWinnerSytemInfoAck",
 		163: "GetUserAllInfo",
 		164: "GetUserAllInfoAck",
-		165: "AddPlayerSkillLevel",
-		166: "AddPlayerSkillLevelAck",
+		165: "PlayerSkillLevelUp",
+		166: "PlayerSkillLevelUpAck",
 		167: "GetPlayerSkillLevel",
 		168: "GetPlayerSkillLevelAck",
 		169: "GetBossKillLvel",
@@ -358,6 +361,8 @@ var (
 		183: "SetTitleInfoAck",
 		184: "GetTitle",
 		185: "GetTitleAck",
+		186: "AddItemToUser",
+		187: "AddItemToUserAck",
 	}
 	MessageId_value = map[string]int32{
 		"Unknown":                           0,
@@ -500,8 +505,8 @@ var (
 		"DeleteWinnerSytemInfoAck":          162,
 		"GetUserAllInfo":                    163,
 		"GetUserAllInfoAck":                 164,
-		"AddPlayerSkillLevel":               165,
-		"AddPlayerSkillLevelAck":            166,
+		"PlayerSkillLevelUp":                165,
+		"PlayerSkillLevelUpAck":             166,
 		"GetPlayerSkillLevel":               167,
 		"GetPlayerSkillLevelAck":            168,
 		"GetBossKillLvel":                   169,
@@ -517,6 +522,8 @@ var (
 		"SetTitleInfoAck":                   183,
 		"GetTitle":                          184,
 		"GetTitleAck":                       185,
+		"AddItemToUser":                     186,
+		"AddItemToUserAck":                  187,
 	}
 )
 
@@ -551,7 +558,7 @@ var File_proto_constid_proto protoreflect.FileDescriptor
 
 const file_proto_constid_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/constid.proto\x12\x04pmsg*\xed\x1b\n" +
+	"\x13proto/constid.proto\x12\x04pmsg*\x96\x1c\n" +
 	"\tMessageId\x12\v\n" +
 	"\aUnknown\x10\x00\x12\f\n" +
 	"\bNodeInfo\x10\x01\x12\x0f\n" +
@@ -705,9 +712,9 @@ const file_proto_constid_proto_rawDesc = "" +
 	"\x15DeleteWinnerSytemInfo\x10\xa1\x01\x12\x1d\n" +
 	"\x18DeleteWinnerSytemInfoAck\x10\xa2\x01\x12\x13\n" +
 	"\x0eGetUserAllInfo\x10\xa3\x01\x12\x16\n" +
-	"\x11GetUserAllInfoAck\x10\xa4\x01\x12\x18\n" +
-	"\x13AddPlayerSkillLevel\x10\xa5\x01\x12\x1b\n" +
-	"\x16AddPlayerSkillLevelAck\x10\xa6\x01\x12\x18\n" +
+	"\x11GetUserAllInfoAck\x10\xa4\x01\x12\x17\n" +
+	"\x12PlayerSkillLevelUp\x10\xa5\x01\x12\x1a\n" +
+	"\x15PlayerSkillLevelUpAck\x10\xa6\x01\x12\x18\n" +
 	"\x13GetPlayerSkillLevel\x10\xa7\x01\x12\x1b\n" +
 	"\x16GetPlayerSkillLevelAck\x10\xa8\x01\x12\x14\n" +
 	"\x0fGetBossKillLvel\x10\xa9\x01\x12\x17\n" +
@@ -722,7 +729,9 @@ const file_proto_constid_proto_rawDesc = "" +
 	"\fSetTitleInfo\x10\xb6\x01\x12\x14\n" +
 	"\x0fSetTitleInfoAck\x10\xb7\x01\x12\r\n" +
 	"\bGetTitle\x10\xb8\x01\x12\x10\n" +
-	"\vGetTitleAck\x10\xb9\x01B\bZ\x06./pmsgb\x06proto3"
+	"\vGetTitleAck\x10\xb9\x01\x12\x12\n" +
+	"\rAddItemToUser\x10\xba\x01\x12\x15\n" +
+	"\x10AddItemToUserAck\x10\xbb\x01B\bZ\x06./pmsgb\x06proto3"
 
 var (
 	file_proto_constid_proto_rawDescOnce sync.Once
