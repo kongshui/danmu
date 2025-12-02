@@ -722,6 +722,7 @@ message relineTo{
       int32 item_id = 2; // 物品Id
       int32 item_num = 3; // 物品数量
       int32 item_type = 4; // 物品类型
+      string verify_key = 5; // 验证密钥
    }
    *文件名：* item.proto
    **备注：** 此协议为添加物品到用户协议，其中open_id为玩家用户id，items为物品信息列表

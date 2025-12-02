@@ -194,6 +194,22 @@ func (rdb *RedisClient) HExists(key string, field string) (bool, error) {
 	return rdb.Client.HExists(key, field).Result()
 }
 
+// hash 增加一个float值
+func (rdb *RedisClient) HIncrByFloat(key string, field string, value float64) (float64, error) {
+	rdb.Lock.Lock()
+	defer rdb.Lock.Unlock()
+	// 为一个key增加一个float值
+	return rdb.Client.HIncrByFloat(key, field, value).Result()
+}
+
+// HScan 扫描hash键值对
+func (rdb *RedisClient) HScan(key string, cursor uint64, match string, count int64) (keys []string, nextCursor uint64, err error) {
+	rdb.Lock.RLock()
+	defer rdb.Lock.RUnlock()
+	// 扫描hash键值对
+	return rdb.Client.HScan(key, cursor, match, count).Result()
+}
+
 // hash 查询多个hash值
 func (rdb *RedisClient) HMGet(key string, fields ...string) ([]any, error) {
 	rdb.Lock.RLock()
