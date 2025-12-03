@@ -62,6 +62,13 @@ func (rdb *RedisClient) RedisCheckPing(addr string, password string, db int, isC
 	}
 }
 
+func (rdb *RedisClient) Type(key string) (string, error) {
+	rdb.Lock.RLock()
+	defer rdb.Lock.RUnlock()
+	// 检查连接是否正常
+	return rdb.Client.Type(key).Result()
+}
+
 // 移除key 过期时间
 func (rdb *RedisClient) Persist(key string) error {
 	rdb.Lock.Lock()

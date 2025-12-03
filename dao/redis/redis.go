@@ -10,6 +10,7 @@ import (
 )
 
 type RedisClient interface {
+	Type(key string) (string, error)
 	Persist(key string) error
 	IncrByFloat(key string, value float64) (float64, error)
 	RedisInit(addr string, password string, db int, isCluster bool)
