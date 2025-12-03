@@ -94,9 +94,7 @@ func pushDyBasePayloayDirect(roomId, anchorOpenId, msgType string, data []byte) 
 				go mysql.InsertGiftData(roomId, anchorOpenId, anchorName.NickName, strconv.FormatInt(roundId, 10), v.SecOpenid, v.Nickname, v.MsgId, v.SecGiftId,
 					v.GiftNum, v.GiftValue, v.Test)
 				// 设置用户是否已经消费
-				if !QueryIsConsume(v.SecOpenid) {
-					setIsConsume(v.SecOpenid, time.Now().UnixMilli())
-				}
+				SetIsConsume(v.SecOpenid)
 			}
 			dyPayloadSendMessage(v, pmsg.MessageId_liveGift, roomId, anchorOpenId)
 		}

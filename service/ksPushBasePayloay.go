@@ -88,10 +88,8 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 				go mysql.InsertGiftData(data.Data.RoomCode, anchorOpenId, anchorName.NickName, strconv.FormatInt(roundId, 10), gift.UserInfo.UserId,
 					gift.UserInfo.NickName, gift.UniqueNo, gift.GiftId, int(gift.GiftCount), int(gift.GiftTotalPrice), false)
 
-				if !QueryIsConsume(gift.UserInfo.UserId) {
-					// 设置用户是否已经消费
-					setIsConsume(gift.UserInfo.UserId, time.Now().UnixMilli())
-				}
+				// 设置用户是否已经消费
+				SetIsConsume(gift.UserInfo.UserId)
 			}
 			if gift.GiftTotalPrice > 0 {
 				isSendAck = true
@@ -262,7 +260,7 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 		roundId, _ := queryRoomIdToRoundId(data.RoomCode)
 		if !(strings.HasPrefix(data.UniqueMessageId, "test_") || strings.HasPrefix(data.UniqueMessageId, "stress_")) {
 			// 设置用户是否已经消费
-			setIsConsume(gift.UserInfo.UserId, time.Now().UnixMilli())
+			SetIsConsume(gift.UserInfo.UserId)
 			//疾苦到数据库中，防止数据丢失
 			go mysql.InsertGiftData(data.RoomCode, data.AuthorOpenId, anchorName.NickName, strconv.FormatInt(roundId, 10), gift.UserInfo.UserId,
 				gift.UserInfo.NickName, gift.UniqueNo, gift.GiftId, int(gift.GiftCount), int(gift.GiftTotalPrice), false)

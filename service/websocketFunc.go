@@ -372,7 +372,7 @@ func consumeUse(msg *pmsg.MessageBody) error {
 	if err != nil {
 		return errors.New("consumeUse Unmarshal err: " + err.Error())
 	}
-	ok := compareIsConsume(data.GetOpenId(), data.GetTimeStamp())
+	ok := QueryIsConsume(data.GetOpenId())
 	data.IsConsume = ok
 	dataByte, err := proto.Marshal(data)
 	if err != nil {
