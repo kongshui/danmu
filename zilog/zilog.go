@@ -422,7 +422,7 @@ func (logS *LogStruct) checkLogRotate() {
 	if logS.maxSize == 0 && logS.maxAge == 0 {
 		return
 	}
-	t := time.NewTicker(10 * time.Minute)
+	t := time.NewTicker(30 * time.Minute)
 	for {
 		<-t.C
 		for _, label := range []string{"debug", "info", "error", "warn", "gift"} {
@@ -441,7 +441,6 @@ func (logS *LogStruct) sizeLogRorate(label string) {
 	size, err := logS.getLogSize(label)
 	if err != nil {
 		logS.Write("error", "get log size err: "+err.Error())
-
 		return
 	}
 	if size <= 0 {
@@ -464,8 +463,8 @@ func (logS *LogStruct) timeLogRorate(label string) {
 			logS.Write("error", label+" log rotate err: "+err.Error()+"\n")
 		} else {
 			logS.Write(label, label+" log file rotated"+"\n")
-			return
 		}
+		return
 	}
 	logS.sizeLogRorate(label)
 }
