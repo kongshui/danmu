@@ -42,10 +42,17 @@ type (
 		maxAge      int
 		rotateTime  int64
 	}
+	LogInfoStruct struct {
+		LogInfoContext map[string][]string
+		Lock           *sync.RWMutex
+	}
 )
 
 var (
-	logInfoContext map[string][]string
+	logInfo = LogInfoStruct{
+		LogInfoContext: make(map[string][]string),
+		Lock:           &sync.RWMutex{},
+	}
 )
 
 // 日志结构体初始化
@@ -106,14 +113,14 @@ func (logS *LogStruct) getLogInfoContext() {
 	defer logS.logInfoFile.Lock.Unlock()
 	dataByte, err := io.ReadAll(logS.logInfoFile.File)
 	if err != nil {
-		logInfoContext = make(map[string][]string)
+		logS.Error("read log info file err: "+err.Error(), true)
 	}
 	if len(dataByte) > 0 {
-		if err := json.Unmarshal(dataByte, &logInfoContext); err != nil {
-			logInfoContext = make(map[string][]string)
+		if err := json.Unmarshal(dataByte, &logInfo.LogInfoContext); err != nil {
+			logS.Error("read log info file err: "+err.Error(), true)
 		}
 	} else {
-		logInfoContext = make(map[string][]string)
+		logInfo.LogInfoContext = make(map[string][]string)
 	}
 }
 
@@ -362,9 +369,9 @@ func (logS *LogStruct) logRotate(label string) error {
 	default:
 		return nil
 	}
+	fileName := file.Name()
 	lock.Lock()
 	defer lock.Unlock()
-	fileName := file.Name()
 	logS.close(label)
 	bakFileName := fileName + "." + time.Now().Format("2006_01_02_15_04_05")
 	os.Rename(fileName, bakFileName)
@@ -431,7 +438,7 @@ func (logS *LogStruct) checkLogRotate() {
 					continue
 				}
 			}
-			go logS.timeLogRorate(label)
+			logS.timeLogRorate(label)
 		}
 	}
 }
@@ -516,22 +523,25 @@ func (logS *LogStruct) compressLogFile(filename, label string) error {
 	}
 	logFile.Close()
 	os.Remove(filename)
-	logInfoContext[label] = append(logInfoContext[label], zipFileName)
-	lenCount := len(logInfoContext[label])
+	logS.logInfoFile.Lock.Lock()
+	defer logS.logInfoFile.Lock.Unlock()
+	logInfo.LogInfoContext[label] = append(logInfo.LogInfoContext[label], zipFileName)
+	lenCount := len(logInfo.LogInfoContext[label])
 	for {
 		if lenCount > logS.maxBackups && lenCount >= 1 {
-			if err := os.Remove(logInfoContext[label][0]); err != nil {
+			if err := os.Remove(logInfo.LogInfoContext[label][0]); err != nil {
 				break
 			}
-			logInfoContext[label] = slices.Delete(logInfoContext[label], 0, 1)
+			logInfo.LogInfoContext[label] = slices.Delete(logInfo.LogInfoContext[label], 0, 1)
 			lenCount--
 		} else {
 			break
 		}
 	}
+	// 更新日志信息文件
 	logS.logInfoFile.File.Truncate(0)
-	dataByte, _ := json.Marshal(logInfoContext)
-	logS.logInfoFile.File.WriteAt(dataByte, 0)
+	dataByte, _ := json.Marshal(logInfo.LogInfoContext)
+	logS.logInfoFile.File.Write(dataByte)
 	return nil
 }
 
