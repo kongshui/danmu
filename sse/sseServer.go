@@ -42,14 +42,13 @@ func SseServer(c *gin.Context) {
 	c.Header("Connection", "keep-alive")
 	c.Header("Access-Control-Allow-Origin", "*")
 	endCh := make(chan struct{})
-	defer close(endCh)
 	defer close(ch.Ch)
-	go sseSendKeepAlive(ch, endCh)
+	go sseSendKeepAlive(ch, &endCh)
 	for {
 		select {
 		case message := <-ch.Ch:
 			if message == "" {
-				return
+				continue
 			}
 			// 发送数据到客户端
 			_, err := c.Writer.Write([]byte(message))
@@ -144,8 +143,6 @@ func SseSend(msgId pmsg.MessageId, uidStrList []string, data []byte) error {
 		if ch.Status {
 			ch.Ch <- sData.String() + "\n"
 		} else {
-			ch.Status = false
-			ch.Ch <- ""
 			continue
 		}
 		if ch.Status {
@@ -156,7 +153,7 @@ func SseSend(msgId pmsg.MessageId, uidStrList []string, data []byte) error {
 }
 
 // 发送心跳包
-func sseSendKeepAlive(ch *ChanSet, c chan struct{}) {
+func sseSendKeepAlive(ch *ChanSet, c *chan struct{}) {
 	t := time.NewTicker(5 * time.Second)
 	defer t.Stop()
 	sData := &pmsg.SseMessage{
@@ -171,7 +168,8 @@ func sseSendKeepAlive(ch *ChanSet, c chan struct{}) {
 				return
 			}
 			ch.Ch <- sData.String() + "\n"
-		case <-c:
+		case <-(*c):
+			close(*c)
 			return
 		}
 	}

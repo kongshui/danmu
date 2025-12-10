@@ -3,7 +3,6 @@ package service
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"strconv"
 
 	"github.com/kongshui/danmu/common"
@@ -61,10 +60,15 @@ func QueryPlayerGroupHandler(c *gin.Context) {
 	if err != nil {
 		ziLog.Error(fmt.Sprintf("QueryPlayerGroupHandler 查询玩家所在组失败, group: %v, roundId: %v, roomId: %v, openId： %v, err: %v",
 			group, roundId, queryInfo.RoomId, queryInfo.OpenId, err), debug)
-		log.Println("QueryPlayerGroupHandler 查询玩家所在组失败", group, roundId, err)
 		c.JSON(200, gin.H{
-			"errcode": 1,
-			"errmsg":  "参数不合法",
+			"errcode": 0,
+			"errmsg":  "success",
+			"data": gin.H{
+				"round_id":          roundId,
+				"group_id":          group,
+				"user_group_status": groupid_list[0],
+				"round_status":      2,
+			},
 		})
 		return
 	}
