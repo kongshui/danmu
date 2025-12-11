@@ -47,6 +47,8 @@ type RedisClient interface {
 	ZRangeWithScores(key string, start, stop int64) ([]redis.Z, error)
 	ZRevRange(key string, start, stop int64) ([]string, error)
 	ZRevRangeWithScores(key string, start, stop int64) ([]redis.Z, error)
+	// zscan 扫描有序集合
+	ZScan(key string, cursor uint64, match string, count int64) (keys []string, nextCursor uint64, err error)
 	ZIncrBy(key string, increment float64, member string) (float64, error)
 	ZRem(key string, members ...any) error
 	ZUnionStore(dest string, store redis.ZStore, keys []string) error

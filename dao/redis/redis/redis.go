@@ -337,6 +337,13 @@ func (rdb *RedisClient) ZRevRangeWithScores(key string, start, stop int64) ([]re
 	return rdb.Client.ZRevRangeWithScores(key, start, stop).Result()
 }
 
+// zscan 扫描有序集合
+func (rdb *RedisClient) ZScan(key string, cursor uint64, match string, count int64) (keys []string, nextCursor uint64, err error) {
+	rdb.Lock.RLock()
+	defer rdb.Lock.RUnlock()
+	return rdb.Client.ZScan(key, cursor, match, count).Result()
+}
+
 // 为有序集合成员增加increment
 func (rdb *RedisClient) ZIncrBy(key string, increment float64, member string) (float64, error) {
 	rdb.Lock.Lock()
