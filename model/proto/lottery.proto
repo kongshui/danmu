@@ -8,4 +8,5 @@ message LotteryMsg  {
     string HeadImgUrl = 3; // 用户头像
     string LotteryMap = 4; // 抽奖结果 json string
     int64 Count = 5; // 礼物数量
+    string GiftId = 6; // 礼物Id
 }
