@@ -359,6 +359,12 @@ func ksPushCommentPayloay(data KsCallbackDataStruct) {
 			ziLog.Error(fmt.Sprintf("ksPushCommentPayloay json.Marshal err: %v", err), debug)
 			return
 		}
+		commentData := KsLiveCommentStruct{}
+		if err := json.NewDecoder(strings.NewReader(string(jData))).Decode(&commentData); err != nil {
+			ziLog.Error(fmt.Sprintf("ksPushBasePayloay json.Unmarshal err:  %v,失败数据为： %v", err, v), debug)
+			continue
+		}
+		go UserInfoCompareStore(commentData.UserInfo.UserId, commentData.UserInfo.NickName, commentData.UserInfo.AvatarUrl, false)
 		sendUidList, _, _, _ := getUidListByOpenId(data.AuthorOpenId)
 		log.Println("ksPushCommentPayloay sendUidList", sendUidList)
 		if len(sendUidList) == 0 {
