@@ -257,6 +257,7 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 			}
 			anchorName.NickName = anchor_nick_name
 		}
+		go UserInfoCompareStore(gift.UserInfo.UserId, gift.UserInfo.NickName, gift.UserInfo.AvatarUrl, false)
 		roundId, _ := queryRoomIdToRoundId(data.RoomCode)
 		if !(strings.HasPrefix(data.UniqueMessageId, "test_") || strings.HasPrefix(data.UniqueMessageId, "stress_")) {
 			// 设置用户是否已经消费
