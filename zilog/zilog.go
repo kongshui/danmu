@@ -539,9 +539,17 @@ func (logS *LogStruct) compressLogFile(filename, label string) error {
 		}
 	}
 	// 更新日志信息文件
-	logS.logInfoFile.File.Truncate(0)
-	dataByte, _ := json.Marshal(logInfo.LogInfoContext)
-	logS.logInfoFile.File.Write(dataByte)
+	if err := logS.logInfoFile.File.Truncate(0); err != nil {
+		return fmt.Errorf("truncate log info file err: %v", err)
+	}
+	dataByte, err := json.Marshal(logInfo.LogInfoContext)
+	if err != nil {
+		return fmt.Errorf("marshal log info err: %v", err)
+	}
+	_, err = logS.logInfoFile.File.Write(dataByte)
+	if err != nil {
+		return fmt.Errorf("write log info file err: %v", err)
+	}
 	return nil
 }
 

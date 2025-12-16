@@ -3,6 +3,7 @@ package service
 import (
 	"log"
 	"os"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -58,6 +59,8 @@ func ServiceInit() {
 		if is_pk_match {
 			go matchV1HeardBeat()
 		}
+	} else {
+		currentRankVersion = time.Now().Format(version_time_layout)
 	}
 
 	// 初始化etcd
