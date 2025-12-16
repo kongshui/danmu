@@ -47,7 +47,7 @@ type (
 		Addr      string `toml:"addr"`
 		Db        int    `toml:"db"`
 		Password  string `toml:"password"`
-		IsCluster bool   `toml:"mode"`
+		IsCluster bool   `toml:"is_cluster"`
 	}
 	//Mysql
 	Mysql struct {
