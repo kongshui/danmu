@@ -9,7 +9,6 @@ import (
 	"strconv"
 
 	"github.com/kongshui/danmu/model/pmsg"
-	"github.com/kongshui/danmu/sse"
 
 	"github.com/kongshui/danmu/common"
 
@@ -89,7 +88,7 @@ func dyGetAnchorInfo(uid, token string) error {
 	databyte, _ := proto.Marshal(data)
 	setRoomInfo(uid, data)
 	connect(data.GetRoomId(), data.GetAnchorOpenId())
-	if err := sse.SseSend(pmsg.MessageId_TokenAck, []string{uid}, databyte); err != nil {
+	if err := sendMessage(pmsg.MessageId_TokenAck, []string{uid}, databyte); err != nil {
 		return fmt.Errorf("DyGetAnchorInfo pushDownLoadMessage err: %v", err)
 	}
 	return nil

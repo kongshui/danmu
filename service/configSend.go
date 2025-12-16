@@ -12,7 +12,6 @@ import (
 
 	"github.com/kongshui/danmu/config"
 	"github.com/kongshui/danmu/model/pmsg"
-	"github.com/kongshui/danmu/sse"
 	"go.etcd.io/etcd/api/v3/mvccpb"
 	clientv3 "go.etcd.io/etcd/client/v3"
 	"google.golang.org/protobuf/proto"
@@ -58,7 +57,7 @@ func ConfigFileSend(uidList []string, openId string) error {
 				if err != nil {
 					return fmt.Errorf("ConfigFileSend 序列化文件内容失败：%v", err)
 				}
-				if err := sse.SseSend(pmsg.MessageId_ConfigFileSend, uidList, dataByte); err != nil {
+				if err := sendMessage(pmsg.MessageId_ConfigFileSend, uidList, dataByte); err != nil {
 					return fmt.Errorf("ConfigFileSend 发送文件内容失败：%v", err)
 				}
 				if info.Size() > int64(labelCount)*512*1024 {
@@ -95,7 +94,7 @@ func ConfigFileSend(uidList []string, openId string) error {
 			if err != nil {
 				return fmt.Errorf("ConfigFileSend 序列化文件内容失败：%v", err)
 			}
-			if err := sse.SseSend(pmsg.MessageId_ConfigFileSend, uidList, dataByte); err != nil {
+			if err := sendMessage(pmsg.MessageId_ConfigFileSend, uidList, dataByte); err != nil {
 				return fmt.Errorf("ConfigFileSend 发送文件内容失败：%v", err)
 			}
 		}
@@ -109,7 +108,7 @@ func ConfigFileSend(uidList []string, openId string) error {
 	if err != nil {
 		return fmt.Errorf("ConfigFileSendEndMessage 序列化文件内容失败：%v", err)
 	}
-	if err := sse.SseSend(pmsg.MessageId_ConfigFileSendEnd, uidList, endDataByte); err != nil {
+	if err := sendMessage(pmsg.MessageId_ConfigFileSendEnd, uidList, endDataByte); err != nil {
 		return fmt.Errorf("ConfigFileSendEndMessage 发送文件内容失败：%v", err)
 	}
 	return nil

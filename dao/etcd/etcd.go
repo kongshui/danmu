@@ -120,8 +120,8 @@ func (etcd *Etcd) KeepLease(ctx context.Context, leaseId clientv3.LeaseID) {
 		select {
 		case <-ctx.Done():
 			return
-		case keepResp := <-ch:
-			if keepResp == nil {
+		case _, ok := <-ch:
+			if !ok {
 				return
 			}
 		}

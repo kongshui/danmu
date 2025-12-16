@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/kongshui/danmu/model/pmsg"
-	"github.com/kongshui/danmu/sse"
 
 	"github.com/kongshui/danmu/common"
 
@@ -541,7 +540,7 @@ func createCommon(openId, context string) string {
 func ReceiveMessageHandle(c *gin.Context) {
 	//访问后端web服务器
 	data, _ := c.GetRawData()
-	if err := sse.SseSend(pmsg.MessageId_TestMsgAck, []string{c.GetHeader("x-client-uuid")}, data); err != nil {
+	if err := sendMessage(pmsg.MessageId_TestMsgAck, []string{c.GetHeader("x-client-uuid")}, data); err != nil {
 		log.Println("访问前端web服务器失败", err)
 	}
 	c.JSON(200, gin.H{

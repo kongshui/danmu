@@ -13,7 +13,6 @@ import (
 	"time"
 
 	"github.com/kongshui/danmu/model/pmsg"
-	"github.com/kongshui/danmu/sse"
 
 	"github.com/kongshui/danmu/common"
 
@@ -22,7 +21,7 @@ import (
 
 // 测试test
 func testMsg(msg *pmsg.MessageBody) error {
-	return sse.SseSend(pmsg.MessageId_TestMsgAck, []string{msg.GetUuid()}, msg.GetMessageData())
+	return sendMessage(pmsg.MessageId_TestMsgAck, []string{msg.GetUuid()}, msg.GetMessageData())
 }
 
 // 对局start
@@ -115,7 +114,7 @@ func roundStart(msg *pmsg.MessageBody) error {
 
 	}
 	ziLog.Info(fmt.Sprintf("roundStart, roomid:: %v,主播openid %v", syncGameStatusData.RoomId, syncGameStatusData.AnchorOpenId), debug)
-	return sse.SseSend(pmsg.MessageId_SyncGameStartAck, []string{msg.Uuid}, msgData)
+	return sendMessage(pmsg.MessageId_SyncGameStartAck, []string{msg.Uuid}, msgData)
 }
 
 // testToekn
@@ -150,7 +149,8 @@ func TestTokenFunc(msg *pmsg.MessageBody) error {
 	if err != nil {
 		return errors.New("token proto Marshal err: " + err.Error())
 	}
-	return sse.SseSend(pmsg.MessageId_TokenAck, []string{msg.Uuid}, sData)
+
+	return sendMessage(pmsg.MessageId_TokenAck, []string{msg.Uuid}, sData)
 }
 
 // 对局结束
@@ -298,7 +298,8 @@ func useUserWinningStreamCoin(msg *pmsg.MessageBody) error {
 	if err != nil {
 		return errors.New("useWinningStreamCoin proto Marshal err: " + err.Error())
 	}
-	if err := sse.SseSend(pmsg.MessageId_UseWinnerStreamCoinAck, []string{msg.Uuid}, sDataByte); err != nil {
+	// 发送给前端
+	if err := sendMessage(pmsg.MessageId_UseWinnerStreamCoinAck, []string{msg.Uuid}, sDataByte); err != nil {
 		return errors.New("玩家使用连胜币 err: " + err.Error())
 	}
 	return nil
@@ -320,8 +321,8 @@ func addUsersWinningStreamCoin(msg *pmsg.MessageBody) error {
 	if err != nil {
 		return errors.New("addUsersWinningStreamCoin proto Marshal err: " + err.Error())
 	}
-
-	if err := sse.SseSend(pmsg.MessageId_UserAddWinnerStreamCoinAck, []string{msg.Uuid}, sDataByte); err != nil {
+	// 发送给前端
+	if err := sendMessage(pmsg.MessageId_UserAddWinnerStreamCoinAck, []string{msg.Uuid}, sDataByte); err != nil {
 		return errors.New("玩家获取连胜币 err: " + err.Error())
 	}
 	return nil
@@ -341,7 +342,8 @@ func queryUserWinningStreamCoin(msg *pmsg.MessageBody) error {
 	if err != nil {
 		return errors.New("queryUserWinningStreamCoin proto Marshal err: " + err.Error())
 	}
-	if err := sse.SseSend(pmsg.MessageId_QueryWinnerStreamCoinAck, []string{msg.Uuid}, sDataByte); err != nil {
+	// 发送给前端
+	if err := sendMessage(pmsg.MessageId_QueryWinnerStreamCoinAck, []string{msg.Uuid}, sDataByte); err != nil {
 		return errors.New("玩家查询连胜币 err: " + err.Error())
 	}
 	return nil
@@ -359,7 +361,8 @@ func GetLastTop100Rank(msg *pmsg.MessageBody) error {
 	if err != nil {
 		return errors.New("获取上期前100名 err: " + err.Error())
 	}
-	if err := sse.SseSend(pmsg.MessageId_GetMonthTopHundredAck, []string{msg.Uuid}, []byte{}); err != nil {
+	// 发送给前端
+	if err := sendMessage(pmsg.MessageId_GetMonthTopHundredAck, []string{msg.Uuid}, []byte{}); err != nil {
 		return errors.New("玩家查询连胜币 err: " + err.Error())
 	}
 	return nil
@@ -378,7 +381,8 @@ func consumeUse(msg *pmsg.MessageBody) error {
 	if err != nil {
 		return errors.New("consumeUse proto Marshal err: " + err.Error())
 	}
-	if err := sse.SseSend(pmsg.MessageId_IsFirstComsumeAck, []string{msg.Uuid}, dataByte); err != nil {
+	// 发送给前端
+	if err := sendMessage(pmsg.MessageId_IsFirstComsumeAck, []string{msg.Uuid}, dataByte); err != nil {
 		return errors.New("玩家查询连胜币 err: " + err.Error())
 	}
 	return nil
@@ -555,7 +559,8 @@ func levelQuery(msg *pmsg.MessageBody) error {
 	if err != nil {
 		return errors.New("levelQuery proto Marshal err: " + err.Error())
 	}
-	if err := sse.SseSend(pmsg.MessageId_LevelQueryAck, []string{msg.Uuid}, sDataByte); err != nil {
+	// 发送给前端
+	if err := sendMessage(pmsg.MessageId_LevelQueryAck, []string{msg.Uuid}, sDataByte); err != nil {
 		return errors.New("levelQuery 玩家查询等级 err: " + err.Error())
 	}
 	return nil
@@ -606,7 +611,8 @@ func recvLog(msg *pmsg.MessageBody) error {
 	if err != nil {
 		return errors.New("recvLog proto Marshal err: " + err.Error())
 	}
-	if err := sse.SseSend(pmsg.MessageId_SendLogInfoAck, []string{msg.Uuid}, sDataByte); err != nil {
+	// 发送给前端
+	if err := sendMessage(pmsg.MessageId_SendLogInfoAck, []string{msg.Uuid}, sDataByte); err != nil {
 		return errors.New("recvLog 发送日志信息返回 err: " + err.Error())
 	}
 	return nil
@@ -615,7 +621,8 @@ func recvLog(msg *pmsg.MessageBody) error {
 // 配置文件请求
 func configMapRequest(msg *pmsg.MessageBody) error {
 	data, nil := json.Marshal(&cfgConfig)
-	if err := sse.SseSend(pmsg.MessageId_ConfigMapRequestAck, []string{msg.Uuid}, data); err != nil {
+	// 发送给前端
+	if err := sendMessage(pmsg.MessageId_ConfigMapRequestAck, []string{msg.Uuid}, data); err != nil {
 		return errors.New("configMapRequest 发送配置文件请求返回 err: " + err.Error())
 	}
 	return nil

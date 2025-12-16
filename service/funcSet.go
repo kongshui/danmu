@@ -2,7 +2,7 @@ package service
 
 import (
 	battlematchv1 "github.com/kongshui/danmu/battlematch/v1"
-	conf "github.com/kongshui/danmu/conf/web"
+	conf "github.com/kongshui/danmu/conf/nodeweb"
 	dao_etcd "github.com/kongshui/danmu/dao/etcd"
 	dao_mysql "github.com/kongshui/danmu/dao/mysql"
 	dao_redis "github.com/kongshui/danmu/dao/redis"
@@ -22,7 +22,8 @@ initFunction：初始化函数
 getCfgFunc：获取读取到的配置函数
 */
 func ServiceFuncSet(addGroupSetFunc SingleUserAddGroupSetFunc, setWinningScoreFunc SetWinScoreFunc, lotteryFunc LotteryFunc, webSocketFunc WebsocketFunc, interFunc InteractiveFunc,
-	giftExtendInfoFunc GiftExtendInfoFunc, scrollFunc ScrollFunc, initFunc InitFunc, setIntegralToRoundFunc SetIntegralToRoundFunc, gCfgFunc GetCfgConfigFunc) {
+	giftExtendInfoFunc GiftExtendInfoFunc, scrollFunc ScrollFunc, initFunc InitFunc, setIntegralToRoundFunc SetIntegralToRoundFunc, gCfgFunc GetCfgConfigFunc,
+	sendMsgToGatewayFunc SendMessageToGatewayFunc) {
 
 	interactive = interFunc
 	playerGroupAddin = addGroupSetFunc
@@ -34,6 +35,7 @@ func ServiceFuncSet(addGroupSetFunc SingleUserAddGroupSetFunc, setWinningScoreFu
 	initService = initFunc
 	setIntegralToRound = setIntegralToRoundFunc
 	getCfgFunc = gCfgFunc
+	sendMessageToGateway = sendMsgToGatewayFunc
 }
 
 /*

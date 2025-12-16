@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/kongshui/danmu/model/pmsg"
-	"github.com/kongshui/danmu/sse"
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/protobuf/proto"
@@ -40,7 +39,7 @@ func OtherSendSse(c *gin.Context) {
 		ziLog.Error(fmt.Sprintf("OtherSendSse Unmarshal err %v", err), debug)
 		return
 	}
-	if err := sse.SseSend(sData.GetMessageId(), sData.GetUidList(), sData.GetData()); err != nil {
+	if err := sendMessage(sData.GetMessageId(), sData.GetUidList(), sData.GetData()); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "send error",
 		})

@@ -6,7 +6,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/kongshui/danmu/model/pmsg"
-	"github.com/kongshui/danmu/sse"
 )
 
 // BlackAnchorDisconnectHandle 黑名单主播断线处理
@@ -52,7 +51,7 @@ func BlackAnchorDisconnectHandle(c *gin.Context) {
 	}
 	dataBytes, _ := json.Marshal(data)
 	// 发送断线消息
-	sse.SseSend(pmsg.MessageId_BlackAnchorLogOff, []string{bAD.OpenId}, dataBytes)
+	sendMessage(pmsg.MessageId_BlackAnchorLogOff, []string{bAD.OpenId}, dataBytes)
 	c.JSON(200, gin.H{
 		"errcode": 0,
 		"errmsg":  "success",

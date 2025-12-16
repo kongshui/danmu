@@ -14,7 +14,7 @@ import (
 
 	dao_mysql "github.com/kongshui/danmu/dao/mysql"
 
-	conf "github.com/kongshui/danmu/conf/web"
+	conf "github.com/kongshui/danmu/conf/nodeweb"
 
 	dao_etcd "github.com/kongshui/danmu/dao/etcd"
 
@@ -30,6 +30,7 @@ type (
 	GiftExtendInfoFunc        func() string
 	ScrollFunc                func(*string)
 	InitFunc                  func(bool)
+	SendMessageToGatewayFunc  func(msgId pmsg.MessageId, uidList []string, data []byte) error
 	SetIntegralToRoundFunc    func(roomId, anchorOpenId, openId string, score float64) error
 	CfgConfig                 struct {
 		FileMd5 map[string]string           `json:"file_md5"`
@@ -55,15 +56,16 @@ var (
 	cfg         *conf.Config
 	accessToken *AccessTokenStruct = &AccessTokenStruct{Lock: &sync.RWMutex{}} //全局token使用
 	// isNotMock            bool                                                           //是否不模拟
-	debug            bool               //是否调试
-	giftToScoreMap   map[string]float64 //礼物对应的积分
-	commentToScore   map[string]float64 //评论对应的积分
-	winCoinToComment map[int64]string   //连胜币对应的评论
-	commentToCoin    map[string]int64   //连胜币对应的评论
-	commentTogiftId  map[string]string  //连胜币对应的礼物Id
-	giftIdToName     map[string]string  //礼物id对应的礼物名称
-	nodeIdToIntegral map[int64]int64    //节点id对应的积分
-	cfgConfig        CfgConfig          = CfgConfig{
+	debug                bool               //是否调试
+	giftToScoreMap       map[string]float64 //礼物对应的积分
+	commentToScore       map[string]float64 //评论对应的积分
+	winCoinToComment     map[int64]string   //连胜币对应的评论
+	commentToCoin        map[string]int64   //连胜币对应的评论
+	commentTogiftId      map[string]string  //连胜币对应的礼物Id
+	giftIdToName         map[string]string  //礼物id对应的礼物名称
+	nodeIdToIntegral     map[int64]int64    //节点id对应的积分
+	sendMessageToGateway SendMessageToGatewayFunc
+	cfgConfig            CfgConfig = CfgConfig{
 		FileMd5: make(map[string]string),
 		Config:  make(map[string]config.CfgConfig),
 	} //配置文件数据

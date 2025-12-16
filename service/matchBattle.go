@@ -11,7 +11,6 @@ import (
 	battlematchv1 "github.com/kongshui/danmu/battlematch/v1"
 
 	"github.com/kongshui/danmu/model/pmsg"
-	"github.com/kongshui/danmu/sse"
 
 	"google.golang.org/protobuf/proto"
 )
@@ -86,7 +85,7 @@ func MatchBattleV1(openId, matchNum string) {
 		return
 	}
 	log.Println("MatchBattleV1 success", sendUidList)
-	if err := sse.SseSend(pmsg.MessageId_MatchBattleV1ApplyAck, sendUidList, sData); err != nil {
+	if err := sendMessage(pmsg.MessageId_MatchBattleV1ApplyAck, sendUidList, sData); err != nil {
 		ziLog.Error(fmt.Sprintf("MatchBattleV1 发送消息失败, err: %v", err), debug)
 		// 匹配失败
 		MatchErrorV1(data.GetOpenIdList(), fmt.Sprintf("MatchBattleV1 发送消息失败, openId: %s, err: %v", openId, err), data.GetMatchBattleRoomId(),
@@ -116,7 +115,7 @@ func MatchErrorV1(openIdList []string, msgErr, groupId string, errLabel int32) {
 			ziLog.Error(fmt.Sprintf("MatchErrorV1 序列化失败, err: %v, data: %v", err, data.String()), debug)
 			continue
 		}
-		if err := sse.SseSend(pmsg.MessageId_MatchBattleError, []string{uid}, sData); err != nil { // 推送消息给其他用户
+		if err := sendMessage(pmsg.MessageId_MatchBattleError, []string{uid}, sData); err != nil { // 推送消息给其他用户
 			ziLog.Error(fmt.Sprintf("MatchErrorV1 pushDownLoadMessage err: %v, data: %v", err, data.String()), debug)
 			continue
 		}
@@ -225,7 +224,7 @@ func matchBattleStartGamedConfirm(groupId string, userIdList []string) {
 			int32(pmsg.ErrorStatus_SendMessageError))
 		return
 	}
-	if err := sse.SseSend(pmsg.MessageId_MatchBattleStartGamedConfirm,
+	if err := sendMessage(pmsg.MessageId_MatchBattleStartGamedConfirm,
 		sendUidList, dataByte); err != nil {
 		MatchErrorV1(userIdList, "MatchBattleStartGamedConfirm pushDownLoadMessage err: "+err.Error(), groupId,
 			int32(pmsg.ErrorStatus_SendMessageError))

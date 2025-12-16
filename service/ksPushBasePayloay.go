@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/kongshui/danmu/model/pmsg"
-	"github.com/kongshui/danmu/sse"
 
 	"google.golang.org/protobuf/proto"
 )
@@ -114,7 +113,7 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 				endSendData.TimeStamp = time.Now().UnixMilli()
 				endSendData.PushType = "lottery"
 				endSendDatabyte, _ := proto.Marshal(endSendData)
-				if err := sse.SseSend(pmsg.MessageId_Lottery, sendUidList, endSendDatabyte); err != nil {
+				if err := sendMessage(pmsg.MessageId_Lottery, sendUidList, endSendDatabyte); err != nil {
 					ziLog.Error(fmt.Sprintf("ksPushBasePayloay 推送消息失败,用户Id： %v,用户名称： %v,err:  %v,内容为： %v", gift.UserInfo.UserId, gift.UserInfo.NickName, err, giftMap), debug)
 				}
 			} else {
@@ -176,7 +175,7 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 			endSendData.Data = jData
 			endSendDatabyte, _ := proto.Marshal(endSendData)
 			// 推送消息
-			if err := sse.SseSend(msgId, sendUidList, endSendDatabyte); err != nil {
+			if err := sendMessage(msgId, sendUidList, endSendDatabyte); err != nil {
 				ziLog.Error(fmt.Sprintf("ksPushBasePayloay 推送消息失败:  %v,失败数据为： %v", err, v), debug)
 			}
 		}
@@ -199,7 +198,7 @@ func ksPushBasePayloay(data KsCallbackStruct) {
 		if uid == "" {
 			return
 		}
-		if err := sse.SseSend(pmsg.MessageId_MsgAckSend, []string{uid}, jData); err != nil {
+		if err := sendMessage(pmsg.MessageId_MsgAckSend, []string{uid}, jData); err != nil {
 			ziLog.Error(fmt.Sprintf("ksPushBasePayloay sendAck 推送消息失败:  %v", err), debug)
 		}
 	}
@@ -287,7 +286,7 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 			endSendData.TimeStamp = time.Now().UnixMilli()
 			endSendData.PushType = "lottery"
 			endSendDatabyte, _ := proto.Marshal(endSendData)
-			if err := sse.SseSend(pmsg.MessageId_Lottery, sendUidList, endSendDatabyte); err != nil {
+			if err := sendMessage(pmsg.MessageId_Lottery, sendUidList, endSendDatabyte); err != nil {
 				ziLog.Error(fmt.Sprintf("ksPushBasePayloay 推送消息失败,用户Id： %v,用户名称： %v,err:  %v,内容为： %v", gift.UserInfo.UserId, gift.UserInfo.NickName, err, giftMap), debug)
 			}
 
@@ -312,7 +311,7 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 			endSendData.TimeStamp = time.Now().UnixMilli()
 			endSendDatabyte, _ := proto.Marshal(endSendData)
 			// 推送消息
-			if err := sse.SseSend(msgId, sendUidList, endSendDatabyte); err != nil {
+			if err := sendMessage(msgId, sendUidList, endSendDatabyte); err != nil {
 				ziLog.Error(fmt.Sprintf("ksPushGiftSendPayloay 推送消息失败： %v， data： %v", err, v), debug)
 			}
 		}
@@ -336,7 +335,7 @@ func ksPushGiftSendPayloay(data KsCallbackQueryStruct) {
 	if uid == "" {
 		return
 	}
-	if err := sse.SseSend(pmsg.MessageId_MsgAckSend, []string{uid}, jData); err != nil {
+	if err := sendMessage(pmsg.MessageId_MsgAckSend, []string{uid}, jData); err != nil {
 		ziLog.Error(fmt.Sprintf("ksPushGiftSendPayloay sendack 推送消息失败： %v", err), debug)
 	}
 
@@ -375,7 +374,7 @@ func ksPushCommentPayloay(data KsCallbackDataStruct) {
 		endSendData.TimeStamp = time.Now().UnixMilli()
 		endSendDatabyte, _ := proto.Marshal(endSendData)
 		// 推送消息
-		if err := sse.SseSend(msgId, sendUidList, endSendDatabyte); err != nil {
+		if err := sendMessage(msgId, sendUidList, endSendDatabyte); err != nil {
 			ziLog.Error(fmt.Sprintf("ksPushCommentPayloay 推送消息失败: %v, data: %v", err, v), debug)
 		}
 	}
@@ -409,7 +408,7 @@ func ksPushLiveLikePayloay(data KsCallbackDataStruct) {
 		endSendData.TimeStamp = time.Now().UnixMilli()
 		endSendDatabyte, _ := proto.Marshal(endSendData)
 		// 推送消息
-		if err := sse.SseSend(msgId, sendUidList, endSendDatabyte); err != nil {
+		if err := sendMessage(msgId, sendUidList, endSendDatabyte); err != nil {
 			ziLog.Error(fmt.Sprintf("ksPushLiveLikePayloay 推送消息失败: %v, data: %v", err, v), debug)
 		}
 	}

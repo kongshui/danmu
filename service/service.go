@@ -22,7 +22,7 @@ func ServiceInit() {
 	app_id = cfg.App.AppId         // appId
 	app_secret = cfg.App.AppSecret // appSecret
 	platform = cfg.App.PlatForm    // 平台
-	debug = cfg.Server.Debug
+	debug = cfg.Web.Debug
 	setUrl()
 	// monthVersionSet()
 
@@ -33,21 +33,21 @@ func ServiceInit() {
 		// 设置token
 		if err := setToken(); err != nil {
 			log.Println("设置token失败： ", err)
-			ziLog.Error("设置token失败： "+err.Error(), cfg.Server.Debug)
+			ziLog.Error("设置token失败： "+err.Error(), debug)
 			os.Exit(1)
 		}
 		go setAccessToken()
 		//获取token
 		if err := getToken(); err != nil {
 			log.Println("获取token失败： ", err)
-			ziLog.Error("获取token失败： "+err.Error(), cfg.Server.Debug)
+			ziLog.Error("获取token失败： "+err.Error(), debug)
 			os.Exit(1)
 		}
 		go getAccessToken()
 		//初始化世界排行版
 		if err := worldRankInit(); err != nil {
 			log.Println("初始化世界排行版失败： ", err)
-			ziLog.Error("初始化世界排行版失败： "+err.Error(), cfg.Server.Debug)
+			ziLog.Error("初始化世界排行版失败： "+err.Error(), debug)
 			os.Exit(1)
 		}
 		// 失败消息获取
@@ -92,7 +92,7 @@ func ServiceInit() {
 	}
 	// 读取配置映射
 	if err := configMapRead(); err != nil {
-		ziLog.Error("读取配置映射失败： "+err.Error(), cfg.Server.Debug)
+		ziLog.Error("读取配置映射失败： "+err.Error(), debug)
 		os.Exit(1)
 	}
 	// 自动检测配置变更

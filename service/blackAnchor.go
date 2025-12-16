@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 
 	"github.com/kongshui/danmu/model/pmsg"
-	"github.com/kongshui/danmu/sse"
 )
 
 // blackAnchorListAdd 添加黑名单主播
@@ -53,6 +52,10 @@ func blackAnchorListIsMember(anchorOpenid string) bool {
 	}
 	dataBytes, _ := json.Marshal(data)
 	// 发送断线消息
-	sse.SseSend(pmsg.MessageId_BlackAnchorLogOff, []string{anchorOpenid}, dataBytes)
+	if err := sendMessage(pmsg.MessageId_BlackAnchorLogOff, []string{anchorOpenid}, dataBytes); err != nil {
+		// 发送消息失败
+		ziLog.Error("黑名单主播发送断线消息失败："+err.Error(), debug)
+		return false
+	}
 	return true
 }

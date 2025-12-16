@@ -7,8 +7,8 @@ import (
 	"github.com/kongshui/danmu/model/pmsg"
 )
 
-// websocketMessageFunc   websocket
-func websocketMessageFunc(msg *pmsg.MessageBody) error {
+// WebsocketMessageFunc   websocket
+func WebsocketMessageFunc(msg *pmsg.MessageBody) error {
 	// log.Println("websocketMessageFunc: ", msg.MessageType)
 	ziLog.Debug(fmt.Sprintf("websocketMessageFunc: %v,uid: %v", msg.MsgId, msg.Uuid), debug)
 	switch msg.MsgId {
