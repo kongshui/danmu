@@ -52,7 +52,7 @@ func blackAnchorListIsMember(anchorOpenid string) bool {
 	}
 	dataBytes, _ := json.Marshal(data)
 	// 发送断线消息
-	if err := sendMessage(pmsg.MessageId_BlackAnchorLogOff, []string{anchorOpenid}, dataBytes); err != nil {
+	if err := SendMessage(pmsg.MessageId_BlackAnchorLogOff, []string{anchorOpenid}, dataBytes); err != nil {
 		// 发送消息失败
 		ziLog.Error("黑名单主播发送断线消息失败："+err.Error(), debug)
 		return false

@@ -39,7 +39,7 @@ func OtherSendSse(c *gin.Context) {
 		ziLog.Error(fmt.Sprintf("OtherSendSse Unmarshal err %v", err), debug)
 		return
 	}
-	if err := sendMessage(sData.GetMessageId(), sData.GetUidList(), sData.GetData()); err != nil {
+	if err := SendMessage(sData.GetMessageId(), sData.GetUidList(), sData.GetData()); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "send error",
 		})

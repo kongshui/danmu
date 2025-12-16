@@ -57,7 +57,7 @@ func ConfigFileSend(uidList []string, openId string) error {
 				if err != nil {
 					return fmt.Errorf("ConfigFileSend 序列化文件内容失败：%v", err)
 				}
-				if err := sendMessage(pmsg.MessageId_ConfigFileSend, uidList, dataByte); err != nil {
+				if err := SendMessage(pmsg.MessageId_ConfigFileSend, uidList, dataByte); err != nil {
 					return fmt.Errorf("ConfigFileSend 发送文件内容失败：%v", err)
 				}
 				if info.Size() > int64(labelCount)*512*1024 {
@@ -94,7 +94,7 @@ func ConfigFileSend(uidList []string, openId string) error {
 			if err != nil {
 				return fmt.Errorf("ConfigFileSend 序列化文件内容失败：%v", err)
 			}
-			if err := sendMessage(pmsg.MessageId_ConfigFileSend, uidList, dataByte); err != nil {
+			if err := SendMessage(pmsg.MessageId_ConfigFileSend, uidList, dataByte); err != nil {
 				return fmt.Errorf("ConfigFileSend 发送文件内容失败：%v", err)
 			}
 		}
@@ -108,7 +108,7 @@ func ConfigFileSend(uidList []string, openId string) error {
 	if err != nil {
 		return fmt.Errorf("ConfigFileSendEndMessage 序列化文件内容失败：%v", err)
 	}
-	if err := sendMessage(pmsg.MessageId_ConfigFileSendEnd, uidList, endDataByte); err != nil {
+	if err := SendMessage(pmsg.MessageId_ConfigFileSendEnd, uidList, endDataByte); err != nil {
 		return fmt.Errorf("ConfigFileSendEndMessage 发送文件内容失败：%v", err)
 	}
 	return nil

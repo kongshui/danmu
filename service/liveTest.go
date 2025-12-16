@@ -49,7 +49,7 @@ func CreateRoomId(uid, roomId string) {
 		databyte, _ := proto.Marshal(data)
 		setRoomInfo(uid, data)
 		connect(data.GetRoomId(), data.GetAnchorOpenId())
-		if err := sendMessage(pmsg.MessageId_TokenAck, []string{uid}, databyte); err != nil {
+		if err := SendMessage(pmsg.MessageId_TokenAck, []string{uid}, databyte); err != nil {
 			ziLog.Error(fmt.Sprintf("DyGetAnchorInfo pushDownLoadMessage err: %v", err), debug)
 		}
 	case "ks":
@@ -59,7 +59,7 @@ func CreateRoomId(uid, roomId string) {
 		roomInfo.NickName = CreateRandomStr(6)
 		roomInfo.AvatarUrl = "http://tupian.geimian.com/pic/2016/11/2016-11-05_213153.jpg"
 		dataByte, _ := json.Marshal(roomInfo)
-		if err := sendMessage(pmsg.MessageId_StartBindAck, []string{uid}, dataByte); err != nil {
+		if err := SendMessage(pmsg.MessageId_StartBindAck, []string{uid}, dataByte); err != nil {
 			ziLog.Error(fmt.Sprintf("KsCreateRoomId pushDownLoadMessage err: %v", err), debug)
 		}
 	default:

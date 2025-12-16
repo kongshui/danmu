@@ -88,7 +88,7 @@ func dyGetAnchorInfo(uid, token string) error {
 	databyte, _ := proto.Marshal(data)
 	setRoomInfo(uid, data)
 	connect(data.GetRoomId(), data.GetAnchorOpenId())
-	if err := sendMessage(pmsg.MessageId_TokenAck, []string{uid}, databyte); err != nil {
+	if err := SendMessage(pmsg.MessageId_TokenAck, []string{uid}, databyte); err != nil {
 		return fmt.Errorf("DyGetAnchorInfo pushDownLoadMessage err: %v", err)
 	}
 	return nil

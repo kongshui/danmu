@@ -51,7 +51,7 @@ func BlackAnchorDisconnectHandle(c *gin.Context) {
 	}
 	dataBytes, _ := json.Marshal(data)
 	// 发送断线消息
-	sendMessage(pmsg.MessageId_BlackAnchorLogOff, []string{bAD.OpenId}, dataBytes)
+	SendMessage(pmsg.MessageId_BlackAnchorLogOff, []string{bAD.OpenId}, dataBytes)
 	c.JSON(200, gin.H{
 		"errcode": 0,
 		"errmsg":  "success",

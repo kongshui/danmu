@@ -169,7 +169,7 @@ func dyPayloadSendMessage(v any, msgId pmsg.MessageId, roomId, anchorOpenid stri
 	endSendData.Data = jData
 	endSendDatabyte, _ := proto.Marshal(endSendData)
 	// 推送消息
-	if err := sendMessage(msgId, sendUidList, endSendDatabyte); err != nil {
+	if err := SendMessage(msgId, sendUidList, endSendDatabyte); err != nil {
 		ziLog.Error(fmt.Sprintf("dyPayloadSendMessage 推送消息失败:  %v,失败数据为： %v", err, v), debug)
 	}
 }

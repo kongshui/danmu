@@ -50,7 +50,7 @@ func readyV1(msg *pmsg.MessageBody) error {
 			return errors.New("ReadyV1 queryOpenidFromUidStr nil")
 		}
 		// 发送给前端
-		if err := sendMessage(pmsg.MessageId_MatchBattleV1Ready, []string{uid}, msg.GetMessageData()); err != nil { // 推送消息给其他用户
+		if err := SendMessage(pmsg.MessageId_MatchBattleV1Ready, []string{uid}, msg.GetMessageData()); err != nil { // 推送消息给其他用户
 			// 发送消息失败
 			MatchErrorV1(data.GetOpenIdList(), "ReadyV1 pushDownLoadMessage err: "+err.Error(), data.GetMatchBattleRoomId(),
 				int32(pmsg.ErrorStatus_SendMessageError))
@@ -99,7 +99,7 @@ func readyV1Ack(msg *pmsg.MessageBody) error {
 			int32(pmsg.ErrorStatus_SendMessageError))
 		return errors.New("ReadyV1 queryOpenidFromUidStr nil")
 	}
-	if err := sendMessage(pmsg.MessageId_MatchBattleV1TimeCheck, sendUidList, sDataByte); err != nil { // 推送消息给其他用户
+	if err := SendMessage(pmsg.MessageId_MatchBattleV1TimeCheck, sendUidList, sDataByte); err != nil { // 推送消息给其他用户
 		MatchErrorV1(data.GetOpenIdList(), "ReadyV1 pushDownLoadMessage err: "+err.Error(), data.GetMatchBattleRoomId(),
 			int32(pmsg.ErrorStatus_SetMatchStatusError))
 		return errors.New("ReadyV1 pushDownLoadMessage err: " + err.Error() + "data: " + data.String())
@@ -133,7 +133,7 @@ func matchV1TimeAck(msg *pmsg.MessageBody) error {
 			return errors.New("matchTimeAck queryOpenidFromUidStr nil")
 		}
 
-		if err := sendMessage(pmsg.MessageId_MatchBattleV1TimeCheckAck, []string{uid}, msg.GetMessageData()); err != nil { // 推送消息给其他用户
+		if err := SendMessage(pmsg.MessageId_MatchBattleV1TimeCheckAck, []string{uid}, msg.GetMessageData()); err != nil { // 推送消息给其他用户
 			// 发送消息失败
 			MatchErrorV1(data.GetOpenIdList(), "matchTimeAck pushDownLoadMessage err: "+err.Error(), data.GetMatchBattleRoomId(),
 				int32(pmsg.ErrorStatus_SendMessageError))
@@ -164,7 +164,7 @@ func matchV1Confirm(msg *pmsg.MessageBody) error {
 				int32(pmsg.ErrorStatus_SendMessageError))
 			return errors.New("matchV1Confirm queryOpenidFromUidStr nil")
 		}
-		if err := sendMessage(pmsg.MessageId_MatchBattleV1StartConfirm, []string{uid}, msg.GetMessageData()); err != nil { // 推送消息给其他用户
+		if err := SendMessage(pmsg.MessageId_MatchBattleV1StartConfirm, []string{uid}, msg.GetMessageData()); err != nil { // 推送消息给其他用户
 			// 发送消息失败
 			MatchErrorV1(data.GetOpenIdList(), "matchV1Confirm pushDownLoadMessage err: "+err.Error(), data.GetMatchBattleRoomId(),
 				int32(pmsg.ErrorStatus_SendMessageError))
@@ -223,7 +223,7 @@ func matchV1ConfirmAck(msg *pmsg.MessageBody) error {
 		return errors.New("askMatchV1RoundId queryOpenidFromUidStr nil")
 	}
 	// 推送消息给所有用户
-	if err := sendMessage(pmsg.MessageId_MatchBattleV1SendRoundId, sendUidList, sdataByte); err != nil { // 推送消息给其他用户
+	if err := SendMessage(pmsg.MessageId_MatchBattleV1SendRoundId, sendUidList, sdataByte); err != nil { // 推送消息给其他用户
 		// 发送消息失败
 		MatchErrorV1(data.GetOpenIdList(), "askMatchV1RoundId pushDownLoadMessage err: "+err.Error(), data.GetMatchBattleRoomId(),
 			int32(pmsg.ErrorStatus_SendMessageError))
@@ -309,7 +309,7 @@ func askMatchV1RoundId(msg *pmsg.MessageBody) error {
 		return errors.New("askMatchV1RoundId queryOpenidFromUidStr nil")
 	}
 	// 推送消息给用户
-	if err := sendMessage(pmsg.MessageId_MatchBattleV1AskRoundIdAck, []string{uid}, sdataByte); err != nil { // 推送消息给其他用户
+	if err := SendMessage(pmsg.MessageId_MatchBattleV1AskRoundIdAck, []string{uid}, sdataByte); err != nil { // 推送消息给其他用户
 		// 发送消息失败
 		return errors.New("askMatchV1RoundId pushDownLoadMessage err: " + err.Error() + "data: " + data.String())
 	}
@@ -379,7 +379,7 @@ func matchV1Start(msg *pmsg.MessageBody) error {
 		return errors.New("askMatchV1RoundId queryOpenidFromUidStr nil")
 	}
 	// 发送消息
-	if err := sendMessage(pmsg.MessageId_MatchBattleV1StartAck, sendUidList, sDataByte); err != nil {
+	if err := SendMessage(pmsg.MessageId_MatchBattleV1StartAck, sendUidList, sDataByte); err != nil {
 		MatchErrorV1(data.GetOpenIdList(), "matchV1Start send pushDownLoadMessage err: "+err.Error(), data.GetMatchBattleRoomId(),
 			int32(pmsg.ErrorStatus_ProtoMarshalError))
 		return errors.New("matchV1Start send pushDownLoadMessage err: " + err.Error())
@@ -445,7 +445,7 @@ func matchV1SyncData(msg *pmsg.MessageBody) error {
 		}
 		// 查询uid
 		uid := queryUidByOpenid(openId)
-		if err := sendMessage(pmsg.MessageId_MatchBattleV1Sync, []string{uid}, msg.GetMessageData()); err != nil { // 推送消息给其他用户
+		if err := SendMessage(pmsg.MessageId_MatchBattleV1Sync, []string{uid}, msg.GetMessageData()); err != nil { // 推送消息给其他用户
 			// 发送消息失败
 			return errors.New("matchV1SyncData pushDownLoadMessage err: " + err.Error() + "data: " + data.String())
 		}
@@ -462,7 +462,7 @@ func matchV1SyncDataAck(msg *pmsg.MessageBody) error {
 	// 传输数据给其他用户
 	// 查询uid
 	uid := queryUidByOpenid(data.GetOpenId())
-	if err := sendMessage(pmsg.MessageId_MatchBattleV1Sync, []string{uid}, msg.GetMessageData()); err != nil { // 推送消息给其他用户
+	if err := SendMessage(pmsg.MessageId_MatchBattleV1Sync, []string{uid}, msg.GetMessageData()); err != nil { // 推送消息给其他用户
 		// 发送消息失败
 		return errors.New("matchV1SyncData pushDownLoadMessage err: " + err.Error() + "data: " + data.String())
 	}
@@ -575,7 +575,7 @@ func matchV1Cancel(msg *pmsg.MessageBody) error {
 	cancelData.TimeStamp = time.Now().UnixMilli()
 	cancelDataByte, _ := proto.Marshal(cancelData)
 	uid := queryUidByOpenid(data.GetOpenId())
-	if err := sendMessage(pmsg.MessageId_MatchBattleV1CancelAck, []string{uid}, cancelDataByte); err != nil { // 推送消息给其他用户
+	if err := SendMessage(pmsg.MessageId_MatchBattleV1CancelAck, []string{uid}, cancelDataByte); err != nil { // 推送消息给其他用户
 		// 发送消息失败
 		return errors.New("matchV1SyncData pushDownLoadMessage err: " + err.Error() + "data: " + data.String())
 	}
@@ -633,7 +633,7 @@ func MatchBattleUseStreamCoin(msg *pmsg.MessageBody) error {
 		return errors.New("matchBattleUseStreamCoin get uid is nil")
 	}
 	sDataByte, _ := proto.Marshal(sData)
-	if err := sendMessage(pmsg.MessageId_MatchBattleUseWinnerStreamCoinAck, sendUidList, sDataByte); err != nil { // 推送消息给其他用户
+	if err := SendMessage(pmsg.MessageId_MatchBattleUseWinnerStreamCoinAck, sendUidList, sDataByte); err != nil { // 推送消息给其他用户
 		// 发送消息失败
 		return errors.New("matchBattleUseStreamCoin pushDownLoadMessage err: " + err.Error() + "data: " + data.String())
 	}
@@ -675,7 +675,7 @@ func matchStartGamedConfirmAck(msg *pmsg.MessageBody) error {
 				int32(pmsg.ErrorStatus_SendMessageError))
 			return errors.New("MatchStartGamedConfirm queryOpenidFromUidStr nil")
 		}
-		if err := sendMessage(pmsg.MessageId_MatchBattleStartGamedConfirmAck, []string{uid}, msg.GetMessageData()); err != nil { // 推送消息给其他用户
+		if err := SendMessage(pmsg.MessageId_MatchBattleStartGamedConfirmAck, []string{uid}, msg.GetMessageData()); err != nil { // 推送消息给其他用户
 			// 发送消息失败
 			MatchErrorV1(data.GetOpenIdList(), "MatchStartGamedConfirm pushDownLoadMessage err: "+err.Error(), data.GetMatchBattleRoomId(),
 				int32(pmsg.ErrorStatus_SendMessageError))

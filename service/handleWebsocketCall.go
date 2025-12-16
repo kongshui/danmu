@@ -47,7 +47,7 @@ func WebsocketCallbackHandle(c *gin.Context) {
 			msg.Uuid = c.GetHeader("x-client-uuid")
 			if err := WebsocketMessageFunc(msg); err != nil {
 				ziLog.Error(fmt.Sprintf("websocketMessageFunc err,  websocket_uplink_msg: %s errorInfo: %s ", msg.String(), err), debug)
-				if err := sendMessage(pmsg.MessageId_BackErrorSend, []string{c.GetHeader("x-client-uuid")}, []byte(err.Error()+"msg: "+msg.String())); err != nil {
+				if err := SendMessage(pmsg.MessageId_BackErrorSend, []string{c.GetHeader("x-client-uuid")}, []byte(err.Error()+"msg: "+msg.String())); err != nil {
 					ziLog.Error(fmt.Sprintf("websocketMessageFunc uplink pushDownLoadMessage err: %v", err), debug)
 				}
 			}

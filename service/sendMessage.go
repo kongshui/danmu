@@ -6,7 +6,7 @@ import (
 )
 
 // SendMessageToGatewayFunc 发送消息到网关函数
-func sendMessage(msgId pmsg.MessageId, uidList []string, data []byte) error {
+func SendMessage(msgId pmsg.MessageId, uidList []string, data []byte) error {
 	switch cfg.IsNode {
 	case true:
 		return sendMessageToGateway(msgId, uidList, data)

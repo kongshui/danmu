@@ -75,7 +75,7 @@ func ksStartFinishGameInfo(roomId, url, label, uid string, isSend bool) error {
 			go UserInfoCompareStore(roomInfoJson.UserId, roomInfoJson.NickName, roomInfoJson.AvatarUrl, true)
 			setRoomInfo(uid, roomInfo)
 			connect(roomId, roomInfo.AnchorOpenId)
-			if err := sendMessage(pmsg.MessageId_StartBindAck, []string{uid}, dataByte); err != nil {
+			if err := SendMessage(pmsg.MessageId_StartBindAck, []string{uid}, dataByte); err != nil {
 				return fmt.Errorf("startFinishGameInfo pushDownLoadMessage: %v, roomId: %v", err, roomId)
 			}
 		}
@@ -195,7 +195,7 @@ func getDyGameInfo(roomid, url, msgType string) int64 {
 func dyStartPushTask(roomId, openId, uid string, start bool) {
 	if is_mock {
 		if start {
-			if err := sendMessage(pmsg.MessageId_StartBindAck, []string{uid}, []byte{}); err != nil {
+			if err := SendMessage(pmsg.MessageId_StartBindAck, []string{uid}, []byte{}); err != nil {
 				ziLog.Error(fmt.Sprintf("startFinishGameInfo pushDownLoadMessage: %v, roomId: %v", err, roomId), debug)
 			}
 		}
@@ -217,7 +217,7 @@ func dyStartPushTask(roomId, openId, uid string, start bool) {
 			}
 		}
 		connect(roomId, openId)
-		if err := sendMessage(pmsg.MessageId_StartBindAck, []string{uid}, []byte{}); err != nil {
+		if err := SendMessage(pmsg.MessageId_StartBindAck, []string{uid}, []byte{}); err != nil {
 			ziLog.Error(fmt.Sprintf("startFinishGameInfo pushDownLoadMessage: %v, roomId: %v", err, roomId), debug)
 		}
 		return
