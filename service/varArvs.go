@@ -42,7 +42,6 @@ type (
 var (
 	playerGroupAddin   SingleUserAddGroupSetFunc
 	setWinnerScore     SetWinScoreFunc
-	lottery            LotteryFunc
 	otherWebsocket     WebsocketFunc
 	interactive        InteractiveFunc
 	giftExtendInfos    GiftExtendInfoFunc
@@ -50,8 +49,8 @@ var (
 	initService        InitFunc
 	setIntegralToRound SetIntegralToRoundFunc
 	getCfgFunc         GetCfgConfigFunc
-
-	is_mock bool
+	lotteryMap         map[string]LotteryFunc // 抽奖礼物id对应的积分
+	is_mock            bool
 
 	cfg         *conf.Config
 	accessToken *AccessTokenStruct = &AccessTokenStruct{Lock: &sync.RWMutex{}} //全局token使用

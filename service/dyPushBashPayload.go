@@ -20,6 +20,11 @@ import (
 // 直接推送
 func pushDyBasePayloayDirect(roomId, anchorOpenId, msgType string, data []byte) {
 	var msgAck MsgAckStruct
+	endSendData := platFormPool.Get().(*pmsg.PlatFormDataSend)
+	defer platFormPool.Put(endSendData)
+	endSendData.OpenId = anchorOpenId
+	endSendData.RoomId = roomId
+	endSendData.PushType = msgType
 	msgAck.RoomId = roomId
 	msgAck.AppId = app_id
 	msgAck.AckType = 1
@@ -64,7 +69,7 @@ func pushDyBasePayloayDirect(roomId, anchorOpenId, msgType string, data []byte) 
 				// 添加积分
 				go matchAddIntrage(roomId, anchorOpenId, v.SecOpenid, score)
 			}
-			dyPayloadSendMessage(v, pmsg.MessageId_LiveComment, roomId, anchorOpenId)
+			dyPayloadSendMessage(v, pmsg.MessageId_LiveComment, roomId, anchorOpenId, true)
 		}
 	case "live_gift":
 		getData := []GiftPayloadStruct{}
@@ -78,12 +83,34 @@ func pushDyBasePayloayDirect(roomId, anchorOpenId, msgType string, data []byte) 
 			msgAckInfo.MsgType = msgType
 			msgAckInfo.ClientTime = time.Now().UnixMilli()
 			dataList = append(dataList, msgAckInfo)
-			if !v.Test {
-				score = float64(v.GiftNum) * giftToScoreMap[v.SecGiftId]
+			lottery, ok := lotteryMap[v.SecGiftId]
+			if ok {
+				// 抽奖
+				giftMap := lottery(anchorOpenId, v.SecOpenid, int64(v.GiftNum))
+				ziLog.Gift(fmt.Sprintf("pushDyBasePayloayDirect Lottery giftdata： %v，用户Id： %v, 用户名称： %v", giftMap, v.SecOpenid, v.Nickname), debug)
+				for giftId, giftCount := range giftMap {
+					score += giftToScoreMap[giftId] * float64(giftCount)
+				}
+				giftMapByte, _ := json.Marshal(giftMap)
+				lotteryData := &pmsg.LotteryMsg{}
+				lotteryData.OpenId = v.SecOpenid
+				lotteryData.NickName = v.Nickname
+				lotteryData.HeadImgUrl = v.AvatarUrl
+				lotteryData.LotteryMap = string(giftMapByte)
+				lotteryData.Count = int64(v.GiftNum)
+				lotteryByte, _ := proto.Marshal(lotteryData)
+				endSendData.Data = lotteryByte
+				endSendData.TimeStamp = time.Now().UnixMilli()
+				endSendData.PushType = "lottery"
+				endSendDatabyte, _ := proto.Marshal(endSendData)
+				dyPayloadSendMessage(endSendDatabyte, pmsg.MessageId_Lottery, roomId, anchorOpenId, true)
 			} else {
-				score = 0
+				if !v.Test {
+					score = float64(v.GiftNum) * giftToScoreMap[v.SecGiftId]
+				} else {
+					score = 0
+				}
 			}
-
 			// 加入玩家信息
 			go UserInfoCompareStore(v.SecOpenid, v.Nickname, v.AvatarUrl, false)
 
@@ -95,7 +122,10 @@ func pushDyBasePayloayDirect(roomId, anchorOpenId, msgType string, data []byte) 
 				// 设置用户是否已经消费
 				SetIsConsume(v.SecOpenid)
 			}
-			dyPayloadSendMessage(v, pmsg.MessageId_liveGift, roomId, anchorOpenId)
+			if !ok {
+				dyPayloadSendMessage(v, pmsg.MessageId_liveGift, roomId, anchorOpenId, true)
+			}
+
 		}
 	case "live_like":
 		getData := []LiveLikePayloadStruct{}
@@ -120,7 +150,7 @@ func pushDyBasePayloayDirect(roomId, anchorOpenId, msgType string, data []byte) 
 				// 送礼直接添加到世界排行榜
 				// go worldRankNumerAdd(v.(map[string]any)["userInfo"].(map[string]any)["userId"].(string), score)
 			}
-			dyPayloadSendMessage(v, pmsg.MessageId_liveLike, roomId, anchorOpenId)
+			dyPayloadSendMessage(v, pmsg.MessageId_liveLike, roomId, anchorOpenId, true)
 		}
 	}
 	//分数不为0时添加积分
@@ -151,22 +181,26 @@ func msgAckSend(data MsgAckStruct) error {
 
 // dySendMessage
 
-func dyPayloadSendMessage(v any, msgId pmsg.MessageId, roomId, anchorOpenid string) {
+func dyPayloadSendMessage(v any, msgId pmsg.MessageId, roomId, anchorOpenid string, isJson bool) {
 	sendUidList, _, _, _ := getUidListByOpenId(anchorOpenid)
 	if len(sendUidList) == 0 {
 		ziLog.Error(fmt.Sprintf("dyPayloadSendMessage sendUidList is nil, roomId: %v, anchorOpenid: %v, data: %v", roomId, anchorOpenid, v), debug)
 		return
 	}
-	jData, err := json.Marshal(v)
-	if err != nil {
-		ziLog.Error(fmt.Sprintf("dyPayloadSendMessage jpushBasePayloayDirect json.Marshal err:  %v,失败数据为： %v", err, v), debug)
-		return
-	}
 	endSendData := platFormPool.Get().(*pmsg.PlatFormDataSend)
 	defer platFormPool.Put(endSendData)
 	endSendData.Reset()
+	if isJson {
+		jData, err := json.Marshal(v)
+		if err != nil {
+			ziLog.Error(fmt.Sprintf("dyPayloadSendMessage jpushBasePayloayDirect json.Marshal err:  %v,失败数据为： %v", err, v), debug)
+			return
+		}
+		endSendData.Data = jData
+	} else {
+		endSendData.Data = v.([]byte)
+	}
 	endSendData.TimeStamp = time.Now().UnixMilli()
-	endSendData.Data = jData
 	endSendDatabyte, _ := proto.Marshal(endSendData)
 	// 推送消息
 	if err := SendMessage(msgId, sendUidList, endSendDatabyte); err != nil {

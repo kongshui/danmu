@@ -103,10 +103,6 @@ func ServiceInit() {
 	// 平台分开推送的内容
 	switch platform {
 	case "ks":
-		if lottery == nil {
-			ziLog.Error("快手抽奖函数未设置", debug)
-			os.Exit(1)
-		}
 	case "dy":
 		// 设置世界排行版生效版本
 		if is_mock {

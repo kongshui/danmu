@@ -21,14 +21,14 @@ scrollfunc：自动滚动函数
 initFunction：初始化函数
 getCfgFunc：获取读取到的配置函数
 */
-func ServiceFuncSet(addGroupSetFunc SingleUserAddGroupSetFunc, setWinningScoreFunc SetWinScoreFunc, lotteryFunc LotteryFunc, webSocketFunc WebsocketFunc, interFunc InteractiveFunc,
+func ServiceFuncSet(addGroupSetFunc SingleUserAddGroupSetFunc, setWinningScoreFunc SetWinScoreFunc, lotteryFunc map[string]LotteryFunc, webSocketFunc WebsocketFunc, interFunc InteractiveFunc,
 	giftExtendInfoFunc GiftExtendInfoFunc, scrollFunc ScrollFunc, initFunc InitFunc, setIntegralToRoundFunc SetIntegralToRoundFunc, gCfgFunc GetCfgConfigFunc,
 	sendMsgToGatewayFunc SendMessageToGatewayFunc) {
 
 	interactive = interFunc
 	playerGroupAddin = addGroupSetFunc
 	setWinnerScore = setWinningScoreFunc
-	lottery = lotteryFunc
+	lotteryMap = lotteryFunc
 	otherWebsocket = webSocketFunc
 	giftExtendInfos = giftExtendInfoFunc
 	scrollAuto = scrollFunc
