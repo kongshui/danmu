@@ -28,6 +28,7 @@ type LotteryMsg struct {
 	HeadImgUrl    string                 `protobuf:"bytes,3,opt,name=HeadImgUrl,proto3" json:"HeadImgUrl,omitempty"` // 用户头像
 	LotteryMap    string                 `protobuf:"bytes,4,opt,name=LotteryMap,proto3" json:"LotteryMap,omitempty"` // 抽奖结果 json string
 	Count         int64                  `protobuf:"varint,5,opt,name=Count,proto3" json:"Count,omitempty"`          // 礼物数量
+	GiftId        string                 `protobuf:"bytes,6,opt,name=GiftId,proto3" json:"GiftId,omitempty"`         // 礼物Id
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -97,11 +98,18 @@ func (x *LotteryMsg) GetCount() int64 {
 	return 0
 }
 
+func (x *LotteryMsg) GetGiftId() string {
+	if x != nil {
+		return x.GiftId
+	}
+	return ""
+}
+
 var File_proto_lottery_proto protoreflect.FileDescriptor
 
 const file_proto_lottery_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/lottery.proto\x12\x04pmsg\"\x96\x01\n" +
+	"\x13proto/lottery.proto\x12\x04pmsg\"\xae\x01\n" +
 	"\n" +
 	"LotteryMsg\x12\x16\n" +
 	"\x06OpenId\x18\x01 \x01(\tR\x06OpenId\x12\x1a\n" +
@@ -112,7 +120,8 @@ const file_proto_lottery_proto_rawDesc = "" +
 	"\n" +
 	"LotteryMap\x18\x04 \x01(\tR\n" +
 	"LotteryMap\x12\x14\n" +
-	"\x05Count\x18\x05 \x01(\x03R\x05CountB\bZ\x06./pmsgb\x06proto3"
+	"\x05Count\x18\x05 \x01(\x03R\x05Count\x12\x16\n" +
+	"\x06GiftId\x18\x06 \x01(\tR\x06GiftIdB\bZ\x06./pmsgb\x06proto3"
 
 var (
 	file_proto_lottery_proto_rawDescOnce sync.Once

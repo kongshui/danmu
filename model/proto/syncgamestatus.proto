@@ -14,4 +14,6 @@ message SyncGameStatusMessage {
     int64 EndTime = 6;          //结束时间
     int32 Status = 7;           //状态,当前房间的游戏对局状态（1=已开始、2=已结束）
     repeated GroupResult GroupResultList = 8;   //对局结果
+    bool choose_side = 9;         //是否需要选边
+    int32 side_type = 10;     //旁观类型
 }

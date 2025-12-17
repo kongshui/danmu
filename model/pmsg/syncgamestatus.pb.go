@@ -23,14 +23,16 @@ const (
 
 type SyncGameStatusMessage struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
-	AnchorOpenId    string                 `protobuf:"bytes,1,opt,name=AnchorOpenId,proto3" json:"AnchorOpenId,omitempty"`       //主播id
-	AppId           string                 `protobuf:"bytes,2,opt,name=AppId,proto3" json:"AppId,omitempty"`                     //小游戏id
-	RoomId          string                 `protobuf:"bytes,3,opt,name=RoomId,proto3" json:"RoomId,omitempty"`                   //房间id
-	RoundId         int64                  `protobuf:"varint,4,opt,name=RoundId,proto3" json:"RoundId,omitempty"`                //对局id
-	StartTime       int64                  `protobuf:"varint,5,opt,name=StartTime,proto3" json:"StartTime,omitempty"`            //开始时间
-	EndTime         int64                  `protobuf:"varint,6,opt,name=EndTime,proto3" json:"EndTime,omitempty"`                //结束时间
-	Status          int32                  `protobuf:"varint,7,opt,name=Status,proto3" json:"Status,omitempty"`                  //状态,当前房间的游戏对局状态（1=已开始、2=已结束）
-	GroupResultList []*GroupResult         `protobuf:"bytes,8,rep,name=GroupResultList,proto3" json:"GroupResultList,omitempty"` //对局结果
+	AnchorOpenId    string                 `protobuf:"bytes,1,opt,name=AnchorOpenId,proto3" json:"AnchorOpenId,omitempty"`                //主播id
+	AppId           string                 `protobuf:"bytes,2,opt,name=AppId,proto3" json:"AppId,omitempty"`                              //小游戏id
+	RoomId          string                 `protobuf:"bytes,3,opt,name=RoomId,proto3" json:"RoomId,omitempty"`                            //房间id
+	RoundId         int64                  `protobuf:"varint,4,opt,name=RoundId,proto3" json:"RoundId,omitempty"`                         //对局id
+	StartTime       int64                  `protobuf:"varint,5,opt,name=StartTime,proto3" json:"StartTime,omitempty"`                     //开始时间
+	EndTime         int64                  `protobuf:"varint,6,opt,name=EndTime,proto3" json:"EndTime,omitempty"`                         //结束时间
+	Status          int32                  `protobuf:"varint,7,opt,name=Status,proto3" json:"Status,omitempty"`                           //状态,当前房间的游戏对局状态（1=已开始、2=已结束）
+	GroupResultList []*GroupResult         `protobuf:"bytes,8,rep,name=GroupResultList,proto3" json:"GroupResultList,omitempty"`          //对局结果
+	ChooseSide      bool                   `protobuf:"varint,9,opt,name=choose_side,json=chooseSide,proto3" json:"choose_side,omitempty"` //是否需要选边
+	SideType        int32                  `protobuf:"varint,10,opt,name=side_type,json=sideType,proto3" json:"side_type,omitempty"`      //旁观类型
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -121,11 +123,25 @@ func (x *SyncGameStatusMessage) GetGroupResultList() []*GroupResult {
 	return nil
 }
 
+func (x *SyncGameStatusMessage) GetChooseSide() bool {
+	if x != nil {
+		return x.ChooseSide
+	}
+	return false
+}
+
+func (x *SyncGameStatusMessage) GetSideType() int32 {
+	if x != nil {
+		return x.SideType
+	}
+	return 0
+}
+
 var File_proto_syncgamestatus_proto protoreflect.FileDescriptor
 
 const file_proto_syncgamestatus_proto_rawDesc = "" +
 	"\n" +
-	"\x1aproto/syncgamestatus.proto\x12\x04pmsg\x1a\x17proto/groupresult.proto\"\x90\x02\n" +
+	"\x1aproto/syncgamestatus.proto\x12\x04pmsg\x1a\x17proto/groupresult.proto\"\xce\x02\n" +
 	"\x15SyncGameStatusMessage\x12\"\n" +
 	"\fAnchorOpenId\x18\x01 \x01(\tR\fAnchorOpenId\x12\x14\n" +
 	"\x05AppId\x18\x02 \x01(\tR\x05AppId\x12\x16\n" +
@@ -134,7 +150,11 @@ const file_proto_syncgamestatus_proto_rawDesc = "" +
 	"\tStartTime\x18\x05 \x01(\x03R\tStartTime\x12\x18\n" +
 	"\aEndTime\x18\x06 \x01(\x03R\aEndTime\x12\x16\n" +
 	"\x06Status\x18\a \x01(\x05R\x06Status\x12;\n" +
-	"\x0fGroupResultList\x18\b \x03(\v2\x11.pmsg.GroupResultR\x0fGroupResultListB\bZ\x06./pmsgb\x06proto3"
+	"\x0fGroupResultList\x18\b \x03(\v2\x11.pmsg.GroupResultR\x0fGroupResultList\x12\x1f\n" +
+	"\vchoose_side\x18\t \x01(\bR\n" +
+	"chooseSide\x12\x1b\n" +
+	"\tside_type\x18\n" +
+	" \x01(\x05R\bsideTypeB\bZ\x06./pmsgb\x06proto3"
 
 var (
 	file_proto_syncgamestatus_proto_rawDescOnce sync.Once

@@ -100,16 +100,19 @@ func roundStart(msg *pmsg.MessageBody) error {
 	case "ks":
 		t := time.NewTimer(time.Second * 2)
 		<-t.C
-		if interactive != nil {
-			if !interactive(syncGameStatusData.RoomId, strconv.FormatInt(syncGameStatusData.RoundId, 10), 0) {
-				ziLog.Error(fmt.Sprintf("round start, roomid:: %v,主播openid %v,设置自动选边互动失败", syncGameStatusData.RoomId, syncGameStatusData.AnchorOpenId), debug)
-			} else {
-				//添加roundid至CurrentRoundId
-				if err := liveCurrentRoundAdd(syncGameStatusData.RoomId, syncGameStatusData.RoundId); err != nil {
-					return errors.New("uplink liveCurrentRoundAdd err: " + err.Error())
+		if syncGameStatusData.ChooseSide {
+			if interactive != nil {
+				if !interactive(syncGameStatusData.RoomId, strconv.FormatInt(syncGameStatusData.RoundId, 10), int8(syncGameStatusData.SideType)) {
+					ziLog.Error(fmt.Sprintf("round start, roomid:: %v,主播openid %v,设置自动选边互动失败", syncGameStatusData.RoomId, syncGameStatusData.AnchorOpenId), debug)
+				} else {
+					//添加roundid至CurrentRoundId
+					if err := liveCurrentRoundAdd(syncGameStatusData.RoomId, syncGameStatusData.RoundId); err != nil {
+						return errors.New("uplink liveCurrentRoundAdd err: " + err.Error())
+					}
 				}
 			}
 		}
+
 	case "dy":
 
 	}
