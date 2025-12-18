@@ -41,6 +41,14 @@ type (
 	}
 )
 
+var (
+	logStrPool = sync.Pool{
+		New: func() any {
+			out := ""
+			return &out
+		}}
+)
+
 // 日志结构体初始化
 func (logS *LogStruct) Init(dataDir, level string, maxSize int64, maxBacks, maxAge int, rotateTime int64) {
 	var err error
@@ -194,6 +202,12 @@ func (logS *LogStruct) close(label string) {
 	}
 }
 
+// func defer logpool
+func logPoolPut(data *string) {
+	*data = ""
+	logStrPool.Put(data)
+}
+
 // Write To debug
 func (logS *LogStruct) debugWrite(data []byte) {
 	logS.debugFile.Lock.Lock()
@@ -204,8 +218,8 @@ func (logS *LogStruct) debugWrite(data []byte) {
 }
 
 // write写日志
-func (logS *LogStruct) Write(label string, data string) {
-	dataByte := []byte(data)
+func (logS *LogStruct) Write(label string, data *string) {
+	dataByte := []byte(*data)
 	if logS.level == "debug" {
 		logS.debugWrite(dataByte)
 	}
@@ -245,52 +259,62 @@ func (logS *LogStruct) Write(label string, data string) {
 
 // info日志写入
 func (logS *LogStruct) Info(data string, debug bool) {
+	newData := logStrPool.Get().(*string)
+	defer logPoolPut(newData)
 	timeFormat := time.Now().Format("2006-01-02 15:04:05")
-	data = timeFormat + " " + data + "\n"
+	*newData = timeFormat + " " + data + "\n"
 	if debug {
-		fmt.Print(data)
+		fmt.Print(*newData)
 	}
-	go logS.Write(Info, data)
+	go logS.Write(Info, newData)
 }
 
 // error日志写入
 func (logS *LogStruct) Error(data string, debug bool) {
+	newData := logStrPool.Get().(*string)
+	defer logPoolPut(newData)
 	timeFormat := time.Now().Format("2006-01-02 15:04:05")
-	data = timeFormat + " " + data + "\n"
+	*newData = timeFormat + " " + data + "\n"
 	if debug {
-		fmt.Print(data)
+		fmt.Print(*newData)
 	}
-	go logS.Write(Error, data)
+	go logS.Write(Error, newData)
 }
 
 // warn日志写入
 func (logS *LogStruct) Warn(data string, debug bool) {
+	newData := logStrPool.Get().(*string)
+	defer logPoolPut(newData)
 	timeFormat := time.Now().Format("2006-01-02 15:04:05")
-	data = timeFormat + " " + data + "\n"
+	*newData = timeFormat + " " + data + "\n"
 	if debug {
-		fmt.Print(data)
+		fmt.Print(*newData)
 	}
-	go logS.Write(Warn, data)
+	go logS.Write(Warn, newData)
 }
 
 // gift日志写入
 func (logS *LogStruct) Gift(data string, debug bool) {
+	newData := logStrPool.Get().(*string)
+	defer logPoolPut(newData)
 	timeFormat := time.Now().Format("2006-01-02 15:04:05")
-	data = timeFormat + " " + data + "\n"
+	*newData = timeFormat + " " + data + "\n"
 	if debug {
-		fmt.Print(data)
+		fmt.Print(*newData)
 	}
-	go logS.Write(Gift, data)
+	go logS.Write(Gift, newData)
 }
 
 // debug日志写入
 func (logS *LogStruct) Debug(data string, debug bool) {
+	newData := logStrPool.Get().(*string)
+	defer logPoolPut(newData)
 	timeFormat := time.Now().Format("2006-01-02 15:04:05")
-	data = timeFormat + " " + data + "\n"
+	*newData = timeFormat + " " + data + "\n"
 	if debug {
-		fmt.Print(data)
+		fmt.Print(*newData)
 	}
-	go logS.Write(Debug, data)
+	go logS.Write(Debug, newData)
 }
 
 // logtotate
@@ -396,7 +420,7 @@ func (logS *LogStruct) checkLogRotate() {
 func (logS *LogStruct) sizeLogRorate(label string) {
 	size, err := logS.getLogSize(label)
 	if err != nil {
-		logS.Write("error", "get log size err: "+err.Error())
+		logS.Error("get log size err: "+err.Error(), false)
 		return
 	}
 	if size <= 0 {
@@ -404,9 +428,9 @@ func (logS *LogStruct) sizeLogRorate(label string) {
 	}
 	if size >= int64(logS.maxSize) {
 		if err := logS.logRotate(label); err != nil {
-			logS.Write("error", label+" log rotate err: "+err.Error()+"\n")
+			logS.Error(label+" log rotate err: "+err.Error(), false)
 		} else {
-			logS.Write(label, label+" log file rotated"+"\n")
+			logS.Info(label+" log file rotated", false)
 		}
 	}
 }
@@ -416,9 +440,9 @@ func (logS *LogStruct) timeLogRorate(label string) {
 	// 测试更改时间设置
 	if time.Now().Unix()-logS.getLogOpenTime(label) >= int64(logS.maxAge)*logS.rotateTime {
 		if err := logS.logRotate(label); err != nil {
-			logS.Write("error", label+" log rotate err: "+err.Error()+"\n")
+			logS.Error(label+" log rotate err: "+err.Error(), false)
 		} else {
-			logS.Write(label, label+" log file rotated"+"\n")
+			logS.Info(label+" log file rotated", false)
 		}
 		return
 	}
