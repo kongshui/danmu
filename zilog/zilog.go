@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 	"time"
 )
@@ -38,6 +39,7 @@ type (
 		maxBackups int
 		maxAge     int
 		rotateTime int64
+		logDir     string
 	}
 )
 
@@ -75,6 +77,7 @@ func (logS *LogStruct) Init(dataDir, level string, maxSize int64, maxBacks, maxA
 	logS.errorFile.Lock = &sync.RWMutex{}
 	logS.warnFile.Lock = &sync.RWMutex{}
 	logS.giftFile.Lock = &sync.RWMutex{}
+	logS.logDir = dataDir
 
 	for _, label := range []string{"debug", "info", "error", "warn", "gift"} {
 		if label == "debug" {
@@ -348,7 +351,7 @@ func (logS *LogStruct) logRotate(label string) error {
 	logS.close(label)
 	bakFileName := fileName + "." + time.Now().Format("2006_01_02_15_04_05")
 	os.Rename(fileName, bakFileName)
-	go logS.compressLogFile(bakFileName)
+	go logS.compressLogFile(bakFileName, label)
 	return logS.open(label, fileName)
 }
 
@@ -450,7 +453,7 @@ func (logS *LogStruct) timeLogRorate(label string) {
 }
 
 // 压缩日志文件
-func (logS *LogStruct) compressLogFile(filename string) error {
+func (logS *LogStruct) compressLogFile(filename string, label string) error {
 	zipFileName := filename + ".zip"
 	newZipFile, err := os.Create(zipFileName)
 	if err != nil {
@@ -495,7 +498,12 @@ func (logS *LogStruct) compressLogFile(filename string) error {
 		return err
 	}
 	logFile.Close()
-	return os.Remove(filename)
+	if err := os.Remove(filename); err != nil {
+		logS.Error(label+" compress log file err: "+err.Error(), false)
+	}
+	// 检测压缩日志文件数量
+	logS.checkLogFile(label)
+	return nil
 }
 
 // 判断文件是否存在
@@ -508,4 +516,27 @@ func pathExists(path string) bool {
 		return false
 	}
 	return false
+}
+
+// 检测压缩日志文件数量
+func (logS *LogStruct) checkLogFile(label string) {
+	fileNames := make([]string, 0)
+	filepath.Walk(logS.logDir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if info.IsDir() {
+			return nil
+		}
+		if filepath.Ext(path) == ".zip" && strings.HasPrefix(info.Name(), label) {
+			fileNames = append(fileNames, path)
+		}
+		return nil
+	})
+	if len(fileNames) > logS.maxBackups {
+		length := len(fileNames) - logS.maxBackups
+		for i := range length {
+			os.Remove(fileNames[i])
+		}
+	}
 }
