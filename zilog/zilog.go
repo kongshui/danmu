@@ -2,12 +2,10 @@ package zilog
 
 import (
 	"archive/zip"
-	"encoding/json"
 	"fmt"
 	"io"
 	"os"
 	"path/filepath"
-	"slices"
 	"sync"
 	"time"
 )
@@ -30,28 +28,16 @@ type (
 
 	// 日志结构体
 	LogStruct struct {
-		debugFile   logFileStruct
-		infoFile    logFileStruct
-		errorFile   logFileStruct
-		warnFile    logFileStruct
-		giftFile    logFileStruct
-		logInfoFile logFileStruct
-		level       string
-		maxSize     int64
-		maxBackups  int
-		maxAge      int
-		rotateTime  int64
-	}
-	LogInfoStruct struct {
-		LogInfoContext map[string][]string
-		Lock           *sync.RWMutex
-	}
-)
-
-var (
-	logInfo = LogInfoStruct{
-		LogInfoContext: make(map[string][]string),
-		Lock:           &sync.RWMutex{},
+		debugFile  logFileStruct
+		infoFile   logFileStruct
+		errorFile  logFileStruct
+		warnFile   logFileStruct
+		giftFile   logFileStruct
+		level      string
+		maxSize    int64
+		maxBackups int
+		maxAge     int
+		rotateTime int64
 	}
 )
 
@@ -81,47 +67,18 @@ func (logS *LogStruct) Init(dataDir, level string, maxSize int64, maxBacks, maxA
 	logS.errorFile.Lock = &sync.RWMutex{}
 	logS.warnFile.Lock = &sync.RWMutex{}
 	logS.giftFile.Lock = &sync.RWMutex{}
-	logS.logInfoFile.Lock = &sync.RWMutex{}
 
-	for _, label := range []string{"debug", "info", "error", "warn", "gift", "loginfo"} {
+	for _, label := range []string{"debug", "info", "error", "warn", "gift"} {
 		if label == "debug" {
 			if logS.level != "debug" {
 				continue
 			}
-		}
-		if label == "loginfo" {
-			if logS.maxBackups < 1 {
-				continue
-			}
-			if err := logS.open(label, filepath.Join(dataDir, "."+label)); err != nil {
-				panic("log info init err: " + err.Error())
-
-			}
-			logS.getLogInfoContext()
-			continue
 		}
 		if err := logS.open(label, filepath.Join(dataDir, label+".log")); err != nil {
 			panic("log init err: " + err.Error())
 		}
 	}
 	go logS.checkLogRotate()
-}
-
-// 获取上次日志内容
-func (logS *LogStruct) getLogInfoContext() {
-	logS.logInfoFile.Lock.Lock()
-	defer logS.logInfoFile.Lock.Unlock()
-	dataByte, err := io.ReadAll(logS.logInfoFile.File)
-	if err != nil {
-		logS.Error("read log info file err: "+err.Error(), true)
-	}
-	if len(dataByte) > 0 {
-		if err := json.Unmarshal(dataByte, &logInfo.LogInfoContext); err != nil {
-			logS.Error("read log info file err: "+err.Error(), true)
-		}
-	} else {
-		logInfo.LogInfoContext = make(map[string][]string)
-	}
 }
 
 // open 日志文件
@@ -167,14 +124,6 @@ func (logS *LogStruct) open(label, fileName string) error {
 				return err
 			}
 			logS.giftFile.OpenTime = time.Now().Unix()
-		}
-	case "loginfo":
-		if logS.logInfoFile.File == nil {
-			logS.logInfoFile.File, err = os.OpenFile(fileName, os.O_CREATE|os.O_RDWR, 0644)
-			if err != nil {
-				return err
-			}
-			logS.logInfoFile.OpenTime = time.Now().Unix()
 		}
 	default:
 		return nil
@@ -375,7 +324,7 @@ func (logS *LogStruct) logRotate(label string) error {
 	logS.close(label)
 	bakFileName := fileName + "." + time.Now().Format("2006_01_02_15_04_05")
 	os.Rename(fileName, bakFileName)
-	go logS.compressLogFile(bakFileName, label)
+	go logS.compressLogFile(bakFileName)
 	return logS.open(label, fileName)
 }
 
@@ -477,7 +426,7 @@ func (logS *LogStruct) timeLogRorate(label string) {
 }
 
 // 压缩日志文件
-func (logS *LogStruct) compressLogFile(filename, label string) error {
+func (logS *LogStruct) compressLogFile(filename string) error {
 	zipFileName := filename + ".zip"
 	newZipFile, err := os.Create(zipFileName)
 	if err != nil {
@@ -522,35 +471,7 @@ func (logS *LogStruct) compressLogFile(filename, label string) error {
 		return err
 	}
 	logFile.Close()
-	os.Remove(filename)
-	logS.logInfoFile.Lock.Lock()
-	defer logS.logInfoFile.Lock.Unlock()
-	logInfo.LogInfoContext[label] = append(logInfo.LogInfoContext[label], zipFileName)
-	lenCount := len(logInfo.LogInfoContext[label])
-	for {
-		if lenCount > logS.maxBackups && lenCount >= 1 {
-			if err := os.Remove(logInfo.LogInfoContext[label][0]); err != nil {
-				break
-			}
-			logInfo.LogInfoContext[label] = slices.Delete(logInfo.LogInfoContext[label], 0, 1)
-			lenCount--
-		} else {
-			break
-		}
-	}
-	// 更新日志信息文件
-	if err := logS.logInfoFile.File.Truncate(0); err != nil {
-		return fmt.Errorf("truncate log info file err: %v", err)
-	}
-	dataByte, err := json.Marshal(logInfo.LogInfoContext)
-	if err != nil {
-		return fmt.Errorf("marshal log info err: %v", err)
-	}
-	_, err = logS.logInfoFile.File.Write(dataByte)
-	if err != nil {
-		return fmt.Errorf("write log info file err: %v", err)
-	}
-	return nil
+	return os.Remove(filename)
 }
 
 // 判断文件是否存在
