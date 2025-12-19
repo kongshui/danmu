@@ -101,14 +101,14 @@ func roundStart(msg *pmsg.MessageBody) error {
 		isok := true
 		t := time.NewTimer(time.Second * 2)
 		<-t.C
-		if syncGameStatusData.ChooseSide {
-			if interactive != nil {
-				if !interactive(syncGameStatusData.RoomId, strconv.FormatInt(syncGameStatusData.RoundId, 10), int8(syncGameStatusData.SideType)) {
-					isok = false
-					ziLog.Error(fmt.Sprintf("round start, roomid:: %v,主播openid %v,设置自动选边互动失败", syncGameStatusData.RoomId, syncGameStatusData.AnchorOpenId), debug)
-				}
+		// if syncGameStatusData.ChooseSide {
+		if interactive != nil {
+			if !interactive(syncGameStatusData.RoomId, strconv.FormatInt(syncGameStatusData.RoundId, 10), int8(syncGameStatusData.SideType)) {
+				isok = false
+				ziLog.Error(fmt.Sprintf("round start, roomid:: %v,主播openid %v,设置自动选边互动失败", syncGameStatusData.RoomId, syncGameStatusData.AnchorOpenId), debug)
 			}
 		}
+		// }
 		//添加roundid至CurrentRoundId
 		if isok {
 			if err := liveCurrentRoundAdd(syncGameStatusData.RoomId, syncGameStatusData.RoundId); err != nil {
