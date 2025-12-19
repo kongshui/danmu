@@ -352,3 +352,31 @@ func (m *MysqlClient) QueryPlayerInfo(openid string) (string, string, error) {
 	}
 	return avatarUrl, nickName, nil
 }
+
+// 通过玩家名称查询openID
+func (m *MysqlClient) QueryOpenIDByNickName(nickName string) ([]string, error) {
+	if !m.isUse {
+		return []string{}, nil
+	}
+	var openIDs []string
+	rows, err := m.Client.Query("SELECT open_id FROM player_info WHERE nick_name LIKE ?", "%"+nickName+"%")
+	if err != nil {
+		log.Println("mysql 通过玩家名称查询openID失败", err)
+		return []string{}, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var openID string
+		err := rows.Scan(&openID)
+		if err != nil {
+			log.Println("mysql 通过玩家名称查询openID失败", err)
+			return []string{}, err
+		}
+		openIDs = append(openIDs, openID)
+	}
+	if err := rows.Err(); err != nil {
+		log.Println("mysql 通过玩家名称查询openID失败", err)
+		return []string{}, err
+	}
+	return openIDs, nil
+}
