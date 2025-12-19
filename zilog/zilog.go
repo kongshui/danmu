@@ -222,6 +222,7 @@ func (logS *LogStruct) debugWrite(data []byte) {
 
 // write写日志
 func (logS *LogStruct) Write(label string, data *string) {
+	defer logPoolPut(data)
 	dataByte := []byte(*data)
 	if logS.level == "debug" {
 		logS.debugWrite(dataByte)
@@ -263,7 +264,6 @@ func (logS *LogStruct) Write(label string, data *string) {
 // info日志写入
 func (logS *LogStruct) Info(data string, debug bool) {
 	newData := logStrPool.Get().(*string)
-	defer logPoolPut(newData)
 	timeFormat := time.Now().Format("2006-01-02 15:04:05")
 	*newData = timeFormat + " " + data + "\n"
 	if debug {
@@ -275,7 +275,6 @@ func (logS *LogStruct) Info(data string, debug bool) {
 // error日志写入
 func (logS *LogStruct) Error(data string, debug bool) {
 	newData := logStrPool.Get().(*string)
-	defer logPoolPut(newData)
 	timeFormat := time.Now().Format("2006-01-02 15:04:05")
 	*newData = timeFormat + " " + data + "\n"
 	if debug {
@@ -287,7 +286,6 @@ func (logS *LogStruct) Error(data string, debug bool) {
 // warn日志写入
 func (logS *LogStruct) Warn(data string, debug bool) {
 	newData := logStrPool.Get().(*string)
-	defer logPoolPut(newData)
 	timeFormat := time.Now().Format("2006-01-02 15:04:05")
 	*newData = timeFormat + " " + data + "\n"
 	if debug {
@@ -299,7 +297,6 @@ func (logS *LogStruct) Warn(data string, debug bool) {
 // gift日志写入
 func (logS *LogStruct) Gift(data string, debug bool) {
 	newData := logStrPool.Get().(*string)
-	defer logPoolPut(newData)
 	timeFormat := time.Now().Format("2006-01-02 15:04:05")
 	*newData = timeFormat + " " + data + "\n"
 	if debug {
@@ -311,7 +308,6 @@ func (logS *LogStruct) Gift(data string, debug bool) {
 // debug日志写入
 func (logS *LogStruct) Debug(data string, debug bool) {
 	newData := logStrPool.Get().(*string)
-	defer logPoolPut(newData)
 	timeFormat := time.Now().Format("2006-01-02 15:04:05")
 	*newData = timeFormat + " " + data + "\n"
 	if debug {
