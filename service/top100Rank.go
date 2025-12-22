@@ -8,9 +8,9 @@ import (
 )
 
 // 返回世界排行榜前100名
-func getTopWorldRankData(startIndex int64, endIndex int64, reverse bool) []map[string]any {
+func getTopWorldRankData(dbName string, startIndex int64, endIndex int64, reverse bool) []map[string]any {
 	data := make([]map[string]any, 0)
-	openIdList := GetRedisZsetData(world_rank_week, startIndex, endIndex, reverse)
+	openIdList := GetRedisZsetData(dbName, startIndex, endIndex, reverse)
 	for i, userInfo := range openIdList {
 		openId := userInfo.Member.(string)
 		user, _ := UserInfoGet(openId, false)
