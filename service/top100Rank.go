@@ -8,7 +8,7 @@ import (
 )
 
 // 返回世界排行榜前100名
-func getTopWorldRankData(dbName string, startIndex int64, endIndex int64, reverse bool) []map[string]any {
+func GetTopWorldRankData(dbName string, startIndex int64, endIndex int64, reverse bool) []map[string]any {
 	data := make([]map[string]any, 0)
 	openIdList := GetRedisZsetData(dbName, startIndex, endIndex, reverse)
 	for i, userInfo := range openIdList {

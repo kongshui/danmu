@@ -44,7 +44,7 @@ func GetPlayerTopHandle(c *gin.Context) {
 		return
 	}
 	// 获取排行榜数据和总长度
-	data := getTopWorldRankData(world_rank_week, pt.StartIndex, pt.EndIndex, pt.Revrse)
+	data := GetTopWorldRankData(world_rank_week, pt.StartIndex, pt.EndIndex, pt.Revrse)
 	total, _ := getTop100RankLen()
 
 	c.JSON(200, gin.H{
