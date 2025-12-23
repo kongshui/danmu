@@ -199,6 +199,9 @@ const (
 	// 添加物品协议
 	MessageId_AddItemToUser    MessageId = 186 // 添加物品到用户
 	MessageId_AddItemToUserAck MessageId = 187 // 添加物品到用户返回
+	// 使用物品协议
+	MessageId_UseItemFromUser    MessageId = 188 // 使用物品
+	MessageId_UseItemFromUserAck MessageId = 189 // 使用物品返回
 )
 
 // Enum value maps for MessageId.
@@ -363,6 +366,8 @@ var (
 		185: "GetTitleAck",
 		186: "AddItemToUser",
 		187: "AddItemToUserAck",
+		188: "UseItemFromUser",
+		189: "UseItemFromUserAck",
 	}
 	MessageId_value = map[string]int32{
 		"Unknown":                           0,
@@ -524,6 +529,8 @@ var (
 		"GetTitleAck":                       185,
 		"AddItemToUser":                     186,
 		"AddItemToUserAck":                  187,
+		"UseItemFromUser":                   188,
+		"UseItemFromUserAck":                189,
 	}
 )
 
@@ -558,7 +565,7 @@ var File_proto_constid_proto protoreflect.FileDescriptor
 
 const file_proto_constid_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/constid.proto\x12\x04pmsg*\x96\x1c\n" +
+	"\x13proto/constid.proto\x12\x04pmsg*\xc5\x1c\n" +
 	"\tMessageId\x12\v\n" +
 	"\aUnknown\x10\x00\x12\f\n" +
 	"\bNodeInfo\x10\x01\x12\x0f\n" +
@@ -731,7 +738,9 @@ const file_proto_constid_proto_rawDesc = "" +
 	"\bGetTitle\x10\xb8\x01\x12\x10\n" +
 	"\vGetTitleAck\x10\xb9\x01\x12\x12\n" +
 	"\rAddItemToUser\x10\xba\x01\x12\x15\n" +
-	"\x10AddItemToUserAck\x10\xbb\x01B\bZ\x06./pmsgb\x06proto3"
+	"\x10AddItemToUserAck\x10\xbb\x01\x12\x14\n" +
+	"\x0fUseItemFromUser\x10\xbc\x01\x12\x17\n" +
+	"\x12UseItemFromUserAck\x10\xbd\x01B\bZ\x06./pmsgb\x06proto3"
 
 var (
 	file_proto_constid_proto_rawDescOnce sync.Once
