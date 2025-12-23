@@ -193,4 +193,7 @@ enum MessageId {
     // 添加物品协议
     AddItemToUser = 186; // 添加物品到用户
     AddItemToUserAck = 187; // 添加物品到用户返回
+    // 使用物品协议
+    UseItemFromUser = 188; // 使用物品
+    UseItemFromUserAck = 189; // 使用物品返回
 }
