@@ -245,9 +245,6 @@ func roundDataUpload(msg *pmsg.MessageBody) error {
 	for _, v := range data.GroupUserList {
 		roundData.GroupUserList = append(roundData.GroupUserList, UserUploadScoreStruct{OpenId: v.OpenId, GroupId: v.GroupId, Score: v.Score, RoundResult: int(v.RoundResult), Rank: v.Rank})
 	}
-	if is_mock {
-		return nil
-	}
 	return usersRoundUpload(data.RoomId, data.GetAnchorOpenId(), roundData, data.GameType)
 }
 
