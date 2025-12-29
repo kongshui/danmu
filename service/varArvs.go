@@ -109,7 +109,6 @@ var (
 	etcdClient = dao_etcd.NewEtcd()
 	// chanPool   = NewChanPool(10)
 	first_ctx                = context.Background()
-	store_level     int64    //存储等级
 	live_like_score float64  //直播点赞积分
 	groupid_list    []string //组名
 	scrollTime      *SetScrollTime

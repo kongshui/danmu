@@ -60,24 +60,5 @@ func ScrollClearLevelInfo(version string) error {
 	if err != nil {
 		return err
 	}
-	// 读取前store_level名单
-	if store_level > 0 {
-		topLeverList, err := rdb.ZRevRange(world_rank_week, 0, store_level-1)
-		if err != nil {
-			ziLog.Error("scrollClearLevelInfo 读取前store_level名单失败： "+err.Error(), debug)
-			return err
-		}
-		for _, openId := range topLeverList {
-			level, err := QueryOldLevelInfo(openId, key)
-			if err != nil {
-				ziLog.Error("scrollClearLevelInfo 读取等级信息失败： "+err.Error(), debug)
-			}
-			_, err = rdb.ZIncrBy(level_db, float64(level), openId)
-			if err != nil {
-				ziLog.Error("scrollClearLevelInfo 等级滚动失败： "+err.Error(), debug)
-				return err
-			}
-		}
-	}
 	return nil
 }

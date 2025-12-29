@@ -64,9 +64,8 @@ storeLevel: 存储等级
 liveLike: 直播点赞积分
 groupIdList: 组名
 */
-func InitGlobalVar(isPkMatch bool, storeLevel int64, liveLike float64, groupIdList []string) {
+func InitGlobalVar(isPkMatch bool, liveLike float64, groupIdList []string) {
 	is_pk_match = isPkMatch    // 是否开启pk匹配
-	store_level = storeLevel   // 存储等级
 	live_like_score = liveLike // 直播点赞积分
 	groupid_list = groupIdList // 组名
 }
