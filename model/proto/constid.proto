@@ -196,4 +196,9 @@ enum MessageId {
     // 使用物品协议
     UseItemFromUser = 188; // 使用物品
     UseItemFromUserAck = 189; // 使用物品返回
+
+
+    // 经验系统
+    AddExpToUser = 190; // 添加经验到用户
+    AddExpToUserAck = 191; // 添加经验到用户返回
 }
