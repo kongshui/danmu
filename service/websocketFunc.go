@@ -27,7 +27,7 @@ func testMsg(msg *pmsg.MessageBody) error {
 // 对局start
 func roundStart(msg *pmsg.MessageBody) error {
 	var (
-		errMsg  error
+		errMsg       = errors.New("")
 		isReady bool = true
 		score   float64
 	)
