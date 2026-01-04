@@ -26,6 +26,11 @@ func testMsg(msg *pmsg.MessageBody) error {
 
 // 对局start
 func roundStart(msg *pmsg.MessageBody) error {
+	var (
+		errMsg  error
+		isReady bool = true
+		score   float64
+	)
 	syncGameStatusData := &pmsg.SyncGameStatusMessage{}
 	err := proto.Unmarshal(msg.MessageData, syncGameStatusData)
 	if err != nil {
@@ -33,7 +38,8 @@ func roundStart(msg *pmsg.MessageBody) error {
 	}
 	isMember := blackAnchorListIsMember(syncGameStatusData.GetAnchorOpenId())
 	if isMember {
-		return fmt.Errorf("anchor is black")
+		isReady = false
+		errMsg = fmt.Errorf("anchor is black")
 	}
 	getRoundId, _ := queryRoomIdToRoundId(syncGameStatusData.GetRoomId())
 	if syncGameStatusData.GetRoundId() == getRoundId {
@@ -48,47 +54,56 @@ func roundStart(msg *pmsg.MessageBody) error {
 	// 	}
 	// }
 	time.Sleep(1 * time.Second)
-
-	data := SyncGameStatusStruct{
-		AnchorOpenId: syncGameStatusData.AnchorOpenId,
-		AppId:        app_id,
-		RoomId:       syncGameStatusData.RoomId,
-		RoundId:      syncGameStatusData.RoundId,
-		StartTime:    syncGameStatusData.StartTime,
-		Status:       1,
-	}
-	//同步开始对局状态
-	switch platform {
-	case "ks":
-		if err := ksSyncGameStatus(data, "start", true); err != nil {
-			return fmt.Errorf("roundStart 同步开始对局状态失败,roomId: %v, roundId: %v, err: %v", data.RoomId, data.RoundId, err)
+	if isReady {
+		data := SyncGameStatusStruct{
+			AnchorOpenId: syncGameStatusData.AnchorOpenId,
+			AppId:        app_id,
+			RoomId:       syncGameStatusData.RoomId,
+			RoundId:      syncGameStatusData.RoundId,
+			StartTime:    syncGameStatusData.StartTime,
+			Status:       1,
 		}
-	case "dy":
-		if is_mock {
-			if err := liveCurrentRoundAdd(syncGameStatusData.RoomId, syncGameStatusData.RoundId); err != nil {
-				return errors.New("uplink liveCurrentRoundAdd err: " + err.Error())
+		//同步开始对局状态
+		switch platform {
+		case "ks":
+			if err := ksSyncGameStatus(data, "start", true); err != nil {
+				errMsg = fmt.Errorf("roundStart 同步开始对局状态失败,roomId: %v, roundId: %v, err: %v", data.RoomId, data.RoundId, err)
+				isReady = false
 			}
-			break
-		}
-		if err := dySyncGameStatus(data); err != nil {
-			return fmt.Errorf("roundStart 同步开始对局状态失败,roomId: %v, roundId: %v, err: %v", data.RoomId, data.RoundId, err)
-		} else {
-			if err := liveCurrentRoundAdd(syncGameStatusData.RoomId, syncGameStatusData.RoundId); err != nil {
-				return errors.New("uplink liveCurrentRoundAdd err: " + err.Error())
+		case "dy":
+			if is_mock {
+				if err := liveCurrentRoundAdd(syncGameStatusData.RoomId, syncGameStatusData.RoundId); err != nil {
+					errMsg = errors.New("uplink liveCurrentRoundAdd err: " + err.Error())
+					isReady = false
+				}
+				break
+			}
+			if err := dySyncGameStatus(data); err != nil {
+				isReady = false
+				errMsg = fmt.Errorf("roundStart 同步开始对局状态失败,roomId: %v, roundId: %v, err: %v", data.RoomId, data.RoundId, err)
+			} else {
+				if err := liveCurrentRoundAdd(syncGameStatusData.RoomId, syncGameStatusData.RoundId); err != nil {
+					errMsg = errors.New("uplink liveCurrentRoundAdd err: " + err.Error())
+					isReady = false
+				}
 			}
 		}
+
+	}
+	if isReady {
+		score, _ = GetIntegral(syncGameStatusData.AnchorOpenId)
+	} else {
+		ziLog.Error(fmt.Sprintf("roundStart, roomid:: %v,主播openid %v,开启对局失败, err: %v", syncGameStatusData.RoomId, syncGameStatusData.AnchorOpenId, errMsg), debug)
 	}
 
-	score, err := GetIntegral(syncGameStatusData.AnchorOpenId)
-	if err != nil {
-		score = 0
-	}
 	sData := &pmsg.RoundReadyMessage{
 		RoomId:        syncGameStatusData.RoomId,
 		RoundId:       syncGameStatusData.RoundId,
 		Timestamp:     syncGameStatusData.StartTime,
 		LiveLikeScore: live_like_score,
 		Integral:      int64(score),
+		IsReady:       isReady,
+		ErrMsg:        errMsg.Error(),
 	}
 
 	msgData, err := proto.Marshal(sData)

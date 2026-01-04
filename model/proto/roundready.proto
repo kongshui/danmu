@@ -9,4 +9,6 @@ message RoundReadyMessage {
     int64 Timestamp = 3;        //时间戳
     double LiveLikeScore = 4;    //点赞积分
     int64 Integral = 5;   // 积分池积分
+    bool IsReady = 6;           //是否准备
+    string ErrMsg = 7;          //错误信息
 }

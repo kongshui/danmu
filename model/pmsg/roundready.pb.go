@@ -28,6 +28,8 @@ type RoundReadyMessage struct {
 	Timestamp     int64                  `protobuf:"varint,3,opt,name=Timestamp,proto3" json:"Timestamp,omitempty"`          //时间戳
 	LiveLikeScore float64                `protobuf:"fixed64,4,opt,name=LiveLikeScore,proto3" json:"LiveLikeScore,omitempty"` //点赞积分
 	Integral      int64                  `protobuf:"varint,5,opt,name=Integral,proto3" json:"Integral,omitempty"`            // 积分池积分
+	IsReady       bool                   `protobuf:"varint,6,opt,name=IsReady,proto3" json:"IsReady,omitempty"`              //是否准备
+	ErrMsg        string                 `protobuf:"bytes,7,opt,name=ErrMsg,proto3" json:"ErrMsg,omitempty"`                 //错误信息
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -97,17 +99,33 @@ func (x *RoundReadyMessage) GetIntegral() int64 {
 	return 0
 }
 
+func (x *RoundReadyMessage) GetIsReady() bool {
+	if x != nil {
+		return x.IsReady
+	}
+	return false
+}
+
+func (x *RoundReadyMessage) GetErrMsg() string {
+	if x != nil {
+		return x.ErrMsg
+	}
+	return ""
+}
+
 var File_proto_roundready_proto protoreflect.FileDescriptor
 
 const file_proto_roundready_proto_rawDesc = "" +
 	"\n" +
-	"\x16proto/roundready.proto\x12\x04pmsg\"\xa5\x01\n" +
+	"\x16proto/roundready.proto\x12\x04pmsg\"\xd7\x01\n" +
 	"\x11RoundReadyMessage\x12\x18\n" +
 	"\aRoundId\x18\x01 \x01(\x03R\aRoundId\x12\x16\n" +
 	"\x06RoomId\x18\x02 \x01(\tR\x06RoomId\x12\x1c\n" +
 	"\tTimestamp\x18\x03 \x01(\x03R\tTimestamp\x12$\n" +
 	"\rLiveLikeScore\x18\x04 \x01(\x01R\rLiveLikeScore\x12\x1a\n" +
-	"\bIntegral\x18\x05 \x01(\x03R\bIntegralB\bZ\x06./pmsgb\x06proto3"
+	"\bIntegral\x18\x05 \x01(\x03R\bIntegral\x12\x18\n" +
+	"\aIsReady\x18\x06 \x01(\bR\aIsReady\x12\x16\n" +
+	"\x06ErrMsg\x18\a \x01(\tR\x06ErrMsgB\bZ\x06./pmsgb\x06proto3"
 
 var (
 	file_proto_roundready_proto_rawDescOnce sync.Once
