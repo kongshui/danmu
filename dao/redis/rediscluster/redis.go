@@ -271,6 +271,13 @@ func (rdb *RedisClient) SAdd(key string, value any) (int64, error) {
 	return rdb.Client.SAdd(key, value).Result()
 }
 
+// 判断集合大小
+func (rdb *RedisClient) SCard(key string) (int64, error) {
+	rdb.Lock.RLock()
+	defer rdb.Lock.RUnlock()
+	return rdb.Client.SCard(key).Result()
+}
+
 // 获取集合中的所有值
 func (rdb *RedisClient) SMembers(key string) ([]string, error) {
 	rdb.Lock.RLock()

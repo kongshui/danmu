@@ -38,6 +38,7 @@ type RedisClient interface {
 	HLen(key string) (int64, error)
 	Ping() (string, error)
 	SAdd(key string, value any) (int64, error)
+	SCard(key string) (int64, error)
 	SMembers(key string) ([]string, error)
 	SRem(key string, value any) error
 	SIsMember(key string, value any) (bool, error)
