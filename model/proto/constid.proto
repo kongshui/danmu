@@ -201,4 +201,26 @@ enum MessageId {
     // 经验系统
     AddExpToUser = 190; // 添加经验到用户
     AddExpToUserAck = 191; // 添加经验到用户返回
+    
+    // 设置用户信息
+    SetUserInfo = 192; // 设置用户信息
+    SetUserInfoAck = 193; // 设置用户信息返回
+
+    // 世界boss系统
+    WorldBossStartBroadcast = 194; // 世界boss开始广播
+    WorldBossEndBroadcast = 195; // 世界boss结束广播
+    GetWorldBossInfo = 196; // 获取世界boss信息
+    GetWorldBossInfoAck = 197; // 获取世界boss信息返回
+    PlayerWorldBossDamage = 198; // 玩家伤害世界boss
+    PlayerWorldBossDamageAck = 199; // 玩家伤害世界boss返回
+    WorldBossSettleBroadcast = 200; // 世界boss结算广播
+    // 获取世界boss结算信息
+    GetWorldBossSettleInfo = 201; // 获取世界boss结算信息
+    GetWorldBossSettleInfoAck = 202; // 获取世界boss结算信息返回
+
+    // 师徒系统
+    GetMasterInfo = 203; // 获取师傅信息
+    GetMasterInfoAck = 204; // 获取师傅信息返回
+    SetMasterInfo = 205; // 设置师傅信息
+    SetMasterInfoAck = 206; // 设置师傅信息返回
 }

@@ -205,6 +205,25 @@ const (
 	// 经验系统
 	MessageId_AddExpToUser    MessageId = 190 // 添加经验到用户
 	MessageId_AddExpToUserAck MessageId = 191 // 添加经验到用户返回
+	// 设置用户信息
+	MessageId_SetUserInfo    MessageId = 192 // 设置用户信息
+	MessageId_SetUserInfoAck MessageId = 193 // 设置用户信息返回
+	// 世界boss系统
+	MessageId_WorldBossStartBroadcast  MessageId = 194 // 世界boss开始广播
+	MessageId_WorldBossEndBroadcast    MessageId = 195 // 世界boss结束广播
+	MessageId_GetWorldBossInfo         MessageId = 196 // 获取世界boss信息
+	MessageId_GetWorldBossInfoAck      MessageId = 197 // 获取世界boss信息返回
+	MessageId_PlayerWorldBossDamage    MessageId = 198 // 玩家伤害世界boss
+	MessageId_PlayerWorldBossDamageAck MessageId = 199 // 玩家伤害世界boss返回
+	MessageId_WorldBossSettleBroadcast MessageId = 200 // 世界boss结算广播
+	// 获取世界boss结算信息
+	MessageId_GetWorldBossSettleInfo    MessageId = 201 // 获取世界boss结算信息
+	MessageId_GetWorldBossSettleInfoAck MessageId = 202 // 获取世界boss结算信息返回
+	// 师徒系统
+	MessageId_GetMasterInfo    MessageId = 203 // 获取师傅信息
+	MessageId_GetMasterInfoAck MessageId = 204 // 获取师傅信息返回
+	MessageId_SetMasterInfo    MessageId = 205 // 设置师傅信息
+	MessageId_SetMasterInfoAck MessageId = 206 // 设置师傅信息返回
 )
 
 // Enum value maps for MessageId.
@@ -373,6 +392,21 @@ var (
 		189: "UseItemFromUserAck",
 		190: "AddExpToUser",
 		191: "AddExpToUserAck",
+		192: "SetUserInfo",
+		193: "SetUserInfoAck",
+		194: "WorldBossStartBroadcast",
+		195: "WorldBossEndBroadcast",
+		196: "GetWorldBossInfo",
+		197: "GetWorldBossInfoAck",
+		198: "PlayerWorldBossDamage",
+		199: "PlayerWorldBossDamageAck",
+		200: "WorldBossSettleBroadcast",
+		201: "GetWorldBossSettleInfo",
+		202: "GetWorldBossSettleInfoAck",
+		203: "GetMasterInfo",
+		204: "GetMasterInfoAck",
+		205: "SetMasterInfo",
+		206: "SetMasterInfoAck",
 	}
 	MessageId_value = map[string]int32{
 		"Unknown":                           0,
@@ -538,6 +572,21 @@ var (
 		"UseItemFromUserAck":                189,
 		"AddExpToUser":                      190,
 		"AddExpToUserAck":                   191,
+		"SetUserInfo":                       192,
+		"SetUserInfoAck":                    193,
+		"WorldBossStartBroadcast":           194,
+		"WorldBossEndBroadcast":             195,
+		"GetWorldBossInfo":                  196,
+		"GetWorldBossInfoAck":               197,
+		"PlayerWorldBossDamage":             198,
+		"PlayerWorldBossDamageAck":          199,
+		"WorldBossSettleBroadcast":          200,
+		"GetWorldBossSettleInfo":            201,
+		"GetWorldBossSettleInfoAck":         202,
+		"GetMasterInfo":                     203,
+		"GetMasterInfoAck":                  204,
+		"SetMasterInfo":                     205,
+		"SetMasterInfoAck":                  206,
 	}
 )
 
@@ -572,7 +621,7 @@ var File_proto_constid_proto protoreflect.FileDescriptor
 
 const file_proto_constid_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/constid.proto\x12\x04pmsg*\xee\x1c\n" +
+	"\x13proto/constid.proto\x12\x04pmsg*\xed\x1f\n" +
 	"\tMessageId\x12\v\n" +
 	"\aUnknown\x10\x00\x12\f\n" +
 	"\bNodeInfo\x10\x01\x12\x0f\n" +
@@ -749,7 +798,22 @@ const file_proto_constid_proto_rawDesc = "" +
 	"\x0fUseItemFromUser\x10\xbc\x01\x12\x17\n" +
 	"\x12UseItemFromUserAck\x10\xbd\x01\x12\x11\n" +
 	"\fAddExpToUser\x10\xbe\x01\x12\x14\n" +
-	"\x0fAddExpToUserAck\x10\xbf\x01B\bZ\x06./pmsgb\x06proto3"
+	"\x0fAddExpToUserAck\x10\xbf\x01\x12\x10\n" +
+	"\vSetUserInfo\x10\xc0\x01\x12\x13\n" +
+	"\x0eSetUserInfoAck\x10\xc1\x01\x12\x1c\n" +
+	"\x17WorldBossStartBroadcast\x10\xc2\x01\x12\x1a\n" +
+	"\x15WorldBossEndBroadcast\x10\xc3\x01\x12\x15\n" +
+	"\x10GetWorldBossInfo\x10\xc4\x01\x12\x18\n" +
+	"\x13GetWorldBossInfoAck\x10\xc5\x01\x12\x1a\n" +
+	"\x15PlayerWorldBossDamage\x10\xc6\x01\x12\x1d\n" +
+	"\x18PlayerWorldBossDamageAck\x10\xc7\x01\x12\x1d\n" +
+	"\x18WorldBossSettleBroadcast\x10\xc8\x01\x12\x1b\n" +
+	"\x16GetWorldBossSettleInfo\x10\xc9\x01\x12\x1e\n" +
+	"\x19GetWorldBossSettleInfoAck\x10\xca\x01\x12\x12\n" +
+	"\rGetMasterInfo\x10\xcb\x01\x12\x15\n" +
+	"\x10GetMasterInfoAck\x10\xcc\x01\x12\x12\n" +
+	"\rSetMasterInfo\x10\xcd\x01\x12\x15\n" +
+	"\x10SetMasterInfoAck\x10\xce\x01B\bZ\x06./pmsgb\x06proto3"
 
 var (
 	file_proto_constid_proto_rawDescOnce sync.Once
