@@ -51,8 +51,8 @@ func QueryPlayerGroupHandler(c *gin.Context) {
 	if queryInfo.APPId != app_id {
 		ziLog.Error(fmt.Sprintf("QueryPlayerGroupHandler roomid或者appid不匹配, queryId: %v, appId: %v", queryInfo.APPId, app_id), debug)
 		c.JSON(200, gin.H{
-			"errcode": 40001,
-			"errmsg":  "roomid或者appid不匹配",
+			"errcode": 1,
+			"errmsg":  "参数不合法",
 		})
 		return
 	}
@@ -61,14 +61,8 @@ func QueryPlayerGroupHandler(c *gin.Context) {
 		ziLog.Error(fmt.Sprintf("QueryPlayerGroupHandler 查询玩家所在组失败, group: %v, roundId: %v, roomId: %v, openId： %v, err: %v",
 			group, roundId, queryInfo.RoomId, queryInfo.OpenId, err), debug)
 		c.JSON(200, gin.H{
-			"errcode": 0,
-			"errmsg":  "success",
-			"data": gin.H{
-				"round_id":          roundId,
-				"group_id":          group,
-				"user_group_status": groupid_list[0],
-				"round_status":      2,
-			},
+			"errcode": 1,
+			"errmsg":  "参数不合法",
 		})
 		return
 	}
