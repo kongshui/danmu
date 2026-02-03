@@ -12,13 +12,6 @@ import (
 )
 
 func PlayerChooseGroupHandle(c *gin.Context) {
-	if is_maintain {
-		c.JSON(400, gin.H{
-			"errcode": 90001,
-			"errmsg":  "维护中",
-		})
-		return
-	}
 	type playerChooseGroup struct {
 		AppId     string `json:"app_id"`
 		OpenId    string `json:"open_id"`
@@ -42,25 +35,25 @@ func PlayerChooseGroupHandle(c *gin.Context) {
 	}
 	if c.GetHeader("x-signature") != common.DySignature(headers, string(*bodyByte), cfg.App.ChooseGroupSecret) {
 		ziLog.Error("PlayerChooseGroupHandle dy签名错误", debug)
-		c.JSON(400, gin.H{
-			"errcode": 11,
-			"errmsg":  "签名错误",
+		c.JSON(200, gin.H{
+			"errcode": 1,
+			"errmsg":  "参数不合法",
 		})
 		return
 	}
 	if err := json.Unmarshal(*bodyByte, &pCG); err != nil {
 		ziLog.Error(fmt.Sprintf("PlayerChooseGroupHandle 解析参数错误,err: %v", err), debug)
-		c.JSON(400, gin.H{
-			"errcode": 40001,
-			"errmsg":  err.Error(),
+		c.JSON(200, gin.H{
+			"errcode": 1,
+			"errmsg":  "参数不合法",
 		})
 		return
 	}
 	if pCG.AppId != app_id {
 		ziLog.Error(fmt.Sprintf("PlayerChooseGroupHandle 房间号不匹配,roomid: %v, getRoomId: %v", pCG.RoomId, c.GetHeader("X-Room-ID")), debug)
-		c.JSON(400, gin.H{
-			"errcode": 40001,
-			"errmsg":  "roomid或者appid不匹配",
+		c.JSON(200, gin.H{
+			"errcode": 1,
+			"errmsg":  "参数不合法",
 		})
 		return
 	}
