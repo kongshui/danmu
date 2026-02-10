@@ -207,7 +207,7 @@ enum MessageId {
     SetUserInfoAck = 193; // 设置用户信息返回
 
     // 世界boss系统
-    WorldBossStartBroadcast = 194; // 世界boss开始广播
+    WorldBossStartBroadcast = 194; // 世界boss开始广播，开始后每10分钟广播一次
     WorldBossEndBroadcast = 195; // 世界boss结束广播
     GetWorldBossInfo = 196; // 获取世界boss信息
     GetWorldBossInfoAck = 197; // 获取世界boss信息返回
@@ -217,10 +217,16 @@ enum MessageId {
     // 获取世界boss结算信息
     GetWorldBossSettleInfo = 201; // 获取世界boss结算信息
     GetWorldBossSettleInfoAck = 202; // 获取世界boss结算信息返回
+    // 世界boss击杀广播
+    WorldBossKillBroadcast = 207; // 世界boss击杀广播
+    // 世界boss开始
+    WorldBossStart = 208; // 世界boss开始广播
+    // 世界boss信息广播
+    WorldBossInfoBroadcast = 209; // 世界boss信息广播
 
     // 师徒系统
-    GetMasterInfo = 203; // 获取师傅信息
-    GetMasterInfoAck = 204; // 获取师傅信息返回
-    SetMasterInfo = 205; // 设置师傅信息
-    SetMasterInfoAck = 206; // 设置师傅信息返回
+    GetMasterInfo = 215; // 获取师傅信息
+    GetMasterInfoAck = 216; // 获取师傅信息返回
+    SetMasterInfo = 217; // 设置师傅信息
+    SetMasterInfoAck = 218; // 设置师傅信息返回
 }

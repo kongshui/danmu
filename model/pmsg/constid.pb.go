@@ -209,7 +209,7 @@ const (
 	MessageId_SetUserInfo    MessageId = 192 // 设置用户信息
 	MessageId_SetUserInfoAck MessageId = 193 // 设置用户信息返回
 	// 世界boss系统
-	MessageId_WorldBossStartBroadcast  MessageId = 194 // 世界boss开始广播
+	MessageId_WorldBossStartBroadcast  MessageId = 194 // 世界boss开始广播，开始后每10分钟广播一次
 	MessageId_WorldBossEndBroadcast    MessageId = 195 // 世界boss结束广播
 	MessageId_GetWorldBossInfo         MessageId = 196 // 获取世界boss信息
 	MessageId_GetWorldBossInfoAck      MessageId = 197 // 获取世界boss信息返回
@@ -219,11 +219,17 @@ const (
 	// 获取世界boss结算信息
 	MessageId_GetWorldBossSettleInfo    MessageId = 201 // 获取世界boss结算信息
 	MessageId_GetWorldBossSettleInfoAck MessageId = 202 // 获取世界boss结算信息返回
+	// 世界boss击杀广播
+	MessageId_WorldBossKillBroadcast MessageId = 207 // 世界boss击杀广播
+	// 世界boss开始
+	MessageId_WorldBossStart MessageId = 208 // 世界boss开始广播
+	// 世界boss信息广播
+	MessageId_WorldBossInfoBroadcast MessageId = 209 // 世界boss信息广播
 	// 师徒系统
-	MessageId_GetMasterInfo    MessageId = 203 // 获取师傅信息
-	MessageId_GetMasterInfoAck MessageId = 204 // 获取师傅信息返回
-	MessageId_SetMasterInfo    MessageId = 205 // 设置师傅信息
-	MessageId_SetMasterInfoAck MessageId = 206 // 设置师傅信息返回
+	MessageId_GetMasterInfo    MessageId = 215 // 获取师傅信息
+	MessageId_GetMasterInfoAck MessageId = 216 // 获取师傅信息返回
+	MessageId_SetMasterInfo    MessageId = 217 // 设置师傅信息
+	MessageId_SetMasterInfoAck MessageId = 218 // 设置师傅信息返回
 )
 
 // Enum value maps for MessageId.
@@ -403,10 +409,13 @@ var (
 		200: "WorldBossSettleBroadcast",
 		201: "GetWorldBossSettleInfo",
 		202: "GetWorldBossSettleInfoAck",
-		203: "GetMasterInfo",
-		204: "GetMasterInfoAck",
-		205: "SetMasterInfo",
-		206: "SetMasterInfoAck",
+		207: "WorldBossKillBroadcast",
+		208: "WorldBossStart",
+		209: "WorldBossInfoBroadcast",
+		215: "GetMasterInfo",
+		216: "GetMasterInfoAck",
+		217: "SetMasterInfo",
+		218: "SetMasterInfoAck",
 	}
 	MessageId_value = map[string]int32{
 		"Unknown":                           0,
@@ -583,10 +592,13 @@ var (
 		"WorldBossSettleBroadcast":          200,
 		"GetWorldBossSettleInfo":            201,
 		"GetWorldBossSettleInfoAck":         202,
-		"GetMasterInfo":                     203,
-		"GetMasterInfoAck":                  204,
-		"SetMasterInfo":                     205,
-		"SetMasterInfoAck":                  206,
+		"WorldBossKillBroadcast":            207,
+		"WorldBossStart":                    208,
+		"WorldBossInfoBroadcast":            209,
+		"GetMasterInfo":                     215,
+		"GetMasterInfoAck":                  216,
+		"SetMasterInfo":                     217,
+		"SetMasterInfoAck":                  218,
 	}
 )
 
@@ -621,7 +633,7 @@ var File_proto_constid_proto protoreflect.FileDescriptor
 
 const file_proto_constid_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/constid.proto\x12\x04pmsg*\xed\x1f\n" +
+	"\x13proto/constid.proto\x12\x04pmsg*\xbc \n" +
 	"\tMessageId\x12\v\n" +
 	"\aUnknown\x10\x00\x12\f\n" +
 	"\bNodeInfo\x10\x01\x12\x0f\n" +
@@ -809,11 +821,14 @@ const file_proto_constid_proto_rawDesc = "" +
 	"\x18PlayerWorldBossDamageAck\x10\xc7\x01\x12\x1d\n" +
 	"\x18WorldBossSettleBroadcast\x10\xc8\x01\x12\x1b\n" +
 	"\x16GetWorldBossSettleInfo\x10\xc9\x01\x12\x1e\n" +
-	"\x19GetWorldBossSettleInfoAck\x10\xca\x01\x12\x12\n" +
-	"\rGetMasterInfo\x10\xcb\x01\x12\x15\n" +
-	"\x10GetMasterInfoAck\x10\xcc\x01\x12\x12\n" +
-	"\rSetMasterInfo\x10\xcd\x01\x12\x15\n" +
-	"\x10SetMasterInfoAck\x10\xce\x01B\bZ\x06./pmsgb\x06proto3"
+	"\x19GetWorldBossSettleInfoAck\x10\xca\x01\x12\x1b\n" +
+	"\x16WorldBossKillBroadcast\x10\xcf\x01\x12\x13\n" +
+	"\x0eWorldBossStart\x10\xd0\x01\x12\x1b\n" +
+	"\x16WorldBossInfoBroadcast\x10\xd1\x01\x12\x12\n" +
+	"\rGetMasterInfo\x10\xd7\x01\x12\x15\n" +
+	"\x10GetMasterInfoAck\x10\xd8\x01\x12\x12\n" +
+	"\rSetMasterInfo\x10\xd9\x01\x12\x15\n" +
+	"\x10SetMasterInfoAck\x10\xda\x01B\bZ\x06./pmsgb\x06proto3"
 
 var (
 	file_proto_constid_proto_rawDescOnce sync.Once
