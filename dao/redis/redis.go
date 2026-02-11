@@ -13,6 +13,7 @@ type RedisClient interface {
 	Type(key string) (string, error)
 	Persist(key string) error
 	IncrByFloat(key string, value float64) (float64, error)
+	IncrBy(key string, value int64) (int64, error)
 	RedisInit(addr string, password string, db int, isCluster bool)
 	RedisCheckPing(addr string, password string, db int, isCluster bool)
 	IsExistKey(key string) bool

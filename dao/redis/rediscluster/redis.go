@@ -85,6 +85,14 @@ func (rdb *RedisClient) IncrByFloat(key string, value float64) (float64, error) 
 	return rdb.Client.IncrByFloat(key, value).Result()
 }
 
+// 为一个key增加一个int64值
+func (rdb *RedisClient) IncrBy(key string, value int64) (int64, error) {
+	rdb.Lock.Lock()
+	defer rdb.Lock.Unlock()
+	// 为一个key增加一个int64值
+	return rdb.Client.IncrBy(key, value).Result()
+}
+
 // 判断redis中是否存在key
 func (rdb *RedisClient) IsExistKey(key string) bool {
 	rdb.Lock.RLock()
