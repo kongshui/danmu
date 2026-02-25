@@ -3,10 +3,15 @@ package service
 import (
 	"errors"
 	"strconv"
+	"strings"
 )
 
 // 通过节点增加积分
 func addIntegralByNode(key string, addscore float64) (float64, error) {
+	// 判断字符串是否为空
+	if strings.TrimSpace(key) == "" {
+		return 0, errors.New("AddIntegral err: key is empty")
+	}
 	score, err := rdb.IncrByFloat(integral_pool_Prefix+key, float64(addscore))
 	if err != nil {
 		return 0, errors.New("AddIntegral err: " + err.Error())
@@ -19,6 +24,10 @@ func addIntegralByNode(key string, addscore float64) (float64, error) {
 
 // 通过分数增加积分
 func AddIntegralByScore(key string, score float64) (float64, error) {
+	// 判断字符串是否为空
+	if strings.TrimSpace(key) == "" {
+		return 0, errors.New("AddIntegral err: key is empty")
+	}
 	score, err := rdb.IncrByFloat(integral_pool_Prefix+key, score)
 	if err != nil {
 		return 0, errors.New("addIntegralByScore err: " + err.Error())
@@ -31,6 +40,10 @@ func AddIntegralByScore(key string, score float64) (float64, error) {
 
 // 获取积分
 func GetIntegral(key string) (float64, error) {
+	// 判断字符串是否为空
+	if strings.TrimSpace(key) == "" {
+		return 0, errors.New("AddIntegral err: key is empty")
+	}
 	score, err := rdb.Get(integral_pool_Prefix + key)
 	if err != nil {
 		return 0, errors.New("getIntegral err: " + err.Error())
@@ -47,6 +60,10 @@ func delIntegral(key string) error {
 // 增加积分池和个人积分
 func addIntegralAndUserIntegral(anchorOpenId, openId string, addscore float64) error {
 	WorldRankNumerAdd(openId, addscore)
+	// 判断字符串是否为空
+	if strings.TrimSpace(anchorOpenId) == "" {
+		return errors.New("AddIntegral err: anchorOpenId is empty")
+	}
 	_, err := rdb.IncrByFloat(integral_pool_Prefix+anchorOpenId, addscore)
 	if err != nil {
 		return errors.New("addIntegralAndUserIntegral err: " + err.Error())

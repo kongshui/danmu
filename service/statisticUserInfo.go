@@ -47,7 +47,7 @@ func StatisticTemplate() {
 	endTimeParse, _ := time.Parse(version_time_layout, currentRankVersion)
 	endTimeParse = time.Date(endTimeParse.Year(), endTimeParse.Month(), endTimeParse.Day(), scrollTime.ScrollTime.WeekHour, 0, 0, 0, endTimeParse.Location())
 	endTime = endTimeParse.Format(mysql_query_time_layout)
-	top100, err := rdb.ZRevRangeWithScores("world_rank_"+currentRankVersion, 0, 100)
+	top100, err := rdb.ZRevRangeWithScores(world_rank_week+"_"+currentRankVersion, 0, 100)
 	if err != nil {
 		ziLog.Error("Statistic rdb ZRevRangeWithScores err: "+err.Error(), debug)
 		return

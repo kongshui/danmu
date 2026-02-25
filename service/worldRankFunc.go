@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 )
@@ -110,6 +111,10 @@ func setHistoryVersion() error {
 // 添加玩家数据至世界排行榜和历史世界排行榜
 func WorldRankNumerAdd(openId string, score float64) {
 	defer RecoverFunc()
+	// 判断字符串是否为空
+	if strings.TrimSpace(openId) == "" {
+		return
+	}
 	if score <= 0 {
 		return
 	}
@@ -233,9 +238,9 @@ func ScrollWorldRank(version string, count int) error {
 	if !rdb.IsExistKey(world_rank_week) {
 		return nil
 	}
-
+	name := world_rank_week + "_" + version
 	//获取世界版本列表
-	if err := rdb.Rename(world_rank_week, "world_rank_"+version); err != nil {
+	if err := rdb.Rename(world_rank_week, name); err != nil {
 		time.Sleep(time.Second * 1)
 		if count > 60 {
 			return fmt.Errorf("scrollWorldRank 滚动世界榜单失败： version: %v, count: %v", version, count)
@@ -243,7 +248,7 @@ func ScrollWorldRank(version string, count int) error {
 		count++
 		return ScrollWorldRank(version, count)
 	}
-	rdb.Expire("world_rank_"+version, 24*30*time.Hour)
+	rdb.Expire(name, 24*30*time.Hour)
 	// rdb.Del(user_info_db)
 	return nil
 }

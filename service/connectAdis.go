@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	battlematchv1 "github.com/kongshui/danmu/battlematch/v1"
@@ -62,6 +63,10 @@ func connect(roomId string, openId string) bool {
 	// if err := rdb.HSet(integral_pool_db, roomId, 0); err != nil {
 	// 	log.Printf("清空积分池失败, roomId : %v,err: %v", roomId, err)
 	// }
+	// 判断字符串是否为空
+	if strings.TrimSpace(openId) == "" {
+		return false
+	}
 	if expireTime > 0 {
 		ok := rdb.IsExistKey(integral_pool_Prefix + openId)
 		// 移除过期时间
