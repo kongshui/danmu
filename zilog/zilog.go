@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"sync"
 	"time"
@@ -261,11 +262,28 @@ func (logS *LogStruct) Write(label string, data *string) {
 	}
 }
 
+// 获取日志所在函数名称和行号
+func getCallerInfo(debug bool) string {
+	if !debug {
+		return ""
+	}
+	pc, _, line, ok := runtime.Caller(2)
+	if !ok {
+		return "unknown"
+	}
+	fn := runtime.FuncForPC(pc)
+	if fn == nil {
+		return "unknown" + fmt.Sprintf(":%d", line)
+	}
+	return fn.Name() + fmt.Sprintf(":%d", line)
+}
+
 // info日志写入
 func (logS *LogStruct) Info(data string, debug bool) {
 	newData := logStrPool.Get().(*string)
+	callerInfo := getCallerInfo(debug)
 	timeFormat := time.Now().Format("2006-01-02 15:04:05")
-	*newData = timeFormat + " " + data + "\n"
+	*newData = fmt.Sprintf("%s %s %s\n", timeFormat, callerInfo, data)
 	if debug {
 		fmt.Print(*newData)
 	}
@@ -275,8 +293,9 @@ func (logS *LogStruct) Info(data string, debug bool) {
 // error日志写入
 func (logS *LogStruct) Error(data string, debug bool) {
 	newData := logStrPool.Get().(*string)
+	callerInfo := getCallerInfo(true)
 	timeFormat := time.Now().Format("2006-01-02 15:04:05")
-	*newData = timeFormat + " " + data + "\n"
+	*newData = fmt.Sprintf("%s %s %s\n", timeFormat, callerInfo, data)
 	if debug {
 		fmt.Print(*newData)
 	}
@@ -286,8 +305,9 @@ func (logS *LogStruct) Error(data string, debug bool) {
 // warn日志写入
 func (logS *LogStruct) Warn(data string, debug bool) {
 	newData := logStrPool.Get().(*string)
+	callerInfo := getCallerInfo(true)
 	timeFormat := time.Now().Format("2006-01-02 15:04:05")
-	*newData = timeFormat + " " + data + "\n"
+	*newData = fmt.Sprintf("%s %s %s\n", timeFormat, callerInfo, data)
 	if debug {
 		fmt.Print(*newData)
 	}
@@ -297,8 +317,9 @@ func (logS *LogStruct) Warn(data string, debug bool) {
 // gift日志写入
 func (logS *LogStruct) Gift(data string, debug bool) {
 	newData := logStrPool.Get().(*string)
+	callerInfo := getCallerInfo(debug)
 	timeFormat := time.Now().Format("2006-01-02 15:04:05")
-	*newData = timeFormat + " " + data + "\n"
+	*newData = fmt.Sprintf("%s %s %s\n", timeFormat, callerInfo, data)
 	if debug {
 		fmt.Print(*newData)
 	}
@@ -308,8 +329,9 @@ func (logS *LogStruct) Gift(data string, debug bool) {
 // debug日志写入
 func (logS *LogStruct) Debug(data string, debug bool) {
 	newData := logStrPool.Get().(*string)
+	callerInfo := getCallerInfo(debug)
 	timeFormat := time.Now().Format("2006-01-02 15:04:05")
-	*newData = timeFormat + " " + data + "\n"
+	*newData = fmt.Sprintf("%s %s %s\n", timeFormat, callerInfo, data)
 	if debug {
 		fmt.Print(*newData)
 	}

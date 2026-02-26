@@ -31,6 +31,7 @@ type RedisClient interface {
 	HGet(key string, field string) (string, error)
 	HExists(key string, field string) (bool, error)
 	HMGet(key string, fields ...string) ([]any, error)
+	HIncrBy(key string, field string, value int64) (int64, error)
 	HIncrByFloat(key string, field string, value float64) (float64, error)
 	HScan(key string, cursor uint64, match string, count int64) (keys []string, nextCursor uint64, err error)
 	HDel(key string, field string) error

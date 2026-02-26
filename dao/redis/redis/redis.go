@@ -220,6 +220,14 @@ func (rdb *RedisClient) HIncrByFloat(key string, field string, value float64) (f
 	return rdb.Client.HIncrByFloat(key, field, value).Result()
 }
 
+// hash 增加一个int64值
+func (rdb *RedisClient) HIncrBy(key string, field string, value int64) (int64, error) {
+	rdb.Lock.Lock()
+	defer rdb.Lock.Unlock()
+	// 为一个key增加一个int64值
+	return rdb.Client.HIncrBy(key, field, value).Result()
+}
+
 // HScan 扫描hash键值对
 func (rdb *RedisClient) HScan(key string, cursor uint64, match string, count int64) (keys []string, nextCursor uint64, err error) {
 	rdb.Lock.RLock()
