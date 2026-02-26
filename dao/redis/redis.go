@@ -23,6 +23,7 @@ type RedisClient interface {
 	SetKeyNX(key string, value any, expiration time.Duration) (bool, error)
 	Publish(channel string, message any) error
 	TTL(key string) (time.Duration, error)
+	Scan(cursor uint64, match string, count int64) ([]string, uint64, error)
 	Expire(key string, expiration time.Duration) error
 	ExpireAt(key string, tm time.Time) error
 	HSet(key string, field string, value any) error

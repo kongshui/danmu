@@ -168,6 +168,13 @@ func (rdb *RedisClient) Expire(key string, expiration time.Duration) error {
 	return rdb.Client.Expire(key, expiration).Err()
 }
 
+// Scan 扫描键值对
+func (rdb *RedisClient) Scan(cursor uint64, match string, count int64) ([]string, uint64, error) {
+	rdb.Lock.RLock()
+	defer rdb.Lock.RUnlock()
+	return rdb.Client.Scan(cursor, match, count).Result()
+}
+
 // 设置过期时间戳
 func (rdb *RedisClient) ExpireAt(key string, tm time.Time) error {
 	rdb.Lock.Lock()
