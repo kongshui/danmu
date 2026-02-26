@@ -230,6 +230,13 @@ const (
 	MessageId_GetMasterInfoAck MessageId = 216 // 获取师傅信息返回
 	MessageId_SetMasterInfo    MessageId = 217 // 设置师傅信息
 	MessageId_SetMasterInfoAck MessageId = 218 // 设置师傅信息返回
+	// 货币相关
+	MessageId_AddMoneyToUser        MessageId = 221 // 添加货币到用户
+	MessageId_AddMoneyToUserAck     MessageId = 222 // 添加或使用货币到用户回复
+	MessageId_UseMoneyFromUser      MessageId = 223 // 使用货币
+	MessageId_UseMoneyFromUserAck   MessageId = 224 // 使用货币回复
+	MessageId_QueryMoneyFromUser    MessageId = 225 // 查询货币
+	MessageId_QueryMoneyFromUserAck MessageId = 226 // 查询货币回复
 )
 
 // Enum value maps for MessageId.
@@ -416,6 +423,12 @@ var (
 		216: "GetMasterInfoAck",
 		217: "SetMasterInfo",
 		218: "SetMasterInfoAck",
+		221: "AddMoneyToUser",
+		222: "AddMoneyToUserAck",
+		223: "UseMoneyFromUser",
+		224: "UseMoneyFromUserAck",
+		225: "QueryMoneyFromUser",
+		226: "QueryMoneyFromUserAck",
 	}
 	MessageId_value = map[string]int32{
 		"Unknown":                           0,
@@ -599,6 +612,12 @@ var (
 		"GetMasterInfoAck":                  216,
 		"SetMasterInfo":                     217,
 		"SetMasterInfoAck":                  218,
+		"AddMoneyToUser":                    221,
+		"AddMoneyToUserAck":                 222,
+		"UseMoneyFromUser":                  223,
+		"UseMoneyFromUserAck":               224,
+		"QueryMoneyFromUser":                225,
+		"QueryMoneyFromUserAck":             226,
 	}
 )
 
@@ -633,7 +652,7 @@ var File_proto_constid_proto protoreflect.FileDescriptor
 
 const file_proto_constid_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/constid.proto\x12\x04pmsg*\xbc \n" +
+	"\x13proto/constid.proto\x12\x04pmsg*\xcf!\n" +
 	"\tMessageId\x12\v\n" +
 	"\aUnknown\x10\x00\x12\f\n" +
 	"\bNodeInfo\x10\x01\x12\x0f\n" +
@@ -828,7 +847,13 @@ const file_proto_constid_proto_rawDesc = "" +
 	"\rGetMasterInfo\x10\xd7\x01\x12\x15\n" +
 	"\x10GetMasterInfoAck\x10\xd8\x01\x12\x12\n" +
 	"\rSetMasterInfo\x10\xd9\x01\x12\x15\n" +
-	"\x10SetMasterInfoAck\x10\xda\x01B\bZ\x06./pmsgb\x06proto3"
+	"\x10SetMasterInfoAck\x10\xda\x01\x12\x13\n" +
+	"\x0eAddMoneyToUser\x10\xdd\x01\x12\x16\n" +
+	"\x11AddMoneyToUserAck\x10\xde\x01\x12\x15\n" +
+	"\x10UseMoneyFromUser\x10\xdf\x01\x12\x18\n" +
+	"\x13UseMoneyFromUserAck\x10\xe0\x01\x12\x17\n" +
+	"\x12QueryMoneyFromUser\x10\xe1\x01\x12\x1a\n" +
+	"\x15QueryMoneyFromUserAck\x10\xe2\x01B\bZ\x06./pmsgb\x06proto3"
 
 var (
 	file_proto_constid_proto_rawDescOnce sync.Once

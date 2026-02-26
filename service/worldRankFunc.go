@@ -7,6 +7,8 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/go-redis/redis"
 )
 
 // 初始化世界排行版相关信息
@@ -85,7 +87,7 @@ func WorldRankVersionInit() error {
 func setHistoryVersion() error {
 	//设置版本列表
 	length, err := rdb.LLen(world_rank_version_list_db)
-	if err != nil {
+	if err != nil && !errors.Is(err, redis.Nil) {
 		return errors.New("worldRankVersionSet 获取版本号长度失败: " + err.Error())
 	}
 

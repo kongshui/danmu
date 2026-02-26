@@ -229,4 +229,12 @@ enum MessageId {
     GetMasterInfoAck = 216; // 获取师傅信息返回
     SetMasterInfo = 217; // 设置师傅信息
     SetMasterInfoAck = 218; // 设置师傅信息返回
+
+     // 货币相关
+    AddMoneyToUser = 221; // 添加货币到用户
+    AddMoneyToUserAck = 222; // 添加或使用货币到用户回复
+    UseMoneyFromUser = 223; // 使用货币
+    UseMoneyFromUserAck = 224; // 使用货币回复
+    QueryMoneyFromUser = 225; // 查询货币
+    QueryMoneyFromUserAck = 226; // 查询货币回复
 }
