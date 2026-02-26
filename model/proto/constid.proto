@@ -237,4 +237,9 @@ enum MessageId {
     UseMoneyFromUserAck = 224; // 使用货币回复
     QueryMoneyFromUser = 225; // 查询货币
     QueryMoneyFromUserAck = 226; // 查询货币回复
+
+
+     // 商城
+    GetShopInfo = 230; // 获取商城信息
+    GetShopInfoAck = 231; // 获取商城信息返回
 }
