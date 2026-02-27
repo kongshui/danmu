@@ -67,7 +67,7 @@ func GetTopWorldRankData(dbName string, startIndex int64, endIndex int64, revers
 // }
 
 // 设置上一周期百强榜
-func Top100Rank(key string) error {
+func LastTop100RankSet(key string) error {
 	// 设置标识
 	ok, err := rdb.SetKeyNX(monitor_top_100_ranking_db, "1", 24*time.Hour)
 	if err != nil {
@@ -75,6 +75,10 @@ func Top100Rank(key string) error {
 		return err
 	}
 	if !ok {
+		return nil
+	}
+	// 先判断是否存在
+	if !rdb.IsExistKey(key) {
 		return nil
 	}
 	// 获取前100名人员
@@ -85,10 +89,14 @@ func Top100Rank(key string) error {
 	}
 	// 重命名
 	reName := top_100_ranking + "_" + time.Now().Format("20060102")
-	if err := rdb.Rename(top_100_ranking, reName); err != nil {
-		ziLog.Error(fmt.Sprintf("Top100Rank 连胜币排行rename error: %v", err), debug)
-		return errors.New("连胜币排行rename error")
+	// 先判断是否存在
+	if rdb.IsExistKey(top_100_ranking) {
+		if err := rdb.Rename(top_100_ranking, reName); err != nil {
+			ziLog.Error(fmt.Sprintf("Top100Rank 连胜币排行rename error: %v", err), debug)
+			return errors.New("连胜币排行rename error")
+		}
 	}
+
 	for _, v := range users {
 		if err := rdb.ZAdd(top_100_ranking, v.Score, v.Member.(string)); err != nil {
 			ziLog.Error(fmt.Sprintf("Top100Rank 设置前100名人员失败，openId：: %v, 排名：%v,err: %v", v.Member.(string), v.Score, err), debug)

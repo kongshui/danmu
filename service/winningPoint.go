@@ -40,6 +40,10 @@ func AddUserWinningPoint(openId string, point int64) (int64, error) {
 // 滚动连胜币排行
 func ScrollWinningPoint() error {
 	ziLog.Info("开始滚动胜点", debug)
+	// 先判断是否存在
+	if !rdb.IsExistKey(winning_point_db) {
+		return nil
+	}
 	l, err := rdb.ZCard(winning_point_db)
 	if err != nil {
 		return errors.New("胜点排行查询失败")

@@ -158,6 +158,10 @@ func liveCurrentRoundAdd(roomId string, roundId int64) error {
 
 // 删除直播间当前对局名称
 func liveCurrentRoundDel(roomId string) error {
+	// 先判断是否存在
+	if !rdb.IsExistKey(roomId + "_round") {
+		return nil
+	}
 	if err := rdb.Del(roomId + "_round"); err != nil {
 		return err
 	}

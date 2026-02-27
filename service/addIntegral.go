@@ -54,6 +54,9 @@ func GetIntegral(key string) (float64, error) {
 
 // 删除积分池，只有匹配用
 func delIntegral(key string) error {
+	if !rdb.IsExistKey(integral_pool_Prefix + key) {
+		return nil
+	}
 	return rdb.Del(integral_pool_Prefix + key)
 }
 

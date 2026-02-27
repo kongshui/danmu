@@ -39,6 +39,10 @@ func DelIsConsume(openId string) error {
 // scroll 滚动删除过期的用户
 func ScrollDelIsConsume(label string) {
 	name := is_consume_db + "_" + label
+	// 先判断是否存在
+	if !rdb.IsExistKey(is_consume_db) {
+		return
+	}
 	if err := rdb.Rename(is_consume_db, name); err != nil {
 		ziLog.Error(fmt.Sprintf("ScrollDelIsConsume error: %v", err), debug)
 	}

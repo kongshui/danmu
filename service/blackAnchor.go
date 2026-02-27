@@ -34,6 +34,10 @@ func blackAnchorListMembers() ([]string, error) {
 
 // blackAnchorListClear 清空黑名单主播
 func blackAnchorListClear() error {
+	// 先判断是否存在
+	if !rdb.IsExistKey(black_anchor_list_db) {
+		return nil
+	}
 	if err := rdb.Del(black_anchor_list_db); err != nil {
 		return err
 	}
