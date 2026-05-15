@@ -240,6 +240,8 @@ const (
 	// 商城
 	MessageId_GetShopInfo    MessageId = 230 // 获取商城信息
 	MessageId_GetShopInfoAck MessageId = 231 // 获取商城信息返回
+	// 其他协议
+	MessageId_liveEnter MessageId = 250 // 进入直播
 )
 
 // Enum value maps for MessageId.
@@ -434,6 +436,7 @@ var (
 		226: "QueryMoneyFromUserAck",
 		230: "GetShopInfo",
 		231: "GetShopInfoAck",
+		250: "liveEnter",
 	}
 	MessageId_value = map[string]int32{
 		"Unknown":                           0,
@@ -625,6 +628,7 @@ var (
 		"QueryMoneyFromUserAck":             226,
 		"GetShopInfo":                       230,
 		"GetShopInfoAck":                    231,
+		"liveEnter":                         250,
 	}
 )
 
@@ -659,7 +663,7 @@ var File_proto_constid_proto protoreflect.FileDescriptor
 
 const file_proto_constid_proto_rawDesc = "" +
 	"\n" +
-	"\x13proto/constid.proto\x12\x04pmsg*\xf6!\n" +
+	"\x13proto/constid.proto\x12\x04pmsg*\x86\"\n" +
 	"\tMessageId\x12\v\n" +
 	"\aUnknown\x10\x00\x12\f\n" +
 	"\bNodeInfo\x10\x01\x12\x0f\n" +
@@ -862,7 +866,8 @@ const file_proto_constid_proto_rawDesc = "" +
 	"\x12QueryMoneyFromUser\x10\xe1\x01\x12\x1a\n" +
 	"\x15QueryMoneyFromUserAck\x10\xe2\x01\x12\x10\n" +
 	"\vGetShopInfo\x10\xe6\x01\x12\x13\n" +
-	"\x0eGetShopInfoAck\x10\xe7\x01B\bZ\x06./pmsgb\x06proto3"
+	"\x0eGetShopInfoAck\x10\xe7\x01\x12\x0e\n" +
+	"\tliveEnter\x10\xfa\x01B\bZ\x06./pmsgb\x06proto3"
 
 var (
 	file_proto_constid_proto_rawDescOnce sync.Once

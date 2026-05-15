@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math/rand/v2"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/kongshui/danmu/model/pmsg"
@@ -13,16 +14,16 @@ import (
 
 // 创建num位字符串
 func CreateIntStr(num int) string {
-	var numStr string
+	var numStr strings.Builder
 	// 先创建数字字符串
 	r := rand.New(rand.NewPCG(uint64(time.Now().UnixNano()), uint64(time.Now().Day())))
 
 	for range num {
 		randNum := r.Int64N(10)
-		numStr += strconv.FormatInt(randNum, 10)
+		numStr.WriteString(strconv.FormatInt(randNum, 10))
 
 	}
-	return numStr
+	return numStr.String()
 }
 
 // 创建随机字符串

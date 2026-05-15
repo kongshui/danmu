@@ -242,4 +242,7 @@ enum MessageId {
      // 商城
     GetShopInfo = 230; // 获取商城信息
     GetShopInfoAck = 231; // 获取商城信息返回
+
+    // 其他协议
+    liveEnter = 250; // 进入直播
 }

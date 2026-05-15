@@ -8,6 +8,7 @@ import (
 	"math/rand"
 	"path"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/kongshui/danmu/model/pmsg"
@@ -500,13 +501,14 @@ func HandleSendFakeRandomGift(c *gin.Context) {
 		case "Right":
 			context = "222"
 		}
-		var newOpenId string = "74"
+		var newOpenId strings.Builder
+		newOpenId.WriteString("74")
 		for range 17 {
-			newOpenId += strconv.Itoa(rand.Intn(10))
+			newOpenId.WriteString(strconv.Itoa(rand.Intn(10)))
 		}
 		// fakeSendMessage(roomId, anchorOpenId, "live_comment", createCommon(newOpenId, context))
-		userList = append(userList, newOpenId)
-		fmt.Println(createCommon(newOpenId, context))
+		userList = append(userList, newOpenId.String())
+		fmt.Println(createCommon(newOpenId.String(), context))
 	}
 	giftIdList := make([]string, 0)
 	// 4. 随机赠送礼物

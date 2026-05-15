@@ -120,6 +120,21 @@ type (
 		TimeStamp int64  `json:"timestamp"`  // 时间戳
 	}
 
+	// 进入直播消息 live_enter
+	LiveEnterPayloadStruct struct {
+		MsgId             string `json:"msg_id"`                    // 消息ID
+		SecOpenid         string `json:"sec_openid"`                // 评论用户的加密openid, 当前其实没有加密
+		AvatarUrl         string `json:"avatar_url"`                // 评论用户头像地址
+		Nickname          string `json:"nickname"`                  // 评论用户昵称
+		TimeStamp         int64  `json:"timestamp"`                 // 时间戳
+		EnterRoomType     int    `json:"enter_room_type"`           // 进入直播间的类型，1-进入直播间；2-离开直播间
+		IsOldPlayer       int    `json:"is_old_player"`             // 是否是老玩家，1-老玩家；0-新玩家
+		GradeLevel        string `json:"grade_level"`               // 用户的直播贡献阶梯: L1-L6
+		InviterOpenOpenId string `json:"inviter_gather_openid"`     // 邀请人gather_openid，当前没有加密
+		InviterNickname   string `json:"inviter_gather_nickname"`   // 邀请人gather_nickname，邀请人昵称
+		InviterAvatarUrl  string `json:"inviter_gather_avatar_url"` // 邀请人gather_avatar_url，邀请人头像地址
+	}
+
 	// 粉丝团数据 live_fansclub
 	FansPayloadStruct struct {
 		MsgId              string `json:"msg_id"`               // 消息ID

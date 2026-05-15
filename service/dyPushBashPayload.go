@@ -152,7 +152,16 @@ func pushDyBasePayloayDirect(roomId, anchorOpenId, msgType string, data []byte) 
 			}
 			dyPayloadSendMessage(v, pmsg.MessageId_liveLike, roomId, anchorOpenId, true)
 		}
+	case "live_enter":
+		getData := []LiveEnterPayloadStruct{}
+		if err := json.NewDecoder(strings.NewReader(string(data))).Decode(&getData); err != nil {
+			ziLog.Error(fmt.Sprintf("PushDyBasePayloayDirect json.Unmarshal err: %v, data: %v", err, data), debug)
+		}
+		for _, v := range getData {
+			dyPayloadSendMessage(v, pmsg.MessageId_liveEnter, roomId, anchorOpenId, true)
+		}
 	}
+
 	//分数不为0时添加积分
 	jsonData, err := json.Marshal(dataList)
 	if err != nil {

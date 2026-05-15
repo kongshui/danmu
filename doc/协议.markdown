@@ -299,6 +299,20 @@ message relineTo{
             nickname: "xxxx", // 点赞用户昵称(不加密)
             timestamp: 1649068964, // 点赞毫秒级时间戳
          }
+   27.4. 进入直播数据结构体
+        {
+            msg_id: "12345678312", // string类型的消息id
+            enter_room_type: 1,      // 1-进入直播间；2-离开直播间
+            sec_openid: "xxxx",     // 进房或离房用户openid，
+            avatar_url: "xxx",     // 用户头像
+            nickname: "xxxx",     // 用户昵称(不加密)
+            is_old_player: 1,     // 是否是弹幕玩法老用户，0-新用户，1-老用户
+            grade_level: "L2",    // 用户的直播贡献阶梯: L1-L6
+            timestamp: 1649068964, // 进房或离房毫秒级时间戳（进房跟离房的消息不保证先后顺序，例如：离房在后，也有可能先收到推送消息。开发者需要自己根据时间戳做逻辑处理）
+            inviter_gather_openid: "xxx",     // 通过用户一键摇人召集进入直播间，发起召集的用户openid（通过召集分享才有该字段）
+            inviter_gather_nickname: "xxx",    // 发起召集的用户昵称
+            inviter_gather_avatar_url: "xxx"   // 发起召集的头像
+         },
 
 - **DyMsgAck 抖音收到消息回执**
    *protobuf结构体为：*

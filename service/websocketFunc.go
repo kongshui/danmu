@@ -10,6 +10,7 @@ import (
 	"path"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/kongshui/danmu/model/pmsg"
@@ -139,18 +140,18 @@ func roundStart(msg *pmsg.MessageBody) error {
 
 // testToekn
 func TestTokenFunc(msg *pmsg.MessageBody) error {
-	var result string = ""
+	var result strings.Builder
 	for range 19 {
 		digit := rand.Intn(10)
 		if digit == 0 {
 			digit = 1
 		}
-		result += strconv.Itoa(digit)
+		result.WriteString(strconv.Itoa(digit))
 	}
 	roomInfo := &pmsg.AnchorInfoMessage{
 		RoomId:       "1123456789876543212",
-		AnchorOpenId: result,
-		NickName:     result,
+		AnchorOpenId: result.String(),
+		NickName:     result.String(),
 		AvatarUrl:    "",
 	}
 	var (
@@ -158,7 +159,7 @@ func TestTokenFunc(msg *pmsg.MessageBody) error {
 	)
 	data.Uuid = msg.Uuid
 	data.RoomId = "1123456789876543212"
-	data.UserId = result
+	data.UserId = result.String()
 	dataByte, err := json.Marshal(data)
 	if err != nil {
 		log.Println("json转换失败， info:", data, err, "err: ", err)
