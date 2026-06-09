@@ -65,9 +65,7 @@ func setKsGlobalAccessToken() error {
 	}
 	// fmt.Println(result, 66666666)
 	//设置access_token
-	accessToken.Lock.Lock()
 	accessToken.Token = result.AccessToken
-	accessToken.Lock.Unlock()
 	err = rdb.Set(access_token_db, result.AccessToken, time.Duration(result.ExpiresIn)*time.Second)
 	if err != nil {
 		return fmt.Errorf("SetGlobalAccessToken  rdb set err: %v", err)
