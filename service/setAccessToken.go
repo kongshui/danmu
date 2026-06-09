@@ -111,9 +111,7 @@ func setDyGlobalAccessToken() error {
 	}
 	// fmt.Println(result, 66666666)
 	//设置access_token
-	accessToken.Lock.Lock()
 	accessToken.Token = result.Data.AccessToken
-	accessToken.Lock.Unlock()
 	err = rdb.Set(access_token_db, result.Data.AccessToken, time.Duration(result.Data.ExpiresIn)*time.Second)
 	if err != nil {
 		return fmt.Errorf("SetGlobalAccessToken  rdb set err: %v", err)
