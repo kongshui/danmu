@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 
@@ -128,10 +129,10 @@ func setToken() error {
 	)
 	switch platform {
 	case "ks":
-		timeCheck = 24 * time.Hour
+		timeCheck = 47 * time.Hour
 		function = setKsGlobalAccessToken
 	case "dy":
-		timeCheck = 50 * time.Minute
+		timeCheck = 110 * time.Minute
 		function = setDyGlobalAccessToken
 	}
 	if rdb.IsExistKey(access_token_db) {
@@ -142,6 +143,8 @@ func setToken() error {
 	} else {
 		isSet = true
 	}
+	rdb.Del(monitor_access_token_db)
+	rdb.Del(access_token_db)
 	if isSet {
 		ok, err := rdb.SetKeyNX(monitor_access_token_db, nodeUuid, timeCheck)
 		if err != nil {
@@ -176,7 +179,7 @@ func setAccessToken() {
 	)
 	switch platform {
 	case "ks":
-		timeCheck = 24 * time.Hour
+		timeCheck = 23 * time.Hour
 		function = setKsGlobalAccessToken
 	case "dy":
 		timeCheck = 50 * time.Minute
@@ -211,9 +214,9 @@ func setAccessToken() {
 		}
 		if ok {
 			for {
-				if count >= 13800 {
+				if count >= 10 {
 					count = 0
-					break
+					os.Exit(1)
 				}
 				if err := function(); err != nil {
 					time.Sleep(6 * time.Second)
@@ -230,7 +233,7 @@ func setAccessToken() {
 
 // 获取token
 func getAccessToken() {
-	t := time.NewTicker(time.Minute * 5)
+	t := time.NewTicker(time.Minute * 1)
 	for {
 		<-t.C
 		getToken()
@@ -242,6 +245,9 @@ func getToken() error {
 	if err != nil {
 		ziLog.Error(fmt.Sprintf("getToken 获取全局Access token失败: %v", err), debug)
 		return fmt.Errorf("getToken 获取全局Access token失败: %v", err)
+	}
+	if accessToken.Token == token {
+		return nil
 	}
 	accessToken.Lock.Lock()
 	accessToken.Token = token

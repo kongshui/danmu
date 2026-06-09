@@ -103,7 +103,15 @@ func pushDyBasePayloayDirect(roomId, anchorOpenId, msgType string, data []byte) 
 				endSendData.TimeStamp = time.Now().UnixMilli()
 				endSendData.PushType = "lottery"
 				endSendDatabyte, _ := proto.Marshal(endSendData)
-				dyPayloadSendMessage(endSendDatabyte, pmsg.MessageId_Lottery, roomId, anchorOpenId, true)
+				sendUidList, _, _, _ := getUidListByOpenId(anchorOpenId)
+				if len(sendUidList) == 0 {
+					ziLog.Error(fmt.Sprintf("dyPayloadSendMessage sendUidList is nil, roomId: %v, anchorOpenid: %v, data: %v", roomId, anchorOpenId, endSendData), debug)
+					return
+				}
+				if err := SendMessage(pmsg.MessageId_Lottery, []string{anchorOpenId}, endSendDatabyte); err != nil {
+					ziLog.Error(fmt.Sprintf("dyPayloadSendMessage 推送消息失败:  %v,失败数据为： %v", err, v), debug)
+				}
+				// dyPayloadSendMessage(endSendDatabyte, pmsg.MessageId_Lottery, roomId, anchorOpenId, true)
 			} else {
 				if !v.Test {
 					score = float64(v.GiftNum) * giftToScoreMap[v.SecGiftId]
