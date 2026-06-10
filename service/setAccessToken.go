@@ -175,10 +175,10 @@ func setAccessToken() {
 	)
 	switch platform {
 	case "ks":
-		timeCheck = 23 * time.Hour
+		timeCheck = 47 * time.Hour
 		function = setKsGlobalAccessToken
 	case "dy":
-		timeCheck = 50 * time.Minute
+		timeCheck = 110 * time.Minute
 		function = setDyGlobalAccessToken
 	}
 	// if rdb.IsExistKey(access_token_db) {
@@ -199,7 +199,7 @@ func setAccessToken() {
 	// 		}
 	// 	}
 	// }
-	t = time.NewTicker(55 * time.Minute)
+	t = time.NewTicker(10 * time.Minute)
 	for {
 		<-t.C
 		count := 0
