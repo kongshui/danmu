@@ -3,7 +3,7 @@ package common
 import (
 	"crypto/md5"
 	"encoding/base64"
-	"sort"
+	"slices"
 	"strings"
 )
 
@@ -16,9 +16,7 @@ func DySignature(header map[string]string, bodyStr, secret string) string {
 		}
 		keyList = append(keyList, key)
 	}
-	sort.Slice(keyList, func(i, j int) bool {
-		return keyList[i] < keyList[j]
-	})
+	slices.Sort(keyList)
 	kvList := make([]string, 0, 4)
 	for _, key := range keyList {
 		kvList = append(kvList, key+"="+header[key])
